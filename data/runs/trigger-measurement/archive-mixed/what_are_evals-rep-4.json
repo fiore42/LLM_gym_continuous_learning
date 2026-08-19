@@ -1,0 +1,78 @@
+{
+  "case_id": "what_are_evals",
+  "question": "What does the corpus describe as the purpose of evals for agent systems?",
+  "mode": "live_retrieval",
+  "model": "claude-sonnet-5",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T16:13:06.932399+00:00",
+  "finished_at": "2026-08-16T16:13:33.673179+00:00",
+  "stop_reason": "PROVIDER_OR_VALIDATION_ERROR",
+  "error": "ModelProviderError: model request failed: HTTP 400: You have reached your specified API usage limits. You will regain access on 2026-09-01 at 00:00 UTC.",
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "INSUFFICIENT_EVIDENCE",
+      "relevant_evidence_count": 2,
+      "assessed_evidence_count": 8,
+      "citation_ids": [
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40"
+      ],
+      "suggested_queries": [
+        "why do teams build evals for AI agents",
+        "evals for measuring agent reliability and regressions",
+        "how are agent evals used before deploying to production"
+      ],
+      "answer": "The retrieved evidence gives only a fragmentary picture of why evals are used for agent systems. One source describes using a 'non-deterministic grader' as part of an eval to evaluate an agent's non-deterministic characteristics such as personality, tone, style, and output quality, and mentions running evals to 'get a baseline' for an agent — suggesting evals serve to measure and baseline agent quality/behavior. Another source, discussing an eval that had Claude play Pokémon Red using tools and vision to try to beat the Elite Four, states that 'evals are often the best way to find your ideal balance' (in that context, balancing effort/response length) — suggesting evals help tune agent behavior/parameters. Beyond these points, the supplied evidence does not offer a more general or consolidated statement of the overarching purpose of evals for agent systems.",
+      "usage": {
+        "input_tokens": 4303,
+        "output_tokens": 1432,
+        "cost_usd": 0.022926,
+        "latency_seconds": 19.8025,
+        "output_tokens_per_second": 72.31
+      }
+    }
+  ],
+  "model_calls": 1,
+  "provider_calls": 2,
+  "model_latency_seconds": 39.605,
+  "output_tokens": 2864,
+  "output_tokens_per_second": 72.31,
+  "rejected_call_latency_seconds": 19.802,
+  "rejected_calls_with_usage": 1,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 20,
+  "evidence_expanded": true,
+  "max_evidence_items": 20,
+  "refined_queries": [
+    "why do teams build evals for AI agents",
+    "evals for measuring agent reliability and regressions",
+    "how are agent evals used before deploying to production"
+  ],
+  "final_evidence_ids": [
+    "89f0dd7a752aa844c90df8b16a8067a5eb7829b9ce656e29afc4d2ec456669c6",
+    "11c5afbe557f59b2e8bbdb7dc084fced2a1d9fda15da0bd997ac71e047e4ac63",
+    "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+    "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+    "1ef7ea308a07ef4355f91fc11363154fa0e3ee81052d80549e2d2ce7992a7430",
+    "7abd810a0066e1bac35fbe9b5cf841acb526c897efb2f10de7ac2fe0788e6940",
+    "7425f99a8e5bcc82d14a80b1daae7170ebd25bcd76ab0dedf1757c3776f0dfed",
+    "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+    "69817502cb7112dd44ebc92432f3bda1fe93a844240bcbab08fe76e85db43905",
+    "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e",
+    "71260df95377e02ccd24a04d2e2d9c3861b61cfb34cb9fc3afcd42234e015eef",
+    "af0dad2a795a5de82568fa2126c882bb0766426147e446da935a1d9ea5126242",
+    "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+    "b8adec83cae6c5aed08e451721d6a8c40e41b855571580f65f6b67fbeaaaea75",
+    "42d777a8caa67764eaab1ffbfb64676cc313cdd3f7f3e2792f5245e5d8090084",
+    "44fa52fc107bde4391fa4f04c5385e45fb306f80fbd499b7ef834fa4ac449c66",
+    "c4c1b249ad89b4fdc6ec9a9d3add46ae4fdb7c6f4f989c731ddc2a21826031f7",
+    "78f31560b0410776cef9add2eae4f146683253af19be7c4ebb471bff7c8fbbb8",
+    "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+    "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027"
+  ],
+  "frozen_expected_outcome": "SUPPORTED",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model.",
+  "repetition": 4,
+  "cost_usd": 0.045852
+}

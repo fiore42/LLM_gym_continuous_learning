@@ -1,0 +1,83 @@
+{
+  "verification_version": 1,
+  "question": "What lifecycle patterns does the corpus describe for agents that draft, evaluate, repair, and stop?",
+  "answer": "The retrieved evidence describes a generate-check-repair pattern in one case and a single-task-then-stop pattern in another, rather than a single unified lifecycle. In the scheduling example, a generator agent produces a first draft, a separate prompt checks the draft and reports specific violations, and a third repair prompt takes those violations as input and attempts targeted fixes—an explicit draft-evaluate-repair sequence. In the ad-production example, a worker agent on the render line animates one approved ad and then stops, with the broader pipeline continuing on to the next video via the next agent in the loop—here the stopping is per-unit-of-work completion rather than an explicit evaluate/repair step. Taken together, the evidence shows agents structured around discrete stages (draft, check/evaluate, repair) in one workflow, and a bounded do-one-task-then-stop pattern within a larger continuing loop in another, but does not describe a single common lifecycle framework spanning both.",
+  "model": "claude-haiku-4-5",
+  "prompt": {
+    "system_prompt": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+    "rendered_user_prompt": "Question: What lifecycle patterns does the corpus describe for agents that draft, evaluate, repair, and stop?\n\nAnswer:\nThe retrieved evidence describes a generate-check-repair pattern in one case and a single-task-then-stop pattern in another, rather than a single unified lifecycle. In the scheduling example, a generator agent produces a first draft, a separate prompt checks the draft and reports specific violations, and a third repair prompt takes those violations as input and attempts targeted fixes—an explicit draft-evaluate-repair sequence. In the ad-production example, a worker agent on the render line animates one approved ad and then stops, with the broader pipeline continuing on to the next video via the next agent in the loop—here the stopping is per-unit-of-work completion rather than an explicit evaluate/repair step. Taken together, the evidence shows agents structured around discrete stages (draft, check/evaluate, repair) in one workflow, and a bounded do-one-task-then-stop pattern within a larger continuing loop in another, but does not describe a single common lifecycle framework spanning both.\n\nEvidence:\nEVIDENCE_ID: fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb\nTEXT: The generator creates a first draft of the schedule. A separate prompt reports specific violations, and a third repair prompt receives those violations and tries to make targeted fixes.\n\nEVIDENCE_ID: 547cef468bbc92126714913b194a16c8724ff23b80cf227311eb092c2f8aea7b\nTEXT: Each run, a worker on the render line animates one approved ad, then stops; the larger loop continues with the next video in the next agent."
+  },
+  "claims": [
+    {
+      "claim": "A generate-check-repair pattern exists where a generator agent produces a first draft",
+      "verdict": "proven",
+      "evidence_id": "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+      "quote": "The generator creates a first draft of the schedule.",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "A separate prompt checks the draft and reports specific violations",
+      "verdict": "proven",
+      "evidence_id": "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+      "quote": "A separate prompt reports specific violations",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "A repair prompt receives violations and attempts targeted fixes",
+      "verdict": "proven",
+      "evidence_id": "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+      "quote": "a third repair prompt receives those violations and tries to make targeted fixes.",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "A worker agent animates one approved ad and then stops",
+      "verdict": "proven",
+      "evidence_id": "547cef468bbc92126714913b194a16c8724ff23b80cf227311eb092c2f8aea7b",
+      "quote": "a worker on the render line animates one approved ad, then stops",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "In the ad-production example, the larger pipeline continues with the next video in the next agent",
+      "verdict": "proven",
+      "evidence_id": "547cef468bbc92126714913b194a16c8724ff23b80cf227311eb092c2f8aea7b",
+      "quote": "the larger loop continues with the next video in the next agent.",
+      "quote_valid": true,
+      "flag": null
+    }
+  ],
+  "usage": {
+    "input_tokens": 530,
+    "output_tokens": 500,
+    "cost_usd": 0.00303
+  },
+  "advisory_only": true,
+  "evidence": [
+    {
+      "evidence_id": "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+      "platform": "youtube",
+      "source_key": "claude",
+      "canonical_url": "https://www.youtube.com/watch?v=G2B0YWuJUgI",
+      "published_at": "2026-05-21T18:19:30+00:00",
+      "title": "The prompting playbook",
+      "locator": "00:30:05–00:30:43",
+      "snippet": "We're going to use this generate evaluate repair loop, where essentially the generator now creates a first draft of the schedule. [...] We have a separate prompt, which reports any specific violations that it made. [...] We then have a third repair prompt, which receives any violations that were made, and tries to make targeted fixes to it.",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260522_G2B0YWuJUgI/transcripts/G2B0YWuJUgI.srt"
+    },
+    {
+      "evidence_id": "547cef468bbc92126714913b194a16c8724ff23b80cf227311eb092c2f8aea7b",
+      "platform": "youtube",
+      "source_key": "ColeMedin",
+      "canonical_url": "https://www.youtube.com/watch?v=deeOA6YVfqw",
+      "published_at": "2026-07-12T18:51:49+00:00",
+      "title": "I Turned Claude Code Into a Complete Video Generation System (with Archon)",
+      "kind": "transcript",
+      "locator": "00:09:12.040–00:09:14.550",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/ColeMedin/videos/20260712_deeOA6YVfqw/transcripts/deeOA6YVfqw.srt",
+      "snippet": "Each run, you animate one approved ad, then stop. The Ralph loop continues with the next video in the next agent."
+    }
+  ]
+}

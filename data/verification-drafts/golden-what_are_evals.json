@@ -1,0 +1,26 @@
+{
+  "verification_version": 1,
+  "question": "What does the corpus describe as the purpose of evals for agent systems?",
+  "answer": "The retrieved evidence indicates that evals are useful for helping developers understand whether iterative changes made to an agent actually improve it — that is, the transcript frames evals as a tool for evaluating and guiding the process of improving an agent over successive changes. However, the evidence provided does not go into further detail about specific mechanisms, metrics, or broader purposes of evals for agent systems, so a fuller characterization of their purpose cannot be attributed to this evidence.",
+  "model": "claude-haiku-4-5",
+  "prompt": {
+    "system_prompt": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+    "rendered_user_prompt": "Question: What does the corpus describe as the purpose of evals for agent systems?\n\nAnswer:\nThe retrieved evidence indicates that evals are useful for helping developers understand whether iterative changes made to an agent actually improve it — that is, the transcript frames evals as a tool for evaluating and guiding the process of improving an agent over successive changes. However, the evidence provided does not go into further detail about specific mechanisms, metrics, or broader purposes of evals for agent systems, so a fuller characterization of their purpose cannot be attributed to this evidence.\n\nEvidence:\nEVIDENCE_ID: 2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e\nTEXT: The transcript discusses what evals are useful for when improving an agent through iterative changes."
+  },
+  "claims": [
+    {
+      "claim": "Evals are useful for helping developers understand whether iterative changes made to an agent actually improve it",
+      "verdict": "not_proven",
+      "evidence_id": "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+      "quote": "The transcript discusses what evals are useful for when improving an agent through iterative changes.",
+      "quote_valid": true,
+      "flag": null
+    }
+  ],
+  "usage": {
+    "input_tokens": 333,
+    "output_tokens": 135,
+    "cost_usd": 0.001008
+  },
+  "advisory_only": true
+}

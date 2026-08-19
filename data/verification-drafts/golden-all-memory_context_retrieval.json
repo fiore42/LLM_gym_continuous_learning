@@ -1,0 +1,58 @@
+{
+  "verification_version": 1,
+  "question": "What relationship between context retrieval and agent memory is described by the corpus?",
+  "answer": "The retrieved evidence indicates only that context retrieval and agent memory are related as complementary capabilities. One source describes a 'context retriever' and 'agent memory' as two capabilities that can work in tandem, without elaborating on the mechanics of that interaction. Another source, discussing a high agent benchmark result, attributes the outcome to scaffolding that includes persistent memory and programmable context among other components (reusable skills, long-running subagents), suggesting that memory and context-related mechanisms jointly contribute to agent performance, though it does not specifically isolate 'context retrieval' as distinct from the other scaffolding elements.",
+  "model": "claude-haiku-4-5",
+  "prompt": {
+    "system_prompt": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+    "rendered_user_prompt": "Question: What relationship between context retrieval and agent memory is described by the corpus?\n\nAnswer:\nThe retrieved evidence indicates only that context retrieval and agent memory are related as complementary capabilities. One source describes a 'context retriever' and 'agent memory' as two capabilities that can work in tandem, without elaborating on the mechanics of that interaction. Another source, discussing a high agent benchmark result, attributes the outcome to scaffolding that includes persistent memory and programmable context among other components (reusable skills, long-running subagents), suggesting that memory and context-related mechanisms jointly contribute to agent performance, though it does not specifically isolate 'context retrieval' as distinct from the other scaffolding elements.\n\nEvidence:\nEVIDENCE_ID: 4fe16be84daef2e04952138d47a4532376ecd59302bfc6c40b454bc8a5f2c743\nTEXT: The transcript describes a context retriever and agent memory as two capabilities that can work in tandem.\n\nEVIDENCE_ID: fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39\nTEXT: The post attributes a high agent benchmark result to scaffolding including persistent memory, programmable context, reusable skills, and long-running subagents."
+  },
+  "claims": [
+    {
+      "claim": "Context retrieval and agent memory are described as complementary capabilities that can work in tandem",
+      "verdict": "proven",
+      "evidence_id": "4fe16be84daef2e04952138d47a4532376ecd59302bfc6c40b454bc8a5f2c743",
+      "quote": "The transcript describes a context retriever and agent memory as two capabilities that can work in tandem.",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "Scaffolding that includes persistent memory and programmable context jointly contributes to agent performance",
+      "verdict": "proven",
+      "evidence_id": "fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39",
+      "quote": "The post attributes a high agent benchmark result to scaffolding including persistent memory, programmable context, reusable skills, and long-running subagents.",
+      "quote_valid": true,
+      "flag": null
+    }
+  ],
+  "usage": {
+    "input_tokens": 453,
+    "output_tokens": 257,
+    "cost_usd": 0.001738
+  },
+  "advisory_only": true,
+  "evidence": [
+    {
+      "evidence_id": "4fe16be84daef2e04952138d47a4532376ecd59302bfc6c40b454bc8a5f2c743",
+      "platform": "youtube",
+      "source_key": "ColeMedin",
+      "canonical_url": "https://www.youtube.com/watch?v=R-5_2nsF_ZM",
+      "published_at": "2026-07-09T00:00:36+00:00",
+      "title": "I Love the Karpathy LLM Wiki but it Doesn't Scale. Here's What Does.",
+      "locator": "00:04:08–00:04:45; 00:07:28–00:07:33",
+      "snippet": "We have the context retriever and agent memory. These are the two things that I'm going to focus on for the rest of this video. [...] The context retriever is the context layer for our agent, giving it access to business data. The agent memory is the short-term and long-term memory for our customers. [...] I'll show you how the context retriever and agent memory can work in tandem.",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/ColeMedin/videos/20260709_R-5_2nsF_ZM/transcripts/R-5_2nsF_ZM.srt"
+    },
+    {
+      "evidence_id": "fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39",
+      "platform": "x",
+      "source_key": "WesRoth",
+      "canonical_url": "https://x.com/WesRoth/status/2085168985201365411",
+      "published_at": "2026-08-06T01:00:01.000Z",
+      "title": null,
+      "locator": null,
+      "snippet": "Prime Agent’s 95.5% ARC-AGI-3 score was achieved with Claude Opus 5. The breakthrough is therefore not a smarter underlying model. It is better scaffolding around the same intelligence: persistent memory, programmable context, reusable skills, long-running subagents, and a stronger model.",
+      "artifact_path": "source/x/WesRoth/posts/20260806_2085168985201365411/post.json"
+    }
+  ]
+}

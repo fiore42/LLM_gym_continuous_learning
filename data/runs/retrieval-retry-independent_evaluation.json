@@ -1,0 +1,83 @@
+{
+  "case_id": "independent_evaluation",
+  "question": "Does the corpus consistently describe an agent reviewing its own work as sufficient quality control?",
+  "mode": "live_retrieval",
+  "model": "claude-sonnet-5",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T12:52:08.127678+00:00",
+  "finished_at": "2026-08-16T12:53:37.023202+00:00",
+  "stop_reason": "QUALITY_GATE_PASSED",
+  "error": null,
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "INSUFFICIENT_EVIDENCE",
+      "citation_ids": [
+        "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3"
+      ],
+      "suggested_queries": [
+        "agent self-verification of outputs before submission",
+        "AI agents grading or critiquing their own work",
+        "self-review versus human-in-the-loop quality control for AI agents"
+      ],
+      "answer": "The retrieved evidence does not support the claim that the corpus consistently describes an agent reviewing its own work as sufficient quality control. In fact, the one piece of evidence that directly addresses this issue says the opposite: that even frontier models 'can pretty much do anything, but you need to review the decisions,' implying human review is necessary rather than self-review being sufficient. Other evidence touches on related but distinct topics—post-training as a human-driven refinement process, a model splitting itself into departments including a 'quality control' function, humans editing an agent's memory/context to keep it behaving consistently, and R&D-side control over release quality—none of which establish that self-review by an agent is treated as adequate quality control. No item in the retrieved evidence makes that specific claim."
+    },
+    {
+      "round": 2,
+      "classification": "SUPPORTED",
+      "citation_ids": [
+        "58d7d3dd942584047553b117261a9059a01ea257add6ca695b9da6a3524964c3",
+        "6b95d853b5726dd7bbaa57c84b38db308e0af2975aa8b07696cd7c4592503b70",
+        "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+        "297d57607b6ad49ab223e8435d6c892783091b1f202c35dc07244d25ba76ba25",
+        "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+        "0e45ba9c41c4e0e7ee9ad9d04f7fed6df2cdba961252b2392761204b1c51fe2c",
+        "a38b17716687d9d9c678961d9e7dfc12198d8dd4d793870b5768711b783141da",
+        "e51515705d9b05663c4ddb63d95e3bf9612d6e2e567149b4c4d89ed77037fdbf"
+      ],
+      "suggested_queries": [],
+      "answer": "No. The retrieved evidence does not converge on a picture where an agent reviewing its own work is treated as sufficient quality control. Instead, several items describe additional, separate mechanisms layered on top of an agent's own output: independent 'agentic verifier' steps, multi-agent setups where one agent finds issues and a different agent refutes them, dedicated verification pipelines, human-in-the-loop review processes, and human-built AI code review agents used to check work before it is passed along. One piece of evidence explicitly warns that using models' own generated outputs as training data (a self-referential process) causes imperfections like hallucination and bias to accumulate, and recommends verification, diversity, external grounding, and human validation as remedies rather than relying on self-review alone. Another notes that even capable frontier models still require a human to 'review the decisions.' None of the retrieved evidence states that an agent checking its own work, by itself, is treated as adequate quality control."
+    }
+  ],
+  "model_calls": 2,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 28,
+  "evidence_expanded": true,
+  "refined_queries": [
+    "agent self-verification of outputs before submission",
+    "AI agents grading or critiquing their own work",
+    "self-review versus human-in-the-loop quality control for AI agents"
+  ],
+  "final_evidence_ids": [
+    "602612e9dcc7a1464d3862e881a3aaf56dbb15353bb0c62184b72b0f172e41b7",
+    "58d7d3dd942584047553b117261a9059a01ea257add6ca695b9da6a3524964c3",
+    "5aab8a09ce205512bb9faa2d6f733b7ba3e74344b9c971b304320895223c823e",
+    "063b5d5374683df28f4aabd98890646b3677716f91c5e0e389911d9611f4e8fa",
+    "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+    "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027",
+    "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e",
+    "7e9d198773ef5eee3e408c9e73709e39b2c36da06332386607c31198f1510c6c",
+    "523f4898fbc3f48811664613c4e217c7a7e61e481c68b8227b1d9b13f67a07a0",
+    "bbb84ca82d69dc2b941db5d0bc8542f9b69d433a91bf41662151c6b111230a78",
+    "6b95d853b5726dd7bbaa57c84b38db308e0af2975aa8b07696cd7c4592503b70",
+    "297d57607b6ad49ab223e8435d6c892783091b1f202c35dc07244d25ba76ba25",
+    "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+    "a38b17716687d9d9c678961d9e7dfc12198d8dd4d793870b5768711b783141da",
+    "08dddf7afc69884a7af300bbf9864e60a5f58f5c439b2c4fcd43e0c14434c72b",
+    "bfa63ee05d5ce3e3d15d9f75059e41025656de07c6fd71b3e0d06d95bbf48a4e",
+    "2bceefeb83df7ccdd0d7eda88a54ce525468ac910e60920d2afa9fac6fdb16a1",
+    "89d58f4f39e231843424e0b1b35e9b1d4892601ba49b76d50268fda7f3099a44",
+    "7f10c524a16177d144b3badb5a389db319f476f22699b9dad6d514f492e37a87",
+    "a3d6ead827a35f611cf14f5bd5082b2e4328b9444732a33833847cbb9c05b70a",
+    "9e84e1ece4371981d0cb156c31b4ea943a44a90a74d37caaf7e0545aab8328ac",
+    "06b78a1c697b9c3a83d8e1794b1df2222d81e0995cfdf01483734648c8e458a7",
+    "faeb387ea4292b520bc4d4897a8cbd6c8bfeddad40c8fd07b4498d4679c25be6",
+    "e51515705d9b05663c4ddb63d95e3bf9612d6e2e567149b4c4d89ed77037fdbf",
+    "b4c49d8d41c95ebb66a4803cc6f53fbf123f8f341ef44a69959592ac9b2fd8f7",
+    "85f14e23d6fc36862769dc430670be05633d177f6d96dbe3b1f489b91a61079f",
+    "c32a7b9620dff038160f9a182f2a92e2c5f2598350ce0270e3007a39c141306b",
+    "0e45ba9c41c4e0e7ee9ad9d04f7fed6df2cdba961252b2392761204b1c51fe2c"
+  ],
+  "frozen_expected_outcome": "CONFLICTING_EVIDENCE",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model."
+}

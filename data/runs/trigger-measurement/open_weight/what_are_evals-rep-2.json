@@ -1,0 +1,105 @@
+{
+  "case_id": "what_are_evals",
+  "question": "What does the corpus describe as the purpose of evals for agent systems?",
+  "mode": "live_retrieval",
+  "model": "glm-5.2",
+  "provider_prefix": "OPEN_WEIGHT",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T16:59:30.701470+00:00",
+  "finished_at": "2026-08-16T17:00:01.117492+00:00",
+  "stop_reason": "QUALITY_GATE_PASSED",
+  "error": null,
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "SUPPORTED",
+      "relevant_evidence_count": 2,
+      "assessed_evidence_count": 8,
+      "citation_ids": [
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40"
+      ],
+      "suggested_queries": [
+        "purpose of evals for agent systems",
+        "why use evals for AI agents",
+        "role of evaluations in agentic systems"
+      ],
+      "answer": "The retrieved evidence describes evals for agent systems as serving the purpose of evaluating an agent's non-deterministic characteristics, such as personality, tone, style, and output quality, using a non-deterministic grader. Additionally, evals are described as often being the best way to find the ideal balance, particularly in the context of controlling effort levels.",
+      "usage": {
+        "input_tokens": 3074,
+        "output_tokens": 950,
+        "cost_usd": 0.008483599999999999,
+        "latency_seconds": 7.5359,
+        "output_tokens_per_second": 126.06
+      }
+    },
+    {
+      "round": 2,
+      "classification": "SUPPORTED",
+      "relevant_evidence_count": 5,
+      "assessed_evidence_count": 20,
+      "citation_ids": [
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+        "ecdeadf4616096071836ec3206171c2641b8e8f8407150da32c7613c8e867f20",
+        "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+        "b679e8c25f9b238942cc942dba86b1ece58a4d0615b7c9ada65447f0ae1e38bf"
+      ],
+      "suggested_queries": [
+        "why are evals important for AI agent systems",
+        "what do evals measure for agent systems",
+        "evals purpose agent evaluation methodology"
+      ],
+      "answer": "The retrieved evidence describes several purposes for evals in agent systems. Evals are used to evaluate an agent's non-deterministic characteristics, such as personality, tone, style, and output quality, using a non-deterministic grader. They are described as \"often the best way to find your ideal balance\" when controlling factors like length through effort levels. Evals are also used to test skills, with every skill being \"visible, tagged, and tested with evals.\" More broadly, the evidence suggests evals are considered \"actually really useful\" for applications consisting of AI agents, and that without evals, building such applications is problematic. The evidence also mentions a combination of fine evals (similar to benchmarks like SWE-bench) and online evaluations based on system usage, where an evaluator agent reads a code base, opens a browser, and step-by-step goes through a testing plan for an application an agent has built.",
+      "usage": {
+        "input_tokens": 6621,
+        "output_tokens": 2205,
+        "cost_usd": 0.018971400000000003,
+        "latency_seconds": 16.6831,
+        "output_tokens_per_second": 132.17
+      }
+    }
+  ],
+  "model_calls": 2,
+  "provider_calls": 2,
+  "model_latency_seconds": 24.219,
+  "output_tokens": 3155,
+  "output_tokens_per_second": 130.27,
+  "rejected_call_latency_seconds": 0,
+  "rejected_calls_with_usage": 0,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 20,
+  "evidence_expanded": true,
+  "max_evidence_items": 20,
+  "refined_queries": [
+    "purpose of evals for agent systems",
+    "why use evals for AI agents",
+    "role of evaluations in agentic systems"
+  ],
+  "final_evidence_ids": [
+    "89f0dd7a752aa844c90df8b16a8067a5eb7829b9ce656e29afc4d2ec456669c6",
+    "11c5afbe557f59b2e8bbdb7dc084fced2a1d9fda15da0bd997ac71e047e4ac63",
+    "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+    "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+    "1ef7ea308a07ef4355f91fc11363154fa0e3ee81052d80549e2d2ce7992a7430",
+    "7abd810a0066e1bac35fbe9b5cf841acb526c897efb2f10de7ac2fe0788e6940",
+    "7425f99a8e5bcc82d14a80b1daae7170ebd25bcd76ab0dedf1757c3776f0dfed",
+    "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+    "31a36ac4a470a58a4030af20264e12015f2ab1fb16c33c6808c68fdf6235a7da",
+    "a38b17716687d9d9c678961d9e7dfc12198d8dd4d793870b5768711b783141da",
+    "ecdeadf4616096071836ec3206171c2641b8e8f8407150da32c7613c8e867f20",
+    "0e45ba9c41c4e0e7ee9ad9d04f7fed6df2cdba961252b2392761204b1c51fe2c",
+    "adb6fe629749de4cc1e97d8132521903bf4ca89f739ff56c7c1e834638125cb9",
+    "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+    "dd6ac3ab2a5e9880fd9763cdd67148a1eb4b2263527ee842a4c2b088d995409f",
+    "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027",
+    "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e",
+    "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+    "ea8750bb4859b4111a2e0ce642d49190a96ff34e9233345ef664f4ba4ea80997",
+    "b679e8c25f9b238942cc942dba86b1ece58a4d0615b7c9ada65447f0ae1e38bf"
+  ],
+  "frozen_expected_outcome": "SUPPORTED",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model.",
+  "repetition": 2,
+  "cost_usd": 0.027455
+}

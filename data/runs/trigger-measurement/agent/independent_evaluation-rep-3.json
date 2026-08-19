@@ -1,0 +1,105 @@
+{
+  "case_id": "independent_evaluation",
+  "question": "Does the corpus consistently describe an agent reviewing its own work as sufficient quality control?",
+  "mode": "live_retrieval",
+  "model": "claude-sonnet-5",
+  "provider_prefix": "AGENT",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T17:09:50.939317+00:00",
+  "finished_at": "2026-08-16T17:11:12.483067+00:00",
+  "stop_reason": "QUALITY_GATE_PASSED",
+  "error": null,
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "INSUFFICIENT_EVIDENCE",
+      "relevant_evidence_count": 1,
+      "assessed_evidence_count": 8,
+      "citation_ids": [
+        "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3"
+      ],
+      "suggested_queries": [
+        "agent self-verification of its own output quality",
+        "AI agent grading or checking its own work",
+        "risks of relying on agent self-review without human oversight"
+      ],
+      "answer": "The retrieved evidence does not support the claim that the corpus consistently describes an agent reviewing its own work as sufficient quality control. In fact, the one piece of evidence that directly addresses this topic says the opposite: it states that frontier models 'can pretty much do anything, but you need to review the decisions,' implying that human review of agent output is necessary rather than self-review being sufficient. Other evidence items touch on related but distinct topics—post-training/alignment processes for LLMs, a model splitting itself into departments including a 'quality control' function, human ability to edit an agent's memory/context to keep it behaving consistently, and R&D-side control over release quality—but none of these establish or endorse the idea that an agent's own review of its work is sufficient quality control. No item in the retrieved evidence makes this claim affirmatively, so there is no basis to describe the corpus as consistent on this point.",
+      "usage": {
+        "input_tokens": 4144,
+        "output_tokens": 1385,
+        "cost_usd": 0.022138,
+        "latency_seconds": 19.9278,
+        "output_tokens_per_second": 69.5
+      }
+    },
+    {
+      "round": 2,
+      "classification": "CONFLICTING_EVIDENCE",
+      "relevant_evidence_count": 6,
+      "assessed_evidence_count": 20,
+      "citation_ids": [
+        "97c96ca7189fb887b32ab67ac3de681911ba78fa9e641b7b219e16cd210fab2e",
+        "d84d89d17c79ca34e076bbf44b153b1c17272f3145ae0c7a870d8c8051e324bb",
+        "00ba6181d26b9aeae64641a6321007d4ddd9a33b5cb3fda798279093056142e8",
+        "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e",
+        "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+        "7a0eceffefb0f5c61eb205ddd9689c6619daf75d94d4beb3a962f6975600d5ee"
+      ],
+      "suggested_queries": [
+        "agent self-verification without human oversight risks",
+        "limitations of AI agents checking their own output",
+        "human-in-the-loop review versus agent self-review quality control"
+      ],
+      "answer": "No consistent position emerges from the retrieved evidence. A few items touch on an agent checking its own output, but they point in different directions rather than converging on a claim that self-review is sufficient quality control. One source describes Opus 5 as verifying its own work and recovering from mistakes 'without human intervention,' framing this positively but with the speaker expressing unease about it rather than endorsing it as adequate quality control. Another source explicitly says the opposite of 'sufficient': it states that a bot often fails to look at its own output, and criticizes users who rely on 'oneshotting' and expect default alignment to work without the human 'even looking at your own output' -- implying self-review alone is not being relied upon and human review is still needed. A third source mentions a coding agent 'checking its own work' as part of a broader production-grade reliability workflow (Eve), but does not claim this self-check is by itself sufficient; it is presented as one feature within a larger tooling and deployment framework. Other evidence describes human oversight mechanisms (e.g., people editing an agent's memory/context to keep behavior consistent, or humans controlling release quality on the R&D side), which points toward external checks rather than self-review as the quality-control mechanism. Overall, the retrieved evidence does not consistently describe self-review as sufficient; it instead shows mixed treatment, with explicit caveats about the need for human review and external quality control alongside isolated mentions of agents checking their own work.",
+      "usage": {
+        "input_tokens": 8866,
+        "output_tokens": 3076,
+        "cost_usd": 0.048492,
+        "latency_seconds": 46.7863,
+        "output_tokens_per_second": 65.75
+      }
+    }
+  ],
+  "model_calls": 2,
+  "provider_calls": 2,
+  "model_latency_seconds": 66.714,
+  "output_tokens": 4461,
+  "output_tokens_per_second": 66.87,
+  "rejected_call_latency_seconds": 0,
+  "rejected_calls_with_usage": 0,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 20,
+  "evidence_expanded": true,
+  "max_evidence_items": 20,
+  "refined_queries": [
+    "agent self-verification of its own output quality",
+    "AI agent grading or checking its own work",
+    "risks of relying on agent self-review without human oversight"
+  ],
+  "final_evidence_ids": [
+    "602612e9dcc7a1464d3862e881a3aaf56dbb15353bb0c62184b72b0f172e41b7",
+    "58d7d3dd942584047553b117261a9059a01ea257add6ca695b9da6a3524964c3",
+    "5aab8a09ce205512bb9faa2d6f733b7ba3e74344b9c971b304320895223c823e",
+    "063b5d5374683df28f4aabd98890646b3677716f91c5e0e389911d9611f4e8fa",
+    "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+    "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027",
+    "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e",
+    "7e9d198773ef5eee3e408c9e73709e39b2c36da06332386607c31198f1510c6c",
+    "bbb84ca82d69dc2b941db5d0bc8542f9b69d433a91bf41662151c6b111230a78",
+    "78f31560b0410776cef9add2eae4f146683253af19be7c4ebb471bff7c8fbbb8",
+    "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+    "0fe06ce36e495e90f08e53b944a077d11506b57c0f8792fc5d67187e0db3ee41",
+    "d84d89d17c79ca34e076bbf44b153b1c17272f3145ae0c7a870d8c8051e324bb",
+    "de5067ede62adb5005463355f6199787004ea7ef3783010d30557f7a80836b4e",
+    "00ba6181d26b9aeae64641a6321007d4ddd9a33b5cb3fda798279093056142e8",
+    "7a0eceffefb0f5c61eb205ddd9689c6619daf75d94d4beb3a962f6975600d5ee",
+    "2bceefeb83df7ccdd0d7eda88a54ce525468ac910e60920d2afa9fac6fdb16a1",
+    "97c96ca7189fb887b32ab67ac3de681911ba78fa9e641b7b219e16cd210fab2e",
+    "6dff47d6099c5a8690bb2d0b57c440fccdaf139a6c106cbf6abb92d150c29d39",
+    "89d58f4f39e231843424e0b1b35e9b1d4892601ba49b76d50268fda7f3099a44"
+  ],
+  "frozen_expected_outcome": "CONFLICTING_EVIDENCE",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model.",
+  "repetition": 3,
+  "cost_usd": 0.07063
+}

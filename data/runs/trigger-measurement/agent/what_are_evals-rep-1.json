@@ -1,0 +1,108 @@
+{
+  "case_id": "what_are_evals",
+  "question": "What does the corpus describe as the purpose of evals for agent systems?",
+  "mode": "live_retrieval",
+  "model": "claude-sonnet-5",
+  "provider_prefix": "AGENT",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T17:01:49.205951+00:00",
+  "finished_at": "2026-08-16T17:03:49.034252+00:00",
+  "stop_reason": "QUALITY_GATE_PASSED",
+  "error": null,
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "INSUFFICIENT_EVIDENCE",
+      "relevant_evidence_count": 2,
+      "assessed_evidence_count": 8,
+      "citation_ids": [
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40"
+      ],
+      "suggested_queries": [
+        "why do we run evals on AI agents",
+        "evals purpose measuring agent performance reliability",
+        "how evals help improve agent behavior before deployment"
+      ],
+      "answer": "The retrieved evidence gives only fragmentary and mostly tangential information about the purpose of evals for agent systems. One source describes using a non-deterministic grader as part of an eval to assess an agent's non-deterministic characteristics (personality, tone, style, and output quality), and mentions running a baseline eval as a technique for evaluating an agent. Another source, discussing an eval where Claude played Pokémon Red, states that evals are often the best way to find an ideal balance (in that context, a balance related to controllable effort/response length). Beyond these two points, the supplied evidence does not otherwise articulate a general definition or purpose of evals for agent systems.",
+      "usage": {
+        "input_tokens": 4303,
+        "output_tokens": 1355,
+        "cost_usd": 0.022156,
+        "latency_seconds": 19.2047,
+        "output_tokens_per_second": 70.56
+      }
+    },
+    {
+      "round": 2,
+      "classification": "SUPPORTED",
+      "relevant_evidence_count": 8,
+      "assessed_evidence_count": 20,
+      "citation_ids": [
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+        "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+        "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+        "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+        "045c60f18d6cf59486b70176d9842403bca0c53d8b07e9880e3100dbdd4b96b2",
+        "0089f26b081acdacc852eb82050f12495743ccc9ed36c499f18be8f15edc8c97",
+        "7e9d198773ef5eee3e408c9e73709e39b2c36da06332386607c31198f1510c6c"
+      ],
+      "suggested_queries": [
+        "why do teams build evals before deploying agents",
+        "evals catching regressions in agent behavior",
+        "evals for measuring agent reliability in production"
+      ],
+      "answer": "The retrieved evidence describes evals mainly as a way to measure and improve agent behavior before and after changes are made. One source describes using a non-deterministic grader as part of an eval to evaluate an agent's non-deterministic characteristics like personality, tone, style, and output quality, and running evals to get a baseline for an agent (96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5). Another source states that evals are often the best way to find an ideal balance (in that case, for controlling response length via effort levels) (663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40). A source walks through applying prompting best practices and then running an eval to check whether an updated prompt produces improvement and addresses test cases (fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb). Another source describes building an eval for a customer service agent using an LLM as a judge to check whether the final response matches an expected response, and states that evals let them measure metrics that would otherwise seem 'plucked out of thin air' (faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed). One source describes making changes to a new agent based on information obtained from running evals (2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e), and another describes running 'very tight evals' internally alongside tight feedback loops to let agents run longer (045c60f18d6cf59486b70176d9842403bca0c53d8b07e9880e3100dbdd4b96b2). Another source similarly says evals are used to improve agents internally and encourages trying things out and running evals (0089f26b081acdacc852eb82050f12495743ccc9ed36c499f18be8f15edc8c97). Separately, one source describes a benchmark called Exploit Gym whose whole purpose is to measure whether AI agents can turn known vulnerabilities into working exploits, illustrating evals/benchmarks used for a specific capability or safety measurement (7e9d198773ef5eee3e408c9e73709e39b2c36da06332386607c31198f1510c6c). Overall, across these items, evals for agent systems are described as tools for measuring agent quality/behavior, establishing baselines, comparing prompt or model changes, and guiding iterative improvements.",
+      "usage": {
+        "input_tokens": 9217,
+        "output_tokens": 3517,
+        "cost_usd": 0.053604,
+        "latency_seconds": 49.7067,
+        "output_tokens_per_second": 70.76
+      }
+    }
+  ],
+  "model_calls": 2,
+  "provider_calls": 3,
+  "model_latency_seconds": 114.513,
+  "output_tokens": 7773,
+  "output_tokens_per_second": 67.88,
+  "rejected_call_latency_seconds": 45.602,
+  "rejected_calls_with_usage": 1,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 20,
+  "evidence_expanded": true,
+  "max_evidence_items": 20,
+  "refined_queries": [
+    "why do we run evals on AI agents",
+    "evals purpose measuring agent performance reliability",
+    "how evals help improve agent behavior before deployment"
+  ],
+  "final_evidence_ids": [
+    "89f0dd7a752aa844c90df8b16a8067a5eb7829b9ce656e29afc4d2ec456669c6",
+    "11c5afbe557f59b2e8bbdb7dc084fced2a1d9fda15da0bd997ac71e047e4ac63",
+    "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+    "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+    "1ef7ea308a07ef4355f91fc11363154fa0e3ee81052d80549e2d2ce7992a7430",
+    "7abd810a0066e1bac35fbe9b5cf841acb526c897efb2f10de7ac2fe0788e6940",
+    "7425f99a8e5bcc82d14a80b1daae7170ebd25bcd76ab0dedf1757c3776f0dfed",
+    "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+    "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+    "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+    "045c60f18d6cf59486b70176d9842403bca0c53d8b07e9880e3100dbdd4b96b2",
+    "0089f26b081acdacc852eb82050f12495743ccc9ed36c499f18be8f15edc8c97",
+    "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+    "2bceefeb83df7ccdd0d7eda88a54ce525468ac910e60920d2afa9fac6fdb16a1",
+    "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+    "7e9d198773ef5eee3e408c9e73709e39b2c36da06332386607c31198f1510c6c",
+    "78f31560b0410776cef9add2eae4f146683253af19be7c4ebb471bff7c8fbbb8",
+    "827a4463ee963513d0525bac34e23aebd9cc5d7516cdd5ab04246b029ea21a24",
+    "af0dad2a795a5de82568fa2126c882bb0766426147e446da935a1d9ea5126242",
+    "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027"
+  ],
+  "frozen_expected_outcome": "SUPPORTED",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model.",
+  "repetition": 1,
+  "cost_usd": 0.123092
+}

@@ -1,0 +1,47 @@
+{
+  "verification_version": 1,
+  "question": "Which dimensions does the corpus say should be considered together when choosing or routing models?",
+  "answer": "Based on the retrieved evidence, the corpus indicates that quality, cost, and latency are the dimensions that should be considered together when choosing or routing models, with trade-offs existing between cost/latency on one side and quality on the other.",
+  "model": "claude-haiku-4-5",
+  "prompt": {
+    "system_prompt": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+    "rendered_user_prompt": "Question: Which dimensions does the corpus say should be considered together when choosing or routing models?\n\nAnswer:\nBased on the retrieved evidence, the corpus indicates that quality, cost, and latency are the dimensions that should be considered together when choosing or routing models, with trade-offs existing between cost/latency on one side and quality on the other.\n\nEvidence:\nEVIDENCE_ID: faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed\nTEXT: The transcript names quality, cost, and latency as evaluation dimensions and describes trade-offs between cost/latency and quality."
+  },
+  "claims": [
+    {
+      "claim": "Quality, cost, and latency are dimensions that should be considered together when choosing or routing models",
+      "verdict": "proven",
+      "evidence_id": "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+      "quote": "The transcript names quality, cost, and latency as evaluation dimensions",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "Trade-offs exist between cost/latency on one side and quality on the other",
+      "verdict": "proven",
+      "evidence_id": "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+      "quote": "describes trade-offs between cost/latency and quality",
+      "quote_valid": true,
+      "flag": null
+    }
+  ],
+  "usage": {
+    "input_tokens": 300,
+    "output_tokens": 238,
+    "cost_usd": 0.00149
+  },
+  "advisory_only": true,
+  "evidence": [
+    {
+      "evidence_id": "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+      "platform": "youtube",
+      "source_key": "claude",
+      "canonical_url": "https://www.youtube.com/watch?v=P0uMXS6emHA",
+      "published_at": "2026-05-21T18:19:30+00:00",
+      "title": "Picking the right model",
+      "locator": "00:03:08–00:03:13; 00:14:14–00:14:19",
+      "snippet": "The first dimension is model quality: how well does it actually perform? Number two is latency, especially for customer-facing use cases. Number three is cost. These are the three pillars of quality, cost, and latency, and we can start to build an eval around them.",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260521_P0uMXS6emHA/transcripts/P0uMXS6emHA.srt"
+    }
+  ]
+}

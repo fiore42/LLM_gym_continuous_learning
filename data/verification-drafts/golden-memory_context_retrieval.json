@@ -1,0 +1,42 @@
+{
+  "verification_version": 1,
+  "question": "What relationship between context retrieval and agent memory is described by the corpus?",
+  "answer": "The retrieved evidence indicates only that context retrieval and agent memory are related as complementary capabilities. One source describes a 'context retriever' and 'agent memory' as two capabilities that can work in tandem, without elaborating on the mechanics of that interaction. Another source, discussing a high agent benchmark result, attributes the outcome to scaffolding that includes persistent memory and programmable context among other components (reusable skills, long-running subagents), suggesting that memory and context-related mechanisms jointly contribute to agent performance, though it does not specifically isolate 'context retrieval' as distinct from the other scaffolding elements.",
+  "model": "claude-haiku-4-5",
+  "prompt": {
+    "system_prompt": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+    "rendered_user_prompt": "Question: What relationship between context retrieval and agent memory is described by the corpus?\n\nAnswer:\nThe retrieved evidence indicates only that context retrieval and agent memory are related as complementary capabilities. One source describes a 'context retriever' and 'agent memory' as two capabilities that can work in tandem, without elaborating on the mechanics of that interaction. Another source, discussing a high agent benchmark result, attributes the outcome to scaffolding that includes persistent memory and programmable context among other components (reusable skills, long-running subagents), suggesting that memory and context-related mechanisms jointly contribute to agent performance, though it does not specifically isolate 'context retrieval' as distinct from the other scaffolding elements.\n\nEvidence:\nEVIDENCE_ID: 4fe16be84daef2e04952138d47a4532376ecd59302bfc6c40b454bc8a5f2c743\nTEXT: The transcript describes a context retriever and agent memory as two capabilities that can work in tandem.\n\nEVIDENCE_ID: fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39\nTEXT: The post attributes a high agent benchmark result to scaffolding including persistent memory, programmable context, reusable skills, and long-running subagents."
+  },
+  "claims": [
+    {
+      "claim": "Context retrieval and agent memory are related as complementary capabilities",
+      "verdict": "proven",
+      "evidence_id": "4fe16be84daef2e04952138d47a4532376ecd59302bfc6c40b454bc8a5f2c743",
+      "quote": "The transcript describes a context retriever and agent memory as two capabilities that can work in tandem.",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "Memory and context-related mechanisms jointly contribute to agent performance",
+      "verdict": "proven",
+      "evidence_id": "fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39",
+      "quote": "The post attributes a high agent benchmark result to scaffolding including persistent memory, programmable context, reusable skills, and long-running subagents.",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "Context retrieval is isolated as distinct from other scaffolding elements in the high agent benchmark result",
+      "verdict": "not_proven",
+      "evidence_id": "fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39",
+      "quote": "The post attributes a high agent benchmark result to scaffolding including persistent memory, programmable context, reusable skills, and long-running subagents.",
+      "quote_valid": true,
+      "flag": null
+    }
+  ],
+  "usage": {
+    "input_tokens": 453,
+    "output_tokens": 373,
+    "cost_usd": 0.002318
+  },
+  "advisory_only": true
+}

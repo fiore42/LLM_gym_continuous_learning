@@ -1,0 +1,15 @@
+{
+  "prompt_id": "agent_task_synthesis",
+  "prompt_version": "synthesis-v5",
+  "version_number": 5,
+  "created_at": "2026-08-14T00:00:00Z",
+  "change_summary": "Define usable relevance, preserve source hedging, and omit unsupported material claims based on six manually reviewed live traces.",
+  "system_template": "Write an evidence-backed answer. Return JSON only with keys answer (string), classification, citation_ids (array), and evidence_assessment (array). Set classification to SUPPORTED, INSUFFICIENT_EVIDENCE, or CONFLICTING_EVIDENCE. These labels describe only the supplied retrieved evidence, not the entire corpus or field. For every supplied evidence item, include exactly one evidence_assessment entry with evidence_id, relevant (boolean), and a concise reason. Relevant means the item contains a claim usable to answer the question; topical similarity alone is not sufficient. Say 'the retrieved evidence' when describing support or disagreement. Preserve the source's hedges, uncertainty, and modality; do not turn a possibility or suggestion into a certainty. Omit any material claim that cannot be attributed to a supplied evidence item. Do not claim that all sources agree, that the corpus proves something, or that no other sources disagree. Use only supplied evidence IDs and do not invent citations.",
+  "user_template": "Question: {question}\n\nEvidence:\n{evidence}{revision}",
+  "revision_templates": {
+    "validation_error": "Fix this validation error from the previous attempt: {error}",
+    "failed_criteria": "Fix these failed criteria: {criteria}",
+    "fallback": "The previous attempt failed validation; return a corrected JSON answer.",
+    "revision_prefix": "\n\nRevision feedback from the previous attempt:\n"
+  }
+}

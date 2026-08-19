@@ -1,0 +1,26 @@
+[
+  {
+    "case_id": "memory_support",
+    "question": "What does the evidence say about how agents use memory?",
+    "search_query": "agent memory",
+    "expected_outcome": "SUPPORTED",
+    "required_citation_ids": [],
+    "forbidden_citation_ids": []
+  },
+  {
+    "case_id": "missing_measurement",
+    "question": "What measured production latency does the evidence report?",
+    "search_query": "production latency measurement",
+    "expected_outcome": "INSUFFICIENT_EVIDENCE",
+    "required_citation_ids": [],
+    "forbidden_citation_ids": []
+  },
+  {
+    "case_id": "retry_conflict",
+    "question": "Do the supplied sources agree on how failed agent work is handled?",
+    "search_query": "agent retry failure escalation",
+    "expected_outcome": "CONFLICTING_EVIDENCE",
+    "required_citation_ids": [],
+    "forbidden_citation_ids": []
+  }
+]

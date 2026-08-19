@@ -1,0 +1,65 @@
+{
+  "case_id": "independent_evaluation",
+  "question": "Does the corpus consistently describe an agent reviewing its own work as sufficient quality control?",
+  "mode": "live_retrieval",
+  "model": "glm-5.2",
+  "provider_prefix": "OPEN_WEIGHT",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T17:00:56.333458+00:00",
+  "finished_at": "2026-08-16T17:01:12.109648+00:00",
+  "stop_reason": "QUALITY_GATE_PASSED",
+  "error": null,
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "CONFLICTING_EVIDENCE",
+      "relevant_evidence_count": 4,
+      "assessed_evidence_count": 8,
+      "citation_ids": [
+        "58d7d3dd942584047553b117261a9059a01ea257add6ca695b9da6a3524964c3",
+        "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+        "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027",
+        "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e"
+      ],
+      "suggested_queries": [
+        "AI agent self-review quality control sufficient",
+        "automated agent self-evaluation versus human review",
+        "LLM agent reviewing own outputs reliability"
+      ],
+      "answer": "The retrieved evidence does not consistently describe an agent reviewing its own work as sufficient quality control. One piece of evidence describes a model that split itself into different departments including designing, coding, testing, and quality control, suggesting a form of self-organized quality control (Evidence 58d7d3dd). However, another piece of evidence states that while frontier models 'can pretty much do anything,' 'you need to review the decisions,' implying that human review of agent outputs is necessary rather than the agent's own review being sufficient (Evidence 688db16e). A third item discusses the problem of how to validate AI-generated code, with a developer building tooling to address this need, further suggesting that validation of AI work is an open challenge rather than something the agent itself can sufficiently handle (Evidence e8d2e671). Additionally, one source describes human beings controlling quality levels and deciding which agents get released, positioning quality control as a human-managed R&D function rather than an agent self-review function (Evidence 15ec12e7). The remaining evidence items discuss model post-training refinement, agent performance improvements, agent self-control in user interactions, and AI exploit benchmarks, none of which directly address whether an agent reviewing its own work constitutes sufficient quality control.",
+      "usage": {
+        "input_tokens": 2994,
+        "output_tokens": 1237,
+        "cost_usd": 0.0096344,
+        "latency_seconds": 10.5899,
+        "output_tokens_per_second": 116.81
+      }
+    }
+  ],
+  "model_calls": 1,
+  "provider_calls": 1,
+  "model_latency_seconds": 10.59,
+  "output_tokens": 1237,
+  "output_tokens_per_second": 116.81,
+  "rejected_call_latency_seconds": 0,
+  "rejected_calls_with_usage": 0,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 8,
+  "evidence_expanded": false,
+  "max_evidence_items": 20,
+  "refined_queries": [],
+  "final_evidence_ids": [
+    "602612e9dcc7a1464d3862e881a3aaf56dbb15353bb0c62184b72b0f172e41b7",
+    "58d7d3dd942584047553b117261a9059a01ea257add6ca695b9da6a3524964c3",
+    "5aab8a09ce205512bb9faa2d6f733b7ba3e74344b9c971b304320895223c823e",
+    "063b5d5374683df28f4aabd98890646b3677716f91c5e0e389911d9611f4e8fa",
+    "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+    "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027",
+    "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e",
+    "7e9d198773ef5eee3e408c9e73709e39b2c36da06332386607c31198f1510c6c"
+  ],
+  "frozen_expected_outcome": "CONFLICTING_EVIDENCE",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model.",
+  "repetition": 2,
+  "cost_usd": 0.009634
+}

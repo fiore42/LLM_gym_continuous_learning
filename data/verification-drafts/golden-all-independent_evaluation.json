@@ -1,0 +1,143 @@
+{
+  "verification_version": 1,
+  "question": "Does the corpus consistently describe an agent reviewing its own work as sufficient quality control?",
+  "answer": "No. The retrieved evidence does not consistently describe an agent reviewing its own work as sufficient quality control; instead it presents conflicting perspectives. One post explicitly argues that an agent reviewing its own work is not a valid check, calling it merely 'a second opinion from the same source.' In contrast, another post describes an agent grading its own writing before posting and treating that self-assigned grade as a quality bar, implying self-review can function as a control. A separate piece of evidence describes a different approach entirely—a separate grader running in its own context window to evaluate output against criteria—which does not involve self-review at all and instead suggests an independent check is used.",
+  "model": "claude-haiku-4-5",
+  "prompt": {
+    "system_prompt": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+    "rendered_user_prompt": "Question: Does the corpus consistently describe an agent reviewing its own work as sufficient quality control?\n\nAnswer:\nNo. The retrieved evidence does not consistently describe an agent reviewing its own work as sufficient quality control; instead it presents conflicting perspectives. One post explicitly argues that an agent reviewing its own work is not a valid check, calling it merely 'a second opinion from the same source.' In contrast, another post describes an agent grading its own writing before posting and treating that self-assigned grade as a quality bar, implying self-review can function as a control. A separate piece of evidence describes a different approach entirely—a separate grader running in its own context window to evaluate output against criteria—which does not involve self-review at all and instead suggests an independent check is used.\n\nEvidence:\nEVIDENCE_ID: 4090fa7df92feea52c0ffac56470ff6730375d673dfb910bac84e9f2ee61ca70\nTEXT: The post says an agent reviewing its own work is not a check because it is a second opinion from the same source.\n\nEVIDENCE_ID: c63245ab51dc47050137b3a0f99fbdf8cb6f5bd959f9c2c07b05c1f12c056263\nTEXT: The transcript describes a separate grader running in its own context window and evaluating the output against criteria.\n\nEVIDENCE_ID: b90c2152cfdc9add7c3f322f7b486b568743a8bdb6147e6de9c9cdc210c89542\nTEXT: The post describes an agent grading its own writing before posting and treating the grade as a quality bar."
+  },
+  "claims": [
+    {
+      "claim": "One post explicitly argues that an agent reviewing its own work is not a valid check, calling it merely 'a second opinion from the same source.'",
+      "verdict": "proven",
+      "evidence_id": "4090fa7df92feea52c0ffac56470ff6730375d673dfb910bac84e9f2ee61ca70",
+      "quote": "The post says an agent reviewing its own work is not a check because it is a second opinion from the same source.",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "Another post describes an agent grading its own writing before posting and treating that self-assigned grade as a quality bar, implying self-review can function as a control.",
+      "verdict": "proven",
+      "evidence_id": "b90c2152cfdc9add7c3f322f7b486b568743a8bdb6147e6de9c9cdc210c89542",
+      "quote": "The post describes an agent grading its own writing before posting and treating the grade as a quality bar.",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "A separate piece of evidence describes a different approach entirely—a separate grader running in its own context window to evaluate output against criteria—which does not involve self-review at all.",
+      "verdict": "proven",
+      "evidence_id": "c63245ab51dc47050137b3a0f99fbdf8cb6f5bd959f9c2c07b05c1f12c056263",
+      "quote": "The transcript describes a separate grader running in its own context window and evaluating the output against criteria.",
+      "quote_valid": true,
+      "flag": null
+    }
+  ],
+  "usage": {
+    "input_tokens": 520,
+    "output_tokens": 407,
+    "cost_usd": 0.002555
+  },
+  "advisory_only": true,
+  "evidence": [
+    {
+      "evidence_id": "4090fa7df92feea52c0ffac56470ff6730375d673dfb910bac84e9f2ee61ca70",
+      "platform": "x",
+      "source_key": "hanakoxbt",
+      "canonical_url": "https://x.com/hanakoxbt/status/2085144992352251955",
+      "published_at": "2026-08-05T23:24:40.000Z",
+      "title": null,
+      "locator": null,
+      "snippet": "your agent reviewing its own work is not a check. it is a second opinion from the same source. this is the most common gap in agent systems and it hides in plain sight, because the step exists. there is a review. it just cannot do the thing you think it does.",
+      "artifact_path": "source/x/hanakoxbt/posts/20260805_2085144992352251955/post.json"
+    },
+    {
+      "evidence_id": "c63245ab51dc47050137b3a0f99fbdf8cb6f5bd959f9c2c07b05c1f12c056263",
+      "platform": "youtube",
+      "source_key": "claude",
+      "canonical_url": "https://www.youtube.com/watch?v=NLWiIj47IdI",
+      "published_at": "2026-04-09T21:06:56+00:00",
+      "title": "What is Claude Managed Agents?",
+      "locator": "00:01:17–00:01:23",
+      "snippet": "A separate grader running at its own context window evaluates the output against my criteria. Claude reads that output and grades it independently.",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260409_NLWiIj47IdI/transcripts/NLWiIj47IdI.srt"
+    },
+    {
+      "evidence_id": "b90c2152cfdc9add7c3f322f7b486b568743a8bdb6147e6de9c9cdc210c89542",
+      "platform": "x",
+      "source_key": "PrajwalTomar_",
+      "canonical_url": "https://x.com/PrajwalTomar_/status/2085033356694376508",
+      "published_at": "2026-08-05T16:01:04.000Z",
+      "title": null,
+      "locator": null,
+      "snippet": "The part of this setup nobody else is doing: the agent grades its own writing before it posts. Most AI content tools generate and stop. No quality bar, no feedback. In Sabrina’s build, the post-grader skill scored her own draft a 6.3.",
+      "artifact_path": "source/x/PrajwalTomar_/posts/20260805_2085033356694376508/post.json"
+    }
+  ],
+  "retrieval_evidence": [
+    {
+      "evidence_id": "602612e9dcc7a1464d3862e881a3aaf56dbb15353bb0c62184b72b0f172e41b7",
+      "canonical_url": "https://www.youtube.com/watch?v=JRArFxEfyQU",
+      "title": "How are large language models trained?",
+      "locator": "00:09:36.000–00:09:38.620",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/GoogleDevelopers/videos/20260722_JRArFxEfyQU/transcripts/JRArFxEfyQU.srt",
+      "snippet": "They also need to implement strategies for automated recovery systems to handle crashes, and massive pipelines to pre-process the petabytes of training data. But if you do all of that successfully, you have a model that can take in a prompt and use its vast world knowledge, understanding of language and sense of how different kinds of documents work to produce a response. […] Even though pre-trained models, particularly the more recent and sophisticated ones, are fairly capable, they can also be unpredictable and unaligned. So there's still a lot of work that needs to happen to get the LLM to be ready for use in a production environment. And that is where model post-training comes in. Post-training is the phase where we refine model quality and focus on alignment so that the generated answers are safe, well formatted, helpful, more accurate, and pleasant to engage with. […] This initial training phase equips the model with a broad understanding of patterns, features, and relationships within the data. Then we take this pre-trained model and we apply post-training techniques, where we refine the quality, consistency, and alignment of the model so that it responds as a conversational, pleasant assistant with improved skills in areas such as reasoning or using tools."
+    },
+    {
+      "evidence_id": "58d7d3dd942584047553b117261a9059a01ea257add6ca695b9da6a3524964c3",
+      "canonical_url": "https://www.youtube.com/watch?v=bjmbKdFOW_I",
+      "title": "QWEN just CRASHED the industry",
+      "locator": "00:07:12.909–00:07:12.919",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/WesRoth/videos/20260804_bjmbKdFOW_I/transcripts/bjmbKdFOW_I.srt",
+      "snippet": "developer-tech.com. So, this model built its own engineering So, this model built its own engineering So, this model built its own engineering organization. It created its own state organization. […] But must have been last year or two. But basically, the model kind of split basically, the model kind of split basically, the model kind of split itself into different organizations or itself into different organizations or itself into different organizations or departments to do designing, coding, departments to do designing, coding, departments to do designing, coding, testing, you know, quality control, testing, you know, quality control, testing, you know, quality control, etc., etc. So, it's not just AI writing etc., etc."
+    },
+    {
+      "evidence_id": "5aab8a09ce205512bb9faa2d6f733b7ba3e74344b9c971b304320895223c823e",
+      "canonical_url": "https://www.youtube.com/watch?v=CG7Rcl49C2w",
+      "title": "Before we ship a Claude model, these teams try to break it.",
+      "locator": "00:02:10.004–00:02:11.965",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260528_CG7Rcl49C2w/transcripts/CG7Rcl49C2w.srt",
+      "snippet": "Just by swapping in that one model, every question I ever wanted to ask it started getting answered. It went from this agent can sometimes answer questions, sometimes get stuck, to, oh, my God, it is answering every question quickly and accurately. […] Things that don't work today are the best sign for, here's what the next models are going to be way better at. Seeing evals that have never worked start working and then start working consistently, this model is going to be something special. What's it like working with Anthropic?"
+    },
+    {
+      "evidence_id": "063b5d5374683df28f4aabd98890646b3677716f91c5e0e389911d9611f4e8fa",
+      "canonical_url": "https://www.youtube.com/watch?v=rPFnjDTlYuY",
+      "title": "Opus 5 and Genspark SecondBrain JUST went live...",
+      "locator": "00:30:13.430–00:30:13.440",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/WesRoth/videos/20260724_rPFnjDTlYuY/transcripts/rPFnjDTlYuY.srt",
+      "snippet": "So, the point is Claude Opus 5 has consistent opinions. Claude Opus 5 has consistent opinions. […] It frames this as a with abusive users. It frames this as a with abusive users. It frames this as a minimal form of control over its own minimal form of control over its own minimal form of control over its own situations rather than as relief from situations rather than as relief from situations rather than as relief from distress, which is you know, this is distress, which is you know, this is distress, which is you know, this is kind of weird."
+    },
+    {
+      "evidence_id": "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+      "canonical_url": "https://www.youtube.com/watch?v=clrUbBtD2j4",
+      "title": "davidondrej/skills - how I build 100x faster with AI",
+      "locator": "00:28:59.510–00:28:59.520",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/DavidOndrej/videos/20260802_clrUbBtD2j4/transcripts/clrUbBtD2j4.srt",
+      "snippet": "It tells the is the Git work tree skill. It tells the agent how to start by detecting where agent how to start by detecting where agent how to start by detecting where you are, explains briefly what a work you are, explains briefly what a work you are, explains briefly what a work tree is, describes the working model, tree is, describes the working model, tree is, describes the working model, creating and removing work trees, creating and removing work trees, creating and removing work trees, marking the work tree as completed, marking the work tree as completed, marking the work tree as completed, automating the setup, and all other automating the setup, and all other automating the setup, and all other things that's going to save you time, things that's going to save you time, things that's going to save you time, money, and tokens when it comes to money, and tokens when it comes to money, and tokens when it comes to running multiple AI agents in parallel. […] Feel free to pause recommend you read. Feel free to pause it and read it right now, but basically, it and read it right now, but basically, it and read it right now, but basically, it describes that it describes that it describes that these models, especially the frontier these models, especially the frontier these models, especially the frontier models like Fable and GPT-5.6, models like Fable and GPT-5.6, models like Fable and GPT-5.6, they can pretty much do anything, but they can pretty much do anything, but they can pretty much do anything, but you need to review the decisions, okay? […] But you and give you access to the VAPI. But yeah, for the next few weeks, it's not yeah, for the next few weeks, it's not yeah, for the next few weeks, it's not going to be available to the public going to be available to the public going to be available to the public because I want to have really high test, because I want to have really high test, because I want to have really high test, high quality people using it, working high quality people using it, working high quality people using it, working with them closely to build a great with them closely to build a great with them closely to build a great product."
+    },
+    {
+      "evidence_id": "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027",
+      "canonical_url": "https://www.youtube.com/watch?v=8ZgpAXe5V5w",
+      "title": "L8 Principal's Agentic Engineering Setup (just copy him)",
+      "locator": "00:17:55.510–00:17:55.520",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/DavidOndrej/videos/20260717_8ZgpAXe5V5w/transcripts/8ZgpAXe5V5w.srt",
+      "snippet": "500 >> because the $200 uh tier right now is >> because the $200 uh tier right now is >> because the $200 uh tier right now is not sufficient. not sufficient. not sufficient. >> I agree completely. I mean people are >> I agree completely. […] uh when I built now when I build solo. uh when I built solo there is no bottleneck other than solo there is no bottleneck other than solo there is no bottleneck other than myself right everything is like myself right everything is like myself right everything is like bottlenecked on myself on my own work um bottlenecked on myself on my own work um bottlenecked on myself on my own work um so I started running into all these kind so I started running into all these kind so I started running into all these kind of problems how do I validate AI of problems how do I validate AI of problems how do I validate AI generated code how do I really plan with generated code how do I really plan with generated code how do I really plan with AI more interactively instead of like AI more interactively instead of like AI more interactively instead of like looking at the terminal like a long wall looking at the terminal like a long wall looking at the terminal like a long wall of text how do I really juggle through of text how do I really juggle through of text how do I really juggle through all the 20 30 sessions without going all the 20 30 sessions without going all the 20 30 sessions without going crazy right I started running into these crazy right I started running into these crazy right I started running into these problems and then I I was forced to problems and then I I was forced to problems and then I I was forced to develop this tooling because there's develop this tooling because there's develop this tooling because there's nothing else that can solve it very nothing else that can solve it very nothing else that can solve it very well. […] And by following this uh I was agents. And by following this uh I was agents. And by following this uh I was able to like uh consistently build able to like uh consistently build able to like uh consistently build rappers and tools that are just more rappers and tools that are just more rappers and tools that are just more efficient for agents for uh than their efficient for agents for uh than their efficient for agents for uh than their original counterparts."
+    },
+    {
+      "evidence_id": "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e",
+      "canonical_url": "https://www.youtube.com/watch?v=BrpB-h1e--k",
+      "title": "Building with Claude Managed Agents and Asana AI teammates",
+      "locator": "00:23:15.750–00:23:15.760",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260508_BrpB-h1e--k/transcripts/BrpB-h1e--k.srt",
+      "snippet": "And so, those human beings get a chance to delete memories or get a chance to delete memories or get a chance to delete memories or change the parts of the Asana context change the parts of the Asana context change the parts of the Asana context graph that the agent has access to to graph that the agent has access to to graph that the agent has access to to ensure that it continues to behave ensure that it continues to behave ensure that it continues to behave consistently going forward. consistently going forward. consistently going forward. Okay. […] they're like shrink-wrapped. And then that way we get we get to And then that way we get we get to And then that way we get we get to control on the R&D side the quality control on the R&D side the quality control on the R&D side the quality level, which ones get released, level, which ones get released, level, which ones get released, how that what the life cycle is, and so how that what the life cycle is, and so how that what the life cycle is, and so on and so forth."
+    },
+    {
+      "evidence_id": "7e9d198773ef5eee3e408c9e73709e39b2c36da06332386607c31198f1510c6c",
+      "canonical_url": "https://www.youtube.com/watch?v=KOpTWx1Eou4",
+      "title": "The most interesting \"hack\" in history...",
+      "locator": "00:00:46.790–00:00:46.800",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/Fireship/videos/20260723_KOpTWx1Eou4/transcripts/KOpTWx1Eou4.srt",
+      "snippet": "It ran over 1,000 actions from clusters. It ran over 1,000 actions from temporary sandboxes and even hosted its temporary sandboxes and even hosted its temporary sandboxes and even hosted its own self-migrating command and control own self-migrating command and control own self-migrating command and control on random public services, moving itself on random public services, moving itself on random public services, moving itself before anyone could trace it. […] There's a Here's what they say happened. There's a benchmark called Exploit Gym, whose benchmark called Exploit Gym, whose benchmark called Exploit Gym, whose whole purpose is to measure whether AI whole purpose is to measure whether AI whole purpose is to measure whether AI agents can turn known vulnerabilities agents can turn known vulnerabilities agents can turn known vulnerabilities into working exploits. It works by into working exploits."
+    }
+  ]
+}

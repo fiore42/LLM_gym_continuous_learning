@@ -1,0 +1,47 @@
+{
+  "verification_version": 1,
+  "question": "What distinction does the corpus make between a task finishing successfully and a model simply running out of things to say?",
+  "answer": "The retrieved evidence indicates a distinction between a stop condition being met (i.e., a task finishing successfully) and a model simply running out of things to say, and it states that traces should not record these two situations identically.",
+  "model": "claude-haiku-4-5",
+  "prompt": {
+    "system_prompt": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+    "rendered_user_prompt": "Question: What distinction does the corpus make between a task finishing successfully and a model simply running out of things to say?\n\nAnswer:\nThe retrieved evidence indicates a distinction between a stop condition being met (i.e., a task finishing successfully) and a model simply running out of things to say, and it states that traces should not record these two situations identically.\n\nEvidence:\nEVIDENCE_ID: fd3e30263bae3165cb9f0bfca953545f6ad7b9ae35fae136278971e493d2cecd\nTEXT: The post distinguishes a stop condition being met from the model running out of things to say and says traces should not record them identically."
+  },
+  "claims": [
+    {
+      "claim": "The corpus distinguishes between a stop condition being met (task finishing successfully) and a model running out of things to say",
+      "verdict": "proven",
+      "evidence_id": "fd3e30263bae3165cb9f0bfca953545f6ad7b9ae35fae136278971e493d2cecd",
+      "quote": "The post distinguishes a stop condition being met from the model running out of things to say",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "Traces should not record these two situations identically",
+      "verdict": "proven",
+      "evidence_id": "fd3e30263bae3165cb9f0bfca953545f6ad7b9ae35fae136278971e493d2cecd",
+      "quote": "traces should not record them identically",
+      "quote_valid": true,
+      "flag": null
+    }
+  ],
+  "usage": {
+    "input_tokens": 300,
+    "output_tokens": 227,
+    "cost_usd": 0.001435
+  },
+  "advisory_only": true,
+  "evidence": [
+    {
+      "evidence_id": "fd3e30263bae3165cb9f0bfca953545f6ad7b9ae35fae136278971e493d2cecd",
+      "platform": "x",
+      "source_key": "hanakoxbt",
+      "canonical_url": "https://x.com/hanakoxbt/status/2084766994726060373",
+      "published_at": "2026-08-04T22:22:39.000Z",
+      "title": null,
+      "locator": null,
+      "snippet": "your agent did not finish the task. it ran out of things to say. these are different events and your trace records them identically. a run can end five ways. the stop condition was met. a test passed, a file exists, a value came back matching.",
+      "artifact_path": "source/x/hanakoxbt/posts/20260804_2084766994726060373/post.json"
+    }
+  ]
+}

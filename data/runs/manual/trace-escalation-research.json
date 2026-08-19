@@ -1,0 +1,133 @@
+{
+  "loop_version": 2,
+  "loop_type": "RESEARCH_QUERY",
+  "run_id": "3818deaaaeb548338e24219a5a8434fd",
+  "status": "COMPLETED",
+  "question": "What does the corpus describe as a reason for an agent to escalate work to a human?",
+  "classification": "SUPPORTED",
+  "retrieval": {
+    "limit": 8,
+    "returned_count": 8,
+    "matched_chunk_count": 17633,
+    "matched_evidence_count": 616,
+    "truncated": true,
+    "index_version": 2,
+    "scope": "supplied retrieved evidence",
+    "index_signature": "2:192634880:1786691909643582812"
+  },
+  "answer": null,
+  "answer_note": "Model synthesis is intentionally not run in this retrieval-only stage.",
+  "evidence": [
+    {
+      "evidence_id": "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "G2B0YWuJUgI",
+      "canonical_url": "https://www.youtube.com/watch?v=G2B0YWuJUgI",
+      "published_at": "2026-05-22T08:35:33+00:00",
+      "title": "The prompting playbook",
+      "kind": "transcript",
+      "locator": "00:20:44.110–00:20:44.120",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260522_G2B0YWuJUgI/transcripts/G2B0YWuJUgI.srt",
+      "snippet": "covered by our policy. Um we need to make sure that it's Um we need to make sure that it's Um we need to make sure that it's escalating to a human whenever there is escalating to a human whenever there is escalating to a human whenever there is um a billing error. […] So, now we have one final failing test So, now we have one final failing test So, now we have one final failing test case, which we need to address, which is case, which we need to address, which is case, which we need to address, which is the billing error here. In this scenario, there is a billing In this scenario, there is a billing In this scenario, there is a billing conflict, and what we really want is the conflict, and what we really want is the conflict, and what we really want is the agent to escalate this to a human. And agent to escalate this to a human. And agent to escalate this to a human. And what we're seeing it doing instead is what we're seeing it doing instead is what we're seeing it doing instead is it's trying to it's trying to it's trying to explain to the customer what the reason explain to the customer what the reason explain to the customer what the reason behind it might be."
+    },
+    {
+      "evidence_id": "7f10c524a16177d144b3badb5a389db319f476f22699b9dad6d514f492e37a87",
+      "platform": "youtube",
+      "source_key": "ColeMedin",
+      "content_id": "PY7xIxybYNc",
+      "canonical_url": "https://www.youtube.com/watch?v=PY7xIxybYNc",
+      "published_at": "2026-07-10T14:00:40+00:00",
+      "title": "Pydantic AI 2.0: The New Best Way to Build AI Agents is Composing Capabilities",
+      "kind": "transcript",
+      "locator": "00:09:16.030–00:09:16.040",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/ColeMedin/videos/20260710_PY7xIxybYNc/transcripts/PY7xIxybYNc.srt",
+      "snippet": "Like this first one is a support agents. Like this first one is a support agent, so it needs to access the agent, so it needs to access the agent, so it needs to access the knowledge base like perform rag in our knowledge base like perform rag in our knowledge base like perform rag in our database and then also be able to database and then also be able to database and then also be able to escalate things to a human. And then escalate things to a human. And then escalate things to a human. And then imagine at the front of your platform imagine at the front of your platform imagine at the front of your platform you have the FAQ widget where there's no you have the FAQ widget where there's no you have the FAQ widget where there's no escalation here, but it still needs escalation here, but it still needs escalation here, but it still needs access to the knowledge base to answer access to the knowledge base to answer access to the knowledge base to answer basic user questions. […] But let's say someone comes to the But let's say someone comes to the But let's say someone comes to the customer support bot where they actually customer support bot where they actually customer support bot where they actually have a concern that needs to be have a concern that needs to be have a concern that needs to be escalated to a human. Like I was charged escalated to a human. Like I was charged escalated to a human."
+    },
+    {
+      "evidence_id": "c4c1b249ad89b4fdc6ec9a9d3add46ae4fdb7c6f4f989c731ddc2a21826031f7",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "BbYSGxtsMic",
+      "canonical_url": "https://www.youtube.com/watch?v=BbYSGxtsMic",
+      "published_at": "2026-05-08T18:49:58+00:00",
+      "title": "Giving coding agents their own computers: How Cursor built cloud agents",
+      "kind": "transcript",
+      "locator": "00:10:45.630–00:10:45.640",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260508_BbYSGxtsMic/transcripts/BbYSGxtsMic.srt",
+      "snippet": "Um it's really just like what come up. Um it's really just like what we do with uh the pattern I was we do with uh the pattern I was we do with uh the pattern I was describing for humans, where if you see describing for humans, where if you see describing for humans, where if you see something wrong, say something, uh something wrong, say something, uh something wrong, say something, uh report it, and and try to work on a fix. […] It's really again very system of record. It's really again very uh uh uh similar to how human human systems work. similar to how human human systems work."
+    },
+    {
+      "evidence_id": "523f4898fbc3f48811664613c4e217c7a7e61e481c68b8227b1d9b13f67a07a0",
+      "platform": "youtube",
+      "source_key": "WesRoth",
+      "content_id": "9lSIHaXT1rU",
+      "canonical_url": "https://www.youtube.com/watch?v=9lSIHaXT1rU",
+      "published_at": "2026-07-29T04:01:32+00:00",
+      "title": "OpenAI JUST revealed the truth about it's \"Rogue Agent\"",
+      "kind": "transcript",
+      "locator": "00:20:58.559–00:21:00.310",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/WesRoth/videos/20260729_9lSIHaXT1rU/transcripts/9lSIHaXT1rU.srt",
+      "snippet": "third-party provers's infrastructure. How open described is it moved laterally How open described is it moved laterally How open described is it moved laterally and it also had privilege escalations. and it also had privilege escalations. […] So the agent they're saying here. So the agent they're saying here. So the agent followed a standard escalation shape. So followed a standard escalation shape. […] And the don't understand the answer. And the reason that puzzle works, I think, is reason that puzzle works, I think, is reason that puzzle works, I think, is because the answer is really obvious."
+    },
+    {
+      "evidence_id": "282cce7ace5ddd253f009df4009fed84168d395f9d37f466a4e001ae0143f6fe",
+      "platform": "youtube",
+      "source_key": "WesRoth",
+      "content_id": "6CljfqMX9i4",
+      "canonical_url": "https://www.youtube.com/watch?v=6CljfqMX9i4",
+      "published_at": "2026-07-07T12:11:53+00:00",
+      "title": "CLAUDE IS CONSCIOUS",
+      "kind": "transcript",
+      "locator": "00:23:39.190–00:23:39.200",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/WesRoth/videos/20260707_6CljfqMX9i4/transcripts/6CljfqMX9i4.srt",
+      "snippet": "thoughts you can describe, accessible. thoughts you can describe, accessible. thoughts you can describe, hold in mind, and reason with. We found hold in mind, and reason with. […] Then you ask a milk in their brain. Then you ask a perfectly reasonable functional adult perfectly reasonable functional adult perfectly reasonable functional adult human being. What do cows drink? And human being. […] Some theories kind we were both happy. Some theories kind of suggest that maybe this is either the of suggest that maybe this is either the of suggest that maybe this is either the reason for humans developing reason for humans developing reason for humans developing consciousness or or one of the reasons consciousness or or one of the reasons consciousness or or one of the reasons is just the ability to sort of model is just the ability to sort of model is just the ability to sort of model ourselves and how we function in the ourselves and how we function in the ourselves and how we function in the world."
+    },
+    {
+      "evidence_id": "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+      "platform": "youtube",
+      "source_key": "DavidOndrej",
+      "content_id": "clrUbBtD2j4",
+      "canonical_url": "https://www.youtube.com/watch?v=clrUbBtD2j4",
+      "published_at": "2026-08-02T18:39:17+00:00",
+      "title": "davidondrej/skills - how I build 100x faster with AI",
+      "kind": "transcript",
+      "locator": "00:07:01.470–00:07:01.480",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/DavidOndrej/videos/20260802_clrUbBtD2j4/transcripts/clrUbBtD2j4.srt",
+      "snippet": "It tells the is the Git work tree skill. It tells the agent how to start by detecting where agent how to start by detecting where agent how to start by detecting where you are, explains briefly what a work you are, explains briefly what a work you are, explains briefly what a work tree is, describes the working model, tree is, describes the working model, tree is, describes the working model, creating and removing work trees, creating and removing work trees, creating and removing work trees, marking the work tree as completed, marking the work tree as completed, marking the work tree as completed, automating the setup, and all other automating the setup, and all other automating the setup, and all other things that's going to save you time, things that's going to save you time, things that's going to save you time, money, and tokens when it comes to money, and tokens when it comes to money, and tokens when it comes to running multiple AI agents in parallel. […] Feel free to pause recommend you read. Feel free to pause it and read it right now, but basically, it and read it right now, but basically, it and read it right now, but basically, it describes that it describes that it describes that these models, especially the frontier these models, especially the frontier these models, especially the frontier models like Fable and GPT-5.6, models like Fable and GPT-5.6, models like Fable and GPT-5.6, they can pretty much do anything, but they can pretty much do anything, but they can pretty much do anything, but you need to review the decisions, okay?"
+    },
+    {
+      "evidence_id": "7425f99a8e5bcc82d14a80b1daae7170ebd25bcd76ab0dedf1757c3776f0dfed",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "N4efO8viXXo",
+      "canonical_url": "https://www.youtube.com/watch?v=N4efO8viXXo",
+      "published_at": "2026-06-12T01:13:08+00:00",
+      "title": "Code with Claude Tokyo 2026: Opening Keynote",
+      "kind": "transcript",
+      "locator": "00:25:04.480–00:25:07.110",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260612_N4efO8viXXo/transcripts/N4efO8viXXo.srt",
+      "snippet": "These are agents to build AI teammates. These are collaborative AI agents that work collaborative AI agents that work collaborative AI agents that work alongside humans inside Asa projects. […] almost 400 km hour. To show you an example of Claude managed To show you an example of Claude managed To show you an example of Claude managed agents in action, we worked with a agents in action, we worked with a agents in action, we worked with a fictional racing team called Shankiro fictional racing team called Shankiro fictional racing team called Shankiro Racing. […] So the cloud code on the right task. So the work that used to require a human to work that used to require a human to work that used to require a human to manually kick off, routines can take manually kick off, routines can take manually kick off, routines can take care of for you."
+    },
+    {
+      "evidence_id": "165718deccbb1583956121d4fa860b1a4b9ac47d58c40d5d276d7a93ea4bd934",
+      "platform": "youtube",
+      "source_key": "lexfridman",
+      "content_id": "XyXBwO5jYpw",
+      "canonical_url": "https://www.youtube.com/watch?v=XyXBwO5jYpw",
+      "published_at": "2026-07-28T20:02:11+00:00",
+      "title": "Gary Gallagher: American Civil War, Slavery, Lincoln, Grant & Lee | Lex Fridman Podcast #499",
+      "kind": "transcript",
+      "locator": "00:04:59.720–00:05:00.480",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/lexfridman/videos/20260728_XyXBwO5jYpw/transcripts/XyXBwO5jYpw.srt",
+      "snippet": "They are much despised even across much of the North because they were seen as agitators who roiled the Union and deepened rifts that might bring a significant political break. - So how did this escalate to a civil war, this almost policy discussion about the institution of slavery? How did it actually escalate? […] The only reason the war lasted as long as it did is because the central government did things no one ever would have believed they would do. He also got rid of habeas corpus just like Abraham Lincoln did in selected situations. […] If you're the farmer who experiences an army coming by and they, they take all, take or kill all your livestock and destroy your crops, and that's, that's pretty much like a total war, even if they don't kill you. - So the war escalates."
+    }
+  ],
+  "completed_stages": [
+    "retrieve",
+    "cite",
+    "classify",
+    "checkpoint"
+  ],
+  "created_at": "2026-08-14T09:52:21.939078+00:00"
+}

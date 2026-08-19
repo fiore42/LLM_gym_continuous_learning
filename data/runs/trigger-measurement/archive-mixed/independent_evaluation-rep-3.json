@@ -1,0 +1,105 @@
+{
+  "case_id": "independent_evaluation",
+  "question": "Does the corpus consistently describe an agent reviewing its own work as sufficient quality control?",
+  "mode": "live_retrieval",
+  "model": "claude-sonnet-5",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T15:25:38.742586+00:00",
+  "finished_at": "2026-08-16T15:26:50.688558+00:00",
+  "stop_reason": "QUALITY_GATE_PASSED",
+  "error": null,
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "INSUFFICIENT_EVIDENCE",
+      "relevant_evidence_count": 3,
+      "assessed_evidence_count": 8,
+      "citation_ids": [
+        "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+        "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027",
+        "58d7d3dd942584047553b117261a9059a01ea257add6ca695b9da6a3524964c3"
+      ],
+      "suggested_queries": [
+        "agent self-critique or self-verification quality control",
+        "AI agent output validation human-in-the-loop",
+        "limitations of AI self-review or self-grading accuracy"
+      ],
+      "answer": "The retrieved evidence does not support the claim that the corpus consistently describes an agent reviewing its own work as sufficient quality control. In fact, the one piece of evidence that directly addresses this topic points the opposite direction: it states that frontier models 'can pretty much do anything, but you need to review the decisions,' implying human review is necessary rather than self-review being sufficient. Another item describes a builder who, working solo, ran into the problem of 'how do I validate AI generated code,' suggesting validation of agent output is a persistent challenge rather than something self-review resolves. A third item describes a model 'splitting itself into different organizations or departments' including one for 'quality control,' but this describes an internal division of labor within a single model's process rather than making a claim about whether self-review alone is treated as sufficient. The remaining evidence items (on pre-training/post-training pipelines, consistent opinions in Claude Opus 5, evals improving, work-tree tooling for parallel agents, and human ability to edit an agent's memory/context) do not address the sufficiency of self-review as quality control at all.",
+      "usage": {
+        "input_tokens": 4144,
+        "output_tokens": 1532,
+        "cost_usd": 0.023608,
+        "latency_seconds": 20.4301,
+        "output_tokens_per_second": 74.99
+      }
+    },
+    {
+      "round": 2,
+      "classification": "CONFLICTING_EVIDENCE",
+      "relevant_evidence_count": 7,
+      "assessed_evidence_count": 20,
+      "citation_ids": [
+        "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+        "6dfb78df0a44504dff0e4f9aefdf95c344c21465d3363a7b0d8cbd490e01a8ab",
+        "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+        "c4c1b249ad89b4fdc6ec9a9d3add46ae4fdb7c6f4f989c731ddc2a21826031f7",
+        "7425f99a8e5bcc82d14a80b1daae7170ebd25bcd76ab0dedf1757c3776f0dfed",
+        "a3d6ead827a35f611cf14f5bd5082b2e4328b9444732a33833847cbb9c05b70a",
+        "297d57607b6ad49ab223e8435d6c892783091b1f202c35dc07244d25ba76ba25"
+      ],
+      "suggested_queries": [
+        "AI agent self-critique reliability limitations",
+        "self-verification failure modes large language models",
+        "agent self-evaluation versus external review quality control"
+      ],
+      "answer": "The retrieved evidence does not support the claim that an agent reviewing its own work is consistently described as sufficient quality control. Several items explicitly argue the opposite: one source frames human review as a necessary check because frontier models 'can pretty much do anything, but you need to review the decisions,' and another states plainly that a human in the loop 'truly adds the judgment, context, and accountability that really no model can truly replicate,' explicitly casting human final approval (not self-review) as the safeguard against failures like hallucination. A third source describes agentic engineering as explicitly retaining 'a human developer that oversees and validates the output' and emphasizes 'this is not about removing humans from the loop.' Where self-review or self-improvement mechanisms are discussed (e.g., agents 'dreaming' to inspect their own past trajectories and self-improve, or discerning what context to save for their 'future self'), these are described as mechanisms for iterative self-improvement over time rather than as a claim that self-review alone constitutes sufficient quality control; in fact one such source notes that having an agent 'just go solve' its own flagged issues and 'one-shot was not that effective because there's a lot of flake in those problems,' implying self-review alone was inadequate. Another source describes multi-agent verification, where multiple AI systems review and validate one another's output, as an emerging strategy alongside keeping humans in the loop, rather than a single agent self-certifying its own work. Other evidence items are tangential (discussing pre-training/post-training, model personality, memory/context management, or unrelated benchmarks) and do not speak to whether self-review is sufficient quality control.",
+      "usage": {
+        "input_tokens": 9222,
+        "output_tokens": 3061,
+        "cost_usd": 0.049054,
+        "latency_seconds": 45.9682,
+        "output_tokens_per_second": 66.59
+      }
+    }
+  ],
+  "model_calls": 2,
+  "provider_calls": 2,
+  "model_latency_seconds": 66.398,
+  "output_tokens": 4593,
+  "output_tokens_per_second": 69.17,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 20,
+  "evidence_expanded": true,
+  "max_evidence_items": 20,
+  "refined_queries": [
+    "agent self-critique or self-verification quality control",
+    "AI agent output validation human-in-the-loop",
+    "limitations of AI self-review or self-grading accuracy"
+  ],
+  "final_evidence_ids": [
+    "602612e9dcc7a1464d3862e881a3aaf56dbb15353bb0c62184b72b0f172e41b7",
+    "58d7d3dd942584047553b117261a9059a01ea257add6ca695b9da6a3524964c3",
+    "5aab8a09ce205512bb9faa2d6f733b7ba3e74344b9c971b304320895223c823e",
+    "063b5d5374683df28f4aabd98890646b3677716f91c5e0e389911d9611f4e8fa",
+    "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+    "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027",
+    "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e",
+    "7e9d198773ef5eee3e408c9e73709e39b2c36da06332386607c31198f1510c6c",
+    "a38b17716687d9d9c678961d9e7dfc12198d8dd4d793870b5768711b783141da",
+    "11c5afbe557f59b2e8bbdb7dc084fced2a1d9fda15da0bd997ac71e047e4ac63",
+    "a3d6ead827a35f611cf14f5bd5082b2e4328b9444732a33833847cbb9c05b70a",
+    "7425f99a8e5bcc82d14a80b1daae7170ebd25bcd76ab0dedf1757c3776f0dfed",
+    "c4c1b249ad89b4fdc6ec9a9d3add46ae4fdb7c6f4f989c731ddc2a21826031f7",
+    "bbb84ca82d69dc2b941db5d0bc8542f9b69d433a91bf41662151c6b111230a78",
+    "fe14e9d9ee8858f358feeb408ef126aa0764d5d7268dc672b53a58804f49ce1b",
+    "8d772af48ed699aadefd56e29423f67f4d4574efdf12637c7638758196e90935",
+    "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+    "297d57607b6ad49ab223e8435d6c892783091b1f202c35dc07244d25ba76ba25",
+    "5bb04fce0e50468033efdc6e738abd48385c9fe8f91a7d435ddf867b4e242d9d",
+    "6dfb78df0a44504dff0e4f9aefdf95c344c21465d3363a7b0d8cbd490e01a8ab"
+  ],
+  "frozen_expected_outcome": "CONFLICTING_EVIDENCE",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model.",
+  "repetition": 3,
+  "cost_usd": 0.072662
+}

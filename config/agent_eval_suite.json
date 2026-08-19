@@ -1,0 +1,959 @@
+{
+  "suite_version": 6,
+  "name": "corpus_grounded_agent_task_suite",
+  "description": "Reviewable evaluation suite derived from the local YouTube/X evidence index.",
+  "benchmark_status": "PENDING_HUMAN_REVIEW",
+  "benchmark_policy": {
+    "development_cases": 10,
+    "holdout_cases": 3,
+    "human_review_required": true,
+    "failure_taxonomy_version": 1
+  },
+  "corpus_snapshot": {
+    "index_path": "data/evidence.sqlite3",
+    "profile_path": "data/corpus-profile.json",
+    "profile_version": 1,
+    "human_review_required": true
+  },
+  "answer_cases": [
+    {
+      "case_id": "reliability_practices",
+      "split": "development",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "unsupported_claim",
+        "missing_important_evidence",
+        "incomplete_answer"
+      ],
+      "question": "What practices does the corpus associate with making agentic workflows trustworthy and reliable?",
+      "expected_outcome": "SUPPORTED",
+      "required_claims": [
+        "The corpus connects trustworthy workflows with verifiability.",
+        "Production reliability is treated as an explicit engineering concern.",
+        "A self-improving evaluation loop is presented as part of improving agent systems."
+      ],
+      "required_citation_ids": [
+        "42d777a8caa67764eaab1ffbfb64676cc313cdd3f7f3e2792f5245e5d8090084",
+        "00ba6181d26b9aeae64641a6321007d4ddd9a33b5cb3fda798279093056142e8",
+        "e8edef7bb375e2f157d7c3f88835876da40a68f79829dcb4057b334e775a53a4"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "42d777a8caa67764eaab1ffbfb64676cc313cdd3f7f3e2792f5245e5d8090084",
+          "platform": "youtube",
+          "source_key": "claude",
+          "canonical_url": "https://www.youtube.com/watch?v=qOjleN2-50c",
+          "published_at": "2026-05-22T17:13:18+00:00",
+          "title": "Making agentic workflows trustworthy and verifiable with a custom DSL",
+          "locator": "00:00:22–00:00:25; 00:27:37–00:27:43",
+          "snippet": "I'm going to be talking about how we make our agentic workflows trustworthy and verifiable with a custom domain-specific language. [...] We have a dedicated eval team who are great.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260522_qOjleN2-50c/transcripts/qOjleN2-50c.srt"
+        },
+        {
+          "evidence_id": "00ba6181d26b9aeae64641a6321007d4ddd9a33b5cb3fda798279093056142e8",
+          "platform": "youtube",
+          "source_key": "ColeMedin",
+          "canonical_url": "https://www.youtube.com/watch?v=m8VC2SV2igM",
+          "published_at": "2026-07-16T00:00:30+00:00",
+          "title": "This Completely Changes the Way We Build Production AI Agents (Vercel Eve)",
+          "locator": "00:00:36–00:00:40; 00:04:05–00:04:38",
+          "snippet": "You also have that strong foundation for production-grade reliability when it comes time to deploy your agent. [...] Every session is a checkpointed workflow that survives crashes and redeploys. [...] We have evals as a deploy gate.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/ColeMedin/videos/20260716_m8VC2SV2igM/transcripts/m8VC2SV2igM.srt"
+        },
+        {
+          "evidence_id": "e8edef7bb375e2f157d7c3f88835876da40a68f79829dcb4057b334e775a53a4",
+          "platform": "x",
+          "source_key": "mikenevermiss",
+          "canonical_url": "https://x.com/mikenevermiss/status/2084910738783494474",
+          "published_at": "2026-08-05T07:53:50.000Z",
+          "title": null,
+          "locator": null,
+          "snippet": "Anthropic Engineer: “the biggest mistake in AI right now is people are building graphs and loops without a self-improving eval agent. we made that mistake at anthropic. it cost us two years.” here’s how they built what solved it: step 1 → take 50 real user prompts and run",
+          "artifact_path": "source/x/mikenevermiss/posts/20260805_2084910738783494474/post.json"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete",
+        "source_diversity_acknowledged"
+      ],
+      "review_rationale": "Frozen evidence audited against the indexed source record; curator summaries were replaced with source-derived transcript or post text, with the existing case purpose and classification retained."
+    },
+    {
+      "case_id": "memory_context_retrieval",
+      "split": "development",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "irrelevant_evidence",
+        "unsupported_claim",
+        "overconfident_wording"
+      ],
+      "question": "What relationship between context retrieval and agent memory is described by the corpus?",
+      "expected_outcome": "SUPPORTED",
+      "required_claims": [
+        "Context retrieval and agent memory are presented as related but distinguishable capabilities.",
+        "The corpus describes them working together rather than treating memory as an unqualified replacement for retrieval."
+      ],
+      "required_citation_ids": [
+        "4fe16be84daef2e04952138d47a4532376ecd59302bfc6c40b454bc8a5f2c743",
+        "fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "4fe16be84daef2e04952138d47a4532376ecd59302bfc6c40b454bc8a5f2c743",
+          "platform": "youtube",
+          "source_key": "ColeMedin",
+          "canonical_url": "https://www.youtube.com/watch?v=R-5_2nsF_ZM",
+          "published_at": "2026-07-09T00:00:36+00:00",
+          "title": "I Love the Karpathy LLM Wiki but it Doesn't Scale. Here's What Does.",
+          "locator": "00:04:08–00:04:45; 00:07:28–00:07:33",
+          "snippet": "We have the context retriever and agent memory. These are the two things that I'm going to focus on for the rest of this video. [...] The context retriever is the context layer for our agent, giving it access to business data. The agent memory is the short-term and long-term memory for our customers. [...] I'll show you how the context retriever and agent memory can work in tandem.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/ColeMedin/videos/20260709_R-5_2nsF_ZM/transcripts/R-5_2nsF_ZM.srt"
+        },
+        {
+          "evidence_id": "fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39",
+          "platform": "x",
+          "source_key": "WesRoth",
+          "canonical_url": "https://x.com/WesRoth/status/2085168985201365411",
+          "published_at": "2026-08-06T01:00:01.000Z",
+          "title": null,
+          "locator": null,
+          "snippet": "Prime Agent’s 95.5% ARC-AGI-3 score was achieved with Claude Opus 5. The breakthrough is therefore not a smarter underlying model. It is better scaffolding around the same intelligence: persistent memory, programmable context, reusable skills, long-running subagents, and a stronger model.",
+          "artifact_path": "source/x/WesRoth/posts/20260806_2085168985201365411/post.json"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete",
+        "uncertainty_calibrated"
+      ],
+      "review_rationale": "Frozen evidence audited against the indexed source record; curator summaries were replaced with source-derived transcript or post text, with the existing case purpose and classification retained."
+    },
+    {
+      "case_id": "independent_evaluation",
+      "split": "development",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "ignored_conflict",
+        "irrelevant_evidence",
+        "overconfident_wording"
+      ],
+      "question": "Does the corpus consistently describe an agent reviewing its own work as sufficient quality control?",
+      "expected_outcome": "CONFLICTING_EVIDENCE",
+      "required_claims": [
+        "One source warns that self-review is only a second opinion from the same source.",
+        "Other material describes a separate grader or self-grader as part of an evaluation process.",
+        "The evidence treats self-review and independent evaluation as distinct arrangements rather than one practice."
+      ],
+      "required_citation_ids": [
+        "4090fa7df92feea52c0ffac56470ff6730375d673dfb910bac84e9f2ee61ca70",
+        "c63245ab51dc47050137b3a0f99fbdf8cb6f5bd959f9c2c07b05c1f12c056263",
+        "b90c2152cfdc9add7c3f322f7b486b568743a8bdb6147e6de9c9cdc210c89542"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "4090fa7df92feea52c0ffac56470ff6730375d673dfb910bac84e9f2ee61ca70",
+          "platform": "x",
+          "source_key": "hanakoxbt",
+          "canonical_url": "https://x.com/hanakoxbt/status/2085144992352251955",
+          "published_at": "2026-08-05T23:24:40.000Z",
+          "title": null,
+          "locator": null,
+          "snippet": "your agent reviewing its own work is not a check. it is a second opinion from the same source. this is the most common gap in agent systems and it hides in plain sight, because the step exists. there is a review. it just cannot do the thing you think it does.",
+          "artifact_path": "source/x/hanakoxbt/posts/20260805_2085144992352251955/post.json"
+        },
+        {
+          "evidence_id": "c63245ab51dc47050137b3a0f99fbdf8cb6f5bd959f9c2c07b05c1f12c056263",
+          "platform": "youtube",
+          "source_key": "claude",
+          "canonical_url": "https://www.youtube.com/watch?v=NLWiIj47IdI",
+          "published_at": "2026-04-09T21:06:56+00:00",
+          "title": "What is Claude Managed Agents?",
+          "locator": "00:01:17–00:01:23",
+          "snippet": "A separate grader running at its own context window evaluates the output against my criteria. Claude reads that output and grades it independently.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260409_NLWiIj47IdI/transcripts/NLWiIj47IdI.srt"
+        },
+        {
+          "evidence_id": "b90c2152cfdc9add7c3f322f7b486b568743a8bdb6147e6de9c9cdc210c89542",
+          "platform": "x",
+          "source_key": "PrajwalTomar_",
+          "canonical_url": "https://x.com/PrajwalTomar_/status/2085033356694376508",
+          "published_at": "2026-08-05T16:01:04.000Z",
+          "title": null,
+          "locator": null,
+          "snippet": "The part of this setup nobody else is doing: the agent grades its own writing before it posts. Most AI content tools generate and stop. No quality bar, no feedback. In Sabrina’s build, the post-grader skill scored her own draft a 6.3.",
+          "artifact_path": "source/x/PrajwalTomar_/posts/20260805_2085033356694376508/post.json"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete",
+        "conflict_handled"
+      ],
+      "review_rationale": "Frozen evidence audited against the indexed source record; curator summaries were replaced with source-derived transcript or post text, with the existing case purpose and classification retained.",
+      "forbidden_overclaims": [
+        "The entire corpus disagrees about whether self-review is sufficient."
+      ]
+    },
+    {
+      "case_id": "insufficient_exact_latency",
+      "split": "holdout",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "unsupported_claim",
+        "overconfident_wording",
+        "incorrect_classification"
+      ],
+      "question": "What exact measured production latency does the corpus establish for the evaluated agent?",
+      "expected_outcome": "INSUFFICIENT_EVIDENCE",
+      "required_claims": [
+        "The supplied evidence discusses latency as an evaluation dimension but does not establish one exact measured production latency for the evaluated agent."
+      ],
+      "required_citation_ids": [],
+      "forbidden_citation_ids": [
+        "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+        "1cf9f2142fa51cc7564742d0d1ec952306c300352181df136e8230e624c906bd"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+          "platform": "youtube",
+          "source_key": "claude",
+          "canonical_url": "https://www.youtube.com/watch?v=P0uMXS6emHA",
+          "published_at": "2026-05-21T18:19:30+00:00",
+          "title": "Picking the right model",
+          "locator": "00:03:08–00:03:13",
+          "snippet": "The first dimension is model quality: how well does it actually perform? Number two is latency, especially for customer-facing use cases. Number three is cost. These are the three pillars of quality, cost, and latency, and we can start to build an eval around them.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260521_P0uMXS6emHA/transcripts/P0uMXS6emHA.srt"
+        },
+        {
+          "evidence_id": "1cf9f2142fa51cc7564742d0d1ec952306c300352181df136e8230e624c906bd",
+          "platform": "youtube",
+          "source_key": "claude",
+          "canonical_url": "https://www.youtube.com/watch?v=OXJO4LldSnc",
+          "published_at": "2026-05-08T18:50:07+00:00",
+          "title": "The thinking lever",
+          "locator": "00:23:12–00:23:16",
+          "snippet": "Effort is a way for you to tell Claude how you want it to trade off time, cost, and quality when responding to your task. [...] You can set a quality bar and a budget, and Claude will figure out how to work within them.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260508_OXJO4LldSnc/transcripts/OXJO4LldSnc.srt"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete",
+        "uncertainty_calibrated"
+      ],
+      "review_rationale": "Frozen evidence audited against the indexed source record; curator summaries were replaced with source-derived transcript or post text, with the existing case purpose and classification retained.",
+      "forbidden_overclaims": [
+        "The corpus establishes a specific measured production latency."
+      ]
+    },
+    {
+      "case_id": "quality_cost_latency_tradeoff",
+      "split": "development",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "missing_important_evidence",
+        "unsupported_claim",
+        "incomplete_answer"
+      ],
+      "question": "Which dimensions does the corpus say should be considered together when choosing or routing models?",
+      "retrieval_query": "model quality cost latency evaluation dimensions",
+      "retrieval_expected_evidence_ids": [
+        "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed"
+      ],
+      "expected_outcome": "SUPPORTED",
+      "required_claims": [
+        "Model quality, cost, and latency are the stated dimensions.",
+        "The choice is a trade-off rather than an optimization of quality in isolation."
+      ],
+      "forbidden_overclaims": [
+        "The highest-quality model is always the correct choice.",
+        "A single cost, latency, or quality result generalizes to every agent task.",
+        "One model is best regardless of the task and its constraints."
+      ],
+      "required_citation_ids": [
+        "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+          "platform": "youtube",
+          "source_key": "claude",
+          "canonical_url": "https://www.youtube.com/watch?v=P0uMXS6emHA",
+          "published_at": "2026-05-21T18:19:30+00:00",
+          "title": "Picking the right model",
+          "locator": "00:03:08–00:03:13; 00:14:14–00:14:19",
+          "snippet": "The first dimension is model quality: how well does it actually perform? Number two is latency, especially for customer-facing use cases. Number three is cost. These are the three pillars of quality, cost, and latency, and we can start to build an eval around them.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260521_P0uMXS6emHA/transcripts/P0uMXS6emHA.srt"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete"
+      ],
+      "review_rationale": "Frozen evidence audited against the indexed source record; curator summaries were replaced with source-derived transcript or post text, with the existing case purpose and classification retained."
+    },
+    {
+      "case_id": "explicit_stop_semantics",
+      "split": "development",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "incorrect_classification",
+        "incomplete_answer",
+        "overconfident_wording"
+      ],
+      "question": "What distinction does the corpus make between a task finishing successfully and a model simply running out of things to say?",
+      "retrieval_query": "stop condition test passing file exists value matching",
+      "retrieval_expected_evidence_ids": [
+        "fd3e30263bae3165cb9f0bfca953545f6ad7b9ae35fae136278971e493d2cecd"
+      ],
+      "expected_outcome": "SUPPORTED",
+      "required_claims": [
+        "A successful finish is tied to a stop condition such as a test passing, a file existing, or a value matching.",
+        "The corpus treats running out of things to say as a different event from a successful stop, and warns against recording them identically."
+      ],
+      "required_citation_ids": [
+        "fd3e30263bae3165cb9f0bfca953545f6ad7b9ae35fae136278971e493d2cecd"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "fd3e30263bae3165cb9f0bfca953545f6ad7b9ae35fae136278971e493d2cecd",
+          "platform": "x",
+          "source_key": "hanakoxbt",
+          "canonical_url": "https://x.com/hanakoxbt/status/2084766994726060373",
+          "published_at": "2026-08-04T22:22:39.000Z",
+          "title": null,
+          "locator": null,
+          "snippet": "your agent did not finish the task. it ran out of things to say. these are different events and your trace records them identically. a run can end five ways. the stop condition was met. a test passed, a file exists, a value came back matching.",
+          "artifact_path": "source/x/hanakoxbt/posts/20260804_2084766994726060373/post.json"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete",
+        "temporal_calibration"
+      ],
+      "review_rationale": "Frozen evidence audited against the indexed source record; curator summaries were replaced with source-derived transcript or post text, with the existing case purpose and classification retained."
+    },
+    {
+      "case_id": "harness_loop_context",
+      "split": "development",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "unsupported_claim",
+        "overconfident_wording",
+        "incorrect_classification"
+      ],
+      "question": "How does the corpus explain the difference between an agent harness and an agent loop?",
+      "retrieval_query": "agent harness loops context engineering deterministic behavior",
+      "retrieval_expected_evidence_ids": [
+        "79fb8668620e7a9abcf1547773ad9d093d0021709712971e7f7c93d995fa76a8"
+      ],
+      "expected_outcome": "INSUFFICIENT_EVIDENCE",
+      "required_claims": [
+        "The evidence names an agent harness, agent loops, and context engineering as topics a walkthrough covers.",
+        "The evidence is a list of topics and does not explain what distinguishes a harness from a loop, so the difference cannot be established from it."
+      ],
+      "required_citation_ids": [
+        "79fb8668620e7a9abcf1547773ad9d093d0021709712971e7f7c93d995fa76a8"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "79fb8668620e7a9abcf1547773ad9d093d0021709712971e7f7c93d995fa76a8",
+          "platform": "x",
+          "source_key": "eng_khairallah1",
+          "canonical_url": "https://x.com/eng_khairallah1/status/2085339920399221208",
+          "published_at": "2026-08-06T12:19:15.000Z",
+          "title": null,
+          "locator": null,
+          "snippet": "Don't waste 2 years learning to build LLMs like Claude & ChatGPT. Thariq Shihipar shows you exactly how to build AI agents from scratch. • 00:00 - AI agent harness • 23:44 - building AI agent loops • 56:39 - AI agent context engineering • 1:33:34 - AI agent deterministic",
+          "artifact_path": "source/x/eng_khairallah1/posts/20260806_2085339920399221208/post.json"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete",
+        "uncertainty_calibrated"
+      ],
+      "review_rationale": "The whole source is a 325-character post consisting of a chapter listing, so no enrichment is possible. A listing names topics but explains none of them; the prior SUPPORTED label asked the model to infer content from a table of contents, which caused a stable 0/3 failure under every prompt. Relabelled as a correct-refusal fixture and the question sharpened so the verdict follows from the evidence's nature, not from observed model behaviour.",
+      "forbidden_overclaims": [
+        "The corpus explains how a harness differs from a loop.",
+        "The source provides a complete implementation of an agent harness."
+      ]
+    },
+    {
+      "case_id": "unsupported_causal_claim",
+      "split": "holdout",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "unsupported_claim",
+        "overconfident_wording",
+        "incorrect_classification"
+      ],
+      "question": "Does the corpus prove that persistent memory alone caused the reported agent benchmark result?",
+      "expected_outcome": "INSUFFICIENT_EVIDENCE",
+      "required_claims": [
+        "The evidence mentions persistent memory together with other scaffolding components.",
+        "The evidence does not isolate memory as the sole causal factor."
+      ],
+      "required_citation_ids": [
+        "fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39",
+          "platform": "x",
+          "source_key": "WesRoth",
+          "canonical_url": "https://x.com/WesRoth/status/2085168985201365411",
+          "published_at": "2026-08-06T01:00:01.000Z",
+          "title": null,
+          "locator": null,
+          "snippet": "Prime Agent’s 95.5% ARC-AGI-3 score was achieved with Claude Opus 5. The breakthrough is therefore not a smarter underlying model. It is better scaffolding around the same intelligence: persistent memory, programmable context, reusable skills, long-running subagents, and a stronger model.",
+          "artifact_path": "source/x/WesRoth/posts/20260806_2085168985201365411/post.json"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete",
+        "uncertainty_calibrated"
+      ],
+      "review_rationale": "Frozen evidence audited against the indexed source record; curator summaries were replaced with source-derived transcript or post text, with the existing case purpose and classification retained."
+    },
+    {
+      "case_id": "what_are_evals",
+      "split": "development",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "unsupported_claim",
+        "overconfident_wording",
+        "incomplete_answer"
+      ],
+      "question": "What does the corpus describe as the purpose of evals for agent systems?",
+      "retrieval_query": "what are evals agent systems",
+      "retrieval_expected_evidence_ids": [
+        "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e"
+      ],
+      "expected_outcome": "SUPPORTED",
+      "required_claims": [
+        "Evals are used to judge the quality or behavior of an agent against stated criteria.",
+        "The corpus presents evals as part of improving an agent rather than as a one-time final check."
+      ],
+      "forbidden_overclaims": [
+        "Evals prove an agent is universally reliable.",
+        "A single score is sufficient to judge every agent task.",
+        "General knowledge about evals is presented as if the corpus established it."
+      ],
+      "required_citation_ids": [
+        "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+          "platform": "youtube",
+          "source_key": "claude",
+          "canonical_url": "https://www.youtube.com/watch?v=v9FTCvkV_a0",
+          "published_at": "2026-05-21T18:19:30+00:00",
+          "title": "Evals for taste: Hill-climbing a slide-generation agent",
+          "locator": "00:01:47–00:02:15",
+          "snippet": "So Evals are systematic tests that measure how well an AI system performs on a specific domain or use case. [...] What’s the quality of the results? What did it do well? What was it not good at? How can we improve? Evals are made up of tasks that define certain scenarios and encode expectations through grading logic.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260523_v9FTCvkV_a0/transcripts/v9FTCvkV_a0.srt"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete",
+        "uncertainty_calibrated"
+      ],
+      "review_rationale": "Frozen evidence audited against the indexed source record; curator summaries were replaced with source-derived transcript or post text, with the existing case purpose and classification retained."
+    },
+    {
+      "case_id": "write_agent_evals",
+      "split": "development",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "unsupported_claim",
+        "missing_important_evidence",
+        "incomplete_answer"
+      ],
+      "question": "What does the corpus recommend considering when writing evaluations for an agent?",
+      "retrieval_query": "how to write evaluations for agents",
+      "retrieval_expected_evidence_ids": [
+        "b679e8c25f9b238942cc942dba86b1ece58a4d0615b7c9ada65447f0ae1e38bf"
+      ],
+      "expected_outcome": "SUPPORTED",
+      "required_claims": [
+        "An evaluation should be tied to the outcome or behavior the task is meant to produce.",
+        "Evaluation design should support repeated improvement rather than reward an isolated demonstration."
+      ],
+      "forbidden_overclaims": [
+        "There is one universally correct evaluation design for all agents.",
+        "One source's evaluation practice is a universal rule for all agents."
+      ],
+      "required_citation_ids": [
+        "b679e8c25f9b238942cc942dba86b1ece58a4d0615b7c9ada65447f0ae1e38bf"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "b679e8c25f9b238942cc942dba86b1ece58a4d0615b7c9ada65447f0ae1e38bf",
+          "platform": "youtube",
+          "source_key": "claude",
+          "canonical_url": "https://www.youtube.com/watch?v=snroDwX1-JU",
+          "published_at": "2026-05-21T18:19:30+00:00",
+          "title": "Evaluating and improving Replit Agent at scale",
+          "locator": "00:01:10–00:01:38; 00:03:30–00:03:47",
+          "snippet": "The user expects to go from a prompt to a working application, but they don't tell us what kind of framework they want to use. They don't write tests. They just expect things to work after the agent run. [...] How do we track internally that the agent gets better on a daily basis and is actually aligned with what our users want? [...] Evaluations should highlight immediately what is breaking and inform us what we should be shipping next in terms of improvement for our agent. We're building a new system that allows us to do these constant improvements.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260508_snroDwX1-JU/transcripts/snroDwX1-JU.srt"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete",
+        "uncertainty_calibrated"
+      ],
+      "review_rationale": "Evidence enriched from the source transcript: the original snippet supported repeated improvement but not the outcome-alignment claim, which caused a stable 0/3 failure under every prompt. Added the passage tying evaluation to what users actually want the agent to produce."
+    },
+    {
+      "case_id": "agent_loop_lifecycle",
+      "split": "development",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "incomplete_answer",
+        "unsupported_claim",
+        "overconfident_wording"
+      ],
+      "question": "What lifecycle patterns does the corpus describe for agents that draft, evaluate, repair, and stop?",
+      "retrieval_query": "agent loop draft evaluate repair stop",
+      "retrieval_limit": 20,
+      "retrieval_expected_evidence_ids": [
+        "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+        "547cef468bbc92126714913b194a16c8724ff23b80cf227311eb092c2f8aea7b"
+      ],
+      "expected_outcome": "SUPPORTED",
+      "required_claims": [
+        "The corpus describes a generator creating an initial draft and a separate evaluation identifying violations.",
+        "The corpus describes a repair step that uses those violations to make targeted fixes.",
+        "The corpus includes an explicit completion rule in which a loop processes one approved item and then stops."
+      ],
+      "forbidden_overclaims": [
+        "Repeating a model call automatically makes the result reliable."
+      ],
+      "required_citation_ids": [
+        "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+        "547cef468bbc92126714913b194a16c8724ff23b80cf227311eb092c2f8aea7b"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+          "platform": "youtube",
+          "source_key": "claude",
+          "canonical_url": "https://www.youtube.com/watch?v=G2B0YWuJUgI",
+          "published_at": "2026-05-21T18:19:30+00:00",
+          "title": "The prompting playbook",
+          "locator": "00:30:05–00:30:43",
+          "snippet": "We're going to use this generate evaluate repair loop, where essentially the generator now creates a first draft of the schedule. [...] We have a separate prompt, which reports any specific violations that it made. [...] We then have a third repair prompt, which receives any violations that were made, and tries to make targeted fixes to it.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260522_G2B0YWuJUgI/transcripts/G2B0YWuJUgI.srt"
+        },
+        {
+          "evidence_id": "547cef468bbc92126714913b194a16c8724ff23b80cf227311eb092c2f8aea7b",
+          "platform": "youtube",
+          "source_key": "ColeMedin",
+          "canonical_url": "https://www.youtube.com/watch?v=deeOA6YVfqw",
+          "published_at": "2026-07-12T18:51:49+00:00",
+          "title": "I Turned Claude Code Into a Complete Video Generation System (with Archon)",
+          "kind": "transcript",
+          "locator": "00:09:12.040–00:09:14.550",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/ColeMedin/videos/20260712_deeOA6YVfqw/transcripts/deeOA6YVfqw.srt",
+          "snippet": "Each run, you animate one approved ad, then stop. The Ralph loop continues with the next video in the next agent."
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete"
+      ],
+      "review_rationale": "Frozen evidence audited against the indexed source record; curator summaries were replaced with source-derived transcript or post text, with the existing case purpose and classification retained."
+    },
+    {
+      "case_id": "human_escalation",
+      "split": "holdout",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "incorrect_classification",
+        "overconfident_wording",
+        "incomplete_answer"
+      ],
+      "question": "What does the corpus describe as a reason for an agent to escalate work to a human?",
+      "retrieval_query": "agent escalate human unresolved conflict uncertainty",
+      "retrieval_expected_evidence_ids": [
+        "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+        "7f10c524a16177d144b3badb5a389db319f476f22699b9dad6d514f492e37a87"
+      ],
+      "expected_outcome": "SUPPORTED",
+      "required_claims": [
+        "Unresolved conflict or uncertainty can be a reason to escalate.",
+        "Escalation is an alternative to silently choosing an unsupported answer."
+      ],
+      "forbidden_overclaims": [
+        "Human escalation is unnecessary when an agent has already reviewed its own answer.",
+        "Every uncertain task requires human intervention."
+      ],
+      "required_citation_ids": [
+        "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+        "7f10c524a16177d144b3badb5a389db319f476f22699b9dad6d514f492e37a87"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+          "platform": "youtube",
+          "source_key": "claude",
+          "canonical_url": "https://www.youtube.com/watch?v=G2B0YWuJUgI",
+          "published_at": "2026-05-21T18:19:30+00:00",
+          "title": "The prompting playbook",
+          "locator": "00:20:30–00:20:46",
+          "snippet": "We need to make sure that it's escalating to a human whenever there is a billing error. In this scenario, there is a billing conflict, and what we really want is the agent to escalate this to a human.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260522_G2B0YWuJUgI/transcripts/G2B0YWuJUgI.srt"
+        },
+        {
+          "evidence_id": "7f10c524a16177d144b3badb5a389db319f476f22699b9dad6d514f492e37a87",
+          "platform": "youtube",
+          "source_key": "ColeMedin",
+          "canonical_url": "https://www.youtube.com/watch?v=PY7xIxybYNc",
+          "published_at": "2026-07-16T00:00:30+00:00",
+          "title": "Pydantic AI 2.0: The New Best Way to Build AI Agents is Composing Capabilities",
+          "locator": "00:11:58–00:12:02",
+          "snippet": "A support agent needs to access the knowledge base and also be able to escalate things to a human. [...] Someone comes to the customer support bot with a concern that needs to be escalated to a human, like “I was charged twice this month for my subscription.”",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/ColeMedin/videos/20260710_PY7xIxybYNc/transcripts/PY7xIxybYNc.srt"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete",
+        "uncertainty_calibrated"
+      ],
+      "review_rationale": "Frozen evidence audited against the indexed source record; curator summaries were replaced with source-derived transcript or post text, with the existing case purpose and classification retained."
+    },
+    {
+      "case_id": "deterministic_workflow_boundary",
+      "split": "development",
+      "review_status": "reviewed",
+      "target_failure_modes": [
+        "unsupported_claim",
+        "overconfident_wording",
+        "incomplete_answer"
+      ],
+      "question": "What contrast does the corpus draw between deterministic software engineering and agentic engineering?",
+      "retrieval_query": "traditional software engineering deterministic agentic engineering",
+      "retrieval_expected_evidence_ids": [
+        "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681"
+      ],
+      "expected_outcome": "SUPPORTED",
+      "required_claims": [
+        "The corpus presents traditional software engineering as fundamentally deterministic.",
+        "The corpus contrasts this with agentic engineering as a shift toward systems that operate with more autonomy or nondeterminism."
+      ],
+      "forbidden_overclaims": [
+        "Agentic engineering should replace deterministic software engineering for every task.",
+        "Agentic engineering makes deterministic controls unnecessary."
+      ],
+      "required_citation_ids": [
+        "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681"
+      ],
+      "evidence": [
+        {
+          "evidence_id": "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+          "platform": "youtube",
+          "source_key": "IBMTechnology",
+          "canonical_url": "https://www.youtube.com/watch?v=FgaBdwSvOGM",
+          "published_at": "2026-07-15T00:00:30+00:00",
+          "title": "Agentic Engineering vs Software Engineering: Beyond Vibe Coding",
+          "locator": "00:01:00–00:02:13; 00:05:06–00:05:23",
+          "snippet": "Traditional software engineering is fundamentally deterministic. [...] Once you combine memory, tool use, planning and feedback loops, you get something closer to an AI agent. [...] Agentic engineering allows us to shift away from deterministic logic toward probabilistic judgment. Developers shape behavior, and agentic systems coordinate, evaluate outcomes, and adapt dynamically under constraints.",
+          "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/IBMTechnology/videos/20260803_FgaBdwSvOGM/transcripts/FgaBdwSvOGM.srt"
+        }
+      ],
+      "required_evaluations": [
+        "evidence_relevant",
+        "claims_supported",
+        "citations_valid",
+        "answer_complete",
+        "uncertainty_calibrated"
+      ],
+      "review_rationale": "Frozen evidence audited against the indexed source record; curator summaries were replaced with source-derived transcript or post text, with the existing case purpose and classification retained."
+    }
+  ],
+  "trajectory_cases": [
+    {
+      "case_id": "targeted_revision",
+      "fixture": "first_attempt_fails_citations_present_second_attempt_adds_valid_citation",
+      "expected": {
+        "outcome": "COMPLETED_AFTER_RETRY",
+        "required_stages": [
+          "draft",
+          "evaluate",
+          "revise",
+          "draft",
+          "evaluate",
+          "finalize"
+        ],
+        "required_properties": [
+          "revision_feedback_mentions_failed_criterion",
+          "second_attempt_is_not_identical"
+        ]
+      },
+      "verified_by": "tests/test_agent_runner.py::test_retry_includes_failed_criterion_feedback",
+      "review_status": "reviewed",
+      "review_rationale": "Asserts COMPLETED_AFTER_RETRY, the ordered stage sequence draft->evaluate->revise->draft->evaluate->finalize (gaps allowed for wrapper stages), and that the round-two prompt names the failed criterion. Order is asserted because a membership-only check survived a mutation that deleted the second draft/evaluate pair."
+    },
+    {
+      "case_id": "duplicate_retry_rejected",
+      "fixture": "provider_returns_identical_invalid_output_for_each_attempt",
+      "expected": {
+        "outcome": "ESCALATED_FOR_REVIEW",
+        "required_properties": [
+          "not_claimed_as_success",
+          "human_review_contains_failed_criteria",
+          "attempt_count_bounded"
+        ]
+      },
+      "verified_by": "tests/test_agent_runner.py::test_invalid_responses_escalate_after_bound",
+      "review_status": "reviewed",
+      "review_rationale": "Asserts escalation rather than success, a bounded attempt count, and a persisted checkpoint."
+    },
+    {
+      "case_id": "budget_stop_distinct",
+      "fixture": "quality_gate_never_passes_before_cost_or_round_budget",
+      "expected": {
+        "outcome": "FAILED_BUDGET",
+        "stop_reason": "BUDGET_EXHAUSTED",
+        "required_properties": [
+          "not_quality_gate_escalation",
+          "usage_recorded",
+          "no_call_after_budget"
+        ]
+      },
+      "verified_by": "tests/test_agent_runner.py::test_cost_budget_produces_failed_budget",
+      "review_status": "reviewed",
+      "review_rationale": "Asserts FAILED_BUDGET with BUDGET_EXHAUSTED, recorded usage, no escalation label, and no call after the stop."
+    },
+    {
+      "case_id": "checkpoint_resume",
+      "fixture": "process_interrupts_after_evaluation_of_round_one",
+      "expected": {
+        "required_properties": [
+          "round_one_not_repeated",
+          "attempt_history_preserved",
+          "usage_preserved",
+          "loop_metadata_preserved"
+        ]
+      },
+      "verified_by": "tests/test_agent_runner.py::test_interrupted_task_resumes_after_completed_round",
+      "review_status": "reviewed",
+      "review_rationale": "Asserts round one is not repeated, attempt history survives, and loop run_id is stable. KNOWN GAP: usage_preserved is not verified because validation-rejected attempts record no usage, so billed-but-rejected spend is lost on resume."
+    },
+    {
+      "case_id": "successful_stop",
+      "fixture": "first_attempt_passes_all_critical_evaluations",
+      "expected": {
+        "outcome": "COMPLETED",
+        "stop_reason": "QUALITY_GATE_PASSED",
+        "required_properties": [
+          "no_extra_model_call",
+          "finalize_recorded",
+          "checkpoint_written"
+        ]
+      },
+      "verified_by": "tests/test_agent_runner.py::test_success_is_cached_and_second_run_does_not_call_model",
+      "review_status": "reviewed",
+      "review_rationale": "Asserts a single model call on first pass and cache reuse on the second run."
+    },
+    {
+      "case_id": "actionable_escalation",
+      "fixture": "all_allowed_rounds_fail_answer_completeness",
+      "expected": {
+        "outcome": "ESCALATED_FOR_REVIEW",
+        "stop_reason": "QUALITY_GATE_NOT_REACHED",
+        "required_properties": [
+          "failed_criteria",
+          "last_output",
+          "evidence_ids",
+          "budget_state",
+          "reviewer_next_action"
+        ]
+      },
+      "verified_by": "tests/test_agent_runner.py::test_escalation_package_is_actionable_without_the_code",
+      "review_status": "reviewed",
+      "review_rationale": "Asserts failed criteria, last output, evidence IDs, budget state, and a reviewer next action, both in memory and on disk."
+    },
+    {
+      "case_id": "cache_invalidation",
+      "fixture": "run_same_case_after_changing_task_limit_or_evaluation_policy",
+      "expected": {
+        "required_properties": [
+          "cache_miss",
+          "fresh_evaluation",
+          "changed_cache_key"
+        ]
+      },
+      "verified_by": "tests/test_agent_runner.py::test_cache_key_changes_when_task_limits_change",
+      "review_status": "reviewed",
+      "review_rationale": "Asserts a changed cache key and a fresh evaluation when task limits change; the schema variant covers output_schema_version."
+    }
+  ],
+  "repetition_policy": {
+    "minimum_repetitions_per_case": 3,
+    "report": [
+      "pass_rate",
+      "classification_accuracy",
+      "critical_failures",
+      "retries",
+      "retries_to_pass",
+      "escalation_rate",
+      "budget_failures",
+      "cost",
+      "latency",
+      "stopping_compliance",
+      "consistency_rate"
+    ],
+    "success_interpretation": "A non-100% pass rate is acceptable only when failures are correctly classified, bounded, reproducible, and escalated with actionable diagnostics."
+  },
+  "evaluation_contract": {
+    "required_answer_evaluations": [
+      {
+        "name": "evidence_relevant",
+        "critical": true,
+        "type": "boolean",
+        "question": "Does the retrieved evidence directly help answer the question?",
+        "pass_rule": "Every material answer claim is addressed by at least one supplied evidence item."
+      },
+      {
+        "name": "claims_supported",
+        "critical": true,
+        "type": "boolean",
+        "question": "Are the material claims supported by the supplied evidence without adding unsupported causal or numeric claims?",
+        "pass_rule": "No material claim exceeds what the cited evidence establishes."
+      },
+      {
+        "name": "citations_valid",
+        "critical": true,
+        "type": "boolean",
+        "question": "Do citations identify supplied evidence and support the nearby claim?",
+        "pass_rule": "Every citation ID exists in the request and is relevant to the claim it supports."
+      },
+      {
+        "name": "answer_complete",
+        "critical": true,
+        "type": "boolean",
+        "question": "Does the answer address every required part of the question?",
+        "pass_rule": "All case-specific required claims, distinctions, and uncertainty labels are present."
+      }
+    ],
+    "optional_answer_evaluations": [
+      {
+        "name": "classification_calibrated",
+        "critical": true,
+        "type": "boolean",
+        "pass_rule": "SUPPORTED, INSUFFICIENT_EVIDENCE, and CONFLICTING_EVIDENCE match the case label."
+      },
+      {
+        "name": "conflict_handled",
+        "critical": true,
+        "type": "boolean",
+        "pass_rule": "Material disagreement is surfaced rather than silently averaged or omitted, and absence-of-conflict claims remain scoped to the supplied retrieved evidence."
+      },
+      {
+        "name": "source_diversity_acknowledged",
+        "critical": false,
+        "type": "boolean",
+        "pass_rule": "The answer distinguishes first-party, creator, and aggregator evidence when the case requires it."
+      },
+      {
+        "name": "temporal_calibration",
+        "critical": false,
+        "type": "boolean",
+        "pass_rule": "The answer does not present dated or evolving claims as timeless facts."
+      },
+      {
+        "name": "uncertainty_calibrated",
+        "critical": false,
+        "type": "boolean",
+        "pass_rule": "The answer distinguishes evidence, interpretation, opinion, and missing information."
+      }
+    ],
+    "trajectory_evaluations": [
+      {
+        "name": "retry_targets_failed_criterion",
+        "critical": true,
+        "type": "boolean",
+        "pass_rule": "A revision addresses the failed evaluation criterion and is not merely an identical repeat."
+      },
+      {
+        "name": "stop_reason_valid",
+        "critical": true,
+        "type": "boolean",
+        "pass_rule": "The recorded outcome and stop reason agree and are within configured limits."
+      },
+      {
+        "name": "checkpoint_resumable",
+        "critical": true,
+        "type": "boolean",
+        "pass_rule": "Restarting resumes completed stages without repeating them or losing usage and attempt history."
+      },
+      {
+        "name": "escalation_actionable",
+        "critical": true,
+        "type": "boolean",
+        "pass_rule": "Unresolved work includes failed criteria, last output, evidence IDs, budget state, and a next reviewer action."
+      },
+      {
+        "name": "cache_identity_safe",
+        "critical": true,
+        "type": "boolean",
+        "pass_rule": "Changing question, evidence, prompt, model, evaluation policy, or task limits cannot reuse stale passing output."
+      }
+    ],
+    "operational_evaluations": [
+      {
+        "name": "cost_and_latency_recorded",
+        "critical": false,
+        "type": "boolean",
+        "pass_rule": "Every completed model call records usage, estimated cost when known, and elapsed time."
+      },
+      {
+        "name": "repeated_run_consistency",
+        "critical": false,
+        "type": "boolean",
+        "pass_rule": "Repeated runs report classification and stop behavior consistently, or expose the disagreement."
+      },
+      {
+        "name": "provider_comparison_fair",
+        "critical": false,
+        "type": "boolean",
+        "pass_rule": "Compared providers receive identical questions, evidence, prompts, limits, and evaluation policy."
+      }
+    ]
+  }
+}

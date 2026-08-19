@@ -1,0 +1,10 @@
+{
+  "prompt_id": "verification",
+  "prompt_version": "verification-v1",
+  "version_number": 1,
+  "created_at": "2026-08-16T13:19:30.812400+00:00",
+  "change_summary": "Move the claim-verification drafter prompt out of a module constant and into the versioned registry, so verification sheets record which prompt produced them and drafter versions can be compared the way synthesis versions are.",
+  "system_template": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+  "user_template": "Question: {question}\n\nAnswer:\n{answer}\n\nEvidence:\n{evidence_text}",
+  "revision_templates": {}
+}

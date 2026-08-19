@@ -1,0 +1,41 @@
+{
+  "rubric_id": "digest_claim_audit",
+  "rubric_version": 1,
+  "purpose": "Audit whether a selected claim is in scope, then test whether the model's mapped set of one to three exact evidence quotes jointly substantiates that claim without asking a human to classify an entire multi-claim transcript.",
+  "scope_question": "Is the stated claim substantively about building, evaluating, deploying, operating, securing, governing, or using AI or agent systems?",
+  "scope_verdicts": {
+    "IN_SCOPE": "The claim is substantively about AI or agent systems and should continue to evidence-support and significance review.",
+    "OUT_OF_SCOPE": "The claim is about a general technology, security, or business topic without a substantive AI or agent connection. Skip support and significance review and record this as a selection failure.",
+    "UNCLEAR": "The displayed claim and context are insufficient to decide scope. Skip support and significance review rather than guessing."
+  },
+  "support_question": "Do the one to three exact AI-selected evidence passages jointly support every material part of the stated claim? Optional context may clarify a passage's meaning but cannot supply missing claim facts.",
+  "blind_question": "For the stated claim content that the selected evidence set establishes, what significance is established for practitioners building or operating AI agent systems?",
+  "passage_labels": {
+    "SIGNIFICANT": "The passage establishes a concrete change, measured result, deployed behavior, API or contract change, or reproducible method with a material practical consequence.",
+    "INCREMENTAL": "The passage establishes useful but modest, local, refining, or already-familiar information.",
+    "UNSUPPORTED": "The passage makes or repeats a substantive claim without enough evidence or operational detail to substantiate it.",
+    "PROMOTIONAL": "The passage is primarily announcement, marketing, or self-promotion without enough inspectable operational evidence.",
+    "UNABLE_TO_DETERMINE": "The passage, context, rubric, or reviewer expertise is insufficient to choose among the four evaluation labels."
+  },
+  "decision_order": [
+    "Decide scope first. OUT_OF_SCOPE and UNCLEAR items stop there and are reported separately from significance quality.",
+    "Evaluate the stated claim against the selected evidence set. Every material claim component must be established by at least one displayed passage. Do not infer a verdict for the whole source.",
+    "Request optional context only when needed to resolve a pronoun, negation, or incomplete sentence. Context may clarify a highlighted passage but cannot rescue the evidence set by adding facts absent from its selected passages.",
+    "If the passage is mainly promotional and lacks operational evidence, choose PROMOTIONAL.",
+    "If it makes a substantive claim that the displayed text does not substantiate, choose UNSUPPORTED.",
+    "If it provides supported practical information, distinguish SIGNIFICANT from INCREMENTAL by whether the consequence would materially change a practitioner decision or action.",
+    "Choose UNABLE_TO_DETERMINE rather than guessing."
+  ],
+  "support_verdicts": {
+    "FULLY_SUPPORTED": "The selected evidence set jointly supports every material part of the stated claim.",
+    "PARTIALLY_SUPPORTED": "The selected evidence set supports some but not all material parts of the stated claim.",
+    "NOT_SUPPORTED": "The selected evidence set does not support the material claim.",
+    "UNCLEAR": "The relationship cannot be decided from the selected evidence set, even after using context only to clarify passage meaning."
+  },
+  "model_label_verdicts": {
+    "AGREE": "The model's significance label is reasonable for the content actually supported by the passage.",
+    "DISAGREE": "The model's significance label is not reasonable for the content actually supported by the passage.",
+    "UNCLEAR": "The label cannot be assessed from the displayed evidence."
+  },
+  "scope": "The model-generated claim and selected passage are visible because they are the objects being audited. The model's proposed label and reason remain hidden during the first pass. This does not measure missed claims, source-level recall, or corpus-level ranking quality."
+}

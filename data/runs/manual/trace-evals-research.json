@@ -1,0 +1,133 @@
+{
+  "loop_version": 2,
+  "loop_type": "RESEARCH_QUERY",
+  "run_id": "282520b98e0943c189760afa524cee92",
+  "status": "COMPLETED",
+  "question": "What does the corpus describe as the purpose of evals for agent systems?",
+  "classification": "SUPPORTED",
+  "retrieval": {
+    "limit": 8,
+    "returned_count": 8,
+    "matched_chunk_count": 11730,
+    "matched_evidence_count": 445,
+    "truncated": true,
+    "index_version": 2,
+    "scope": "supplied retrieved evidence",
+    "index_signature": "2:192634880:1786691909643582812"
+  },
+  "answer": null,
+  "answer_note": "Model synthesis is intentionally not run in this retrieval-only stage.",
+  "evidence": [
+    {
+      "evidence_id": "89f0dd7a752aa844c90df8b16a8067a5eb7829b9ce656e29afc4d2ec456669c6",
+      "platform": "youtube",
+      "source_key": "WesRoth",
+      "content_id": "CMjTfpTd-NY",
+      "canonical_url": "https://www.youtube.com/watch?v=CMjTfpTd-NY",
+      "published_at": "2026-07-09T01:41:16+00:00",
+      "title": "Grok 4.5 just COOKED Claude and OpenAI",
+      "kind": "transcript",
+      "locator": "00:07:44.870–00:07:44.880",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/WesRoth/videos/20260709_CMjTfpTd-NY/transcripts/CMjTfpTd-NY.srt",
+      "snippet": "You can powered business system builder. You can powered business system builder. You can describe what you want to manage and it describe what you want to manage and it describe what you want to manage and it can build the database starter data can build the database starter data can build the database starter data views dashboards and workflows around views dashboards and workflows around views dashboards and workflows around it. […] So if your databases or templates. So if your relationship data is already sitting in relationship data is already sitting in relationship data is already sitting in a spreadsheet or an inbox or another a spreadsheet or an inbox or another a spreadsheet or an inbox or another business tool, the goal is not to business tool, the goal is not to business tool, the goal is not to manually rebuild everything field by manually rebuild everything field by manually rebuild everything field by field. You just describe the system that field. You just describe the system that field. You just describe the system that you want. Bring in the data and refine you want."
+    },
+    {
+      "evidence_id": "11c5afbe557f59b2e8bbdb7dc084fced2a1d9fda15da0bd997ac71e047e4ac63",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "19HDQ9HppOA",
+      "canonical_url": "https://www.youtube.com/watch?v=19HDQ9HppOA",
+      "published_at": "2026-05-26T12:10:17+00:00",
+      "title": "Ship your first Managed Agent",
+      "kind": "transcript",
+      "locator": "00:04:43.070–00:04:43.080",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260526_19HDQ9HppOA/transcripts/19HDQ9HppOA.srt",
+      "snippet": "ready agents on Claude. We've seen people build 10 to 15 times We've seen people build 10 to 15 times We've seen people build 10 to 15 times faster to production with Claude managed faster to production with Claude managed faster to production with Claude managed agents by leveraging our purpose-built agents by leveraging our purpose-built agents by leveraging our purpose-built harness. […] So again here to fixing the root cause. So again here for demo purposes, we're stopping at for demo purposes, we're stopping at for demo purposes, we're stopping at just the agent giving us the recommended just the agent giving us the recommended just the agent giving us the recommended actions, but I want you all to imagine actions, but I want you all to imagine actions, but I want you all to imagine the possibilities of where this can go the possibilities of where this can go the possibilities of where this can go if we give our agent more tools, more if we give our agent more tools, more if we give our agent more tools, more ability to take actions, access to your ability to take actions, access to your ability to take actions, access to your code base, ability to put up PRs, code base, ability to put up PRs, code base, ability to put up PRs, ability to fix incidents, so that you as ability to fix incidents, so that you as ability to fix incidents, so that you as a human developer can just become the a human developer can just become the a human developer can just become the oversight and watch over the agents as oversight and watch over the agents as oversight and watch over the agents as they take action, and you no longer have they take action, and you no longer have they take action, and you no longer have to go through and do manual steps like to go through and do manual steps like to go through and do manual steps like actually following the agent's actually following the agent's actually following the agent's instructions here to fix the root cause instructions here to fix the root cause instructions here to fix the root cause of the incident."
+    },
+    {
+      "evidence_id": "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "mWvtOHlZM-I",
+      "canonical_url": "https://www.youtube.com/watch?v=mWvtOHlZM-I",
+      "published_at": "2026-05-23T05:48:14+00:00",
+      "title": "Tool, skill, or subagent? Decomposing an agent that outgrew its prompt",
+      "kind": "transcript",
+      "locator": "00:02:44.350–00:02:44.360",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260523_mWvtOHlZM-I/transcripts/mWvtOHlZM-I.srt",
+      "snippet": "I first want to walk you through our problem statement in our through our problem statement in our through our problem statement in our agent. So, for the purposes of this agent. So, for the purposes of this agent. […] So, characteristics of our agent. So, personality and tone and style and personality and tone and style and personality and tone and style and output quality, we're using a output quality, we're using a output quality, we're using a non-deterministic grader as a part of non-deterministic grader as a part of non-deterministic grader as a part of our eval to evaluate our agent's our eval to evaluate our agent's our eval to evaluate our agent's non-deterministic characteristics. […] So, in order to get a set up already. So, in order to get a baseline and run those evals, you have baseline and run those evals, you have baseline and run those evals, you have to run UV run evals \\{{}dash} \\{{}dash} agent to run UV run evals \\{{}dash} \\{{}dash} agent to run UV run evals \\{{}dash} \\{{}dash} agent before. […] Again, this is a a technique if you have evals for your agent. Um again, you have evals for your agent. Um again, you have evals for your agent."
+    },
+    {
+      "evidence_id": "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "T7KqH7kYnE4",
+      "canonical_url": "https://www.youtube.com/watch?v=T7KqH7kYnE4",
+      "published_at": "2026-05-20T19:44:14+00:00",
+      "title": "The thinking lever",
+      "kind": "transcript",
+      "locator": "00:19:45.800–00:19:47.710",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260520_T7KqH7kYnE4/transcripts/T7KqH7kYnE4.srt",
+      "snippet": "It's probably my favorite eval. eval. eval. This eval is we put Claude into Pokémon This eval is we put Claude into Pokémon This eval is we put Claude into Pokémon Red, and we gave it access to tools to Red, and we gave it access to tools to Red, and we gave it access to tools to trigger buttons on, like, a Gameboy, for trigger buttons on, like, a Gameboy, for trigger buttons on, like, a Gameboy, for example, and we gave it vision over the example, and we gave it vision over the example, and we gave it vision over the game, and we had it execute and try to game, and we had it execute and try to game, and we had it execute and try to beat the Elite Four, which is the beat the Elite Four, which is the beat the Elite Four, which is the objective of Pokémon, if you're not objective of Pokémon, if you're not objective of Pokémon, if you're not familiar. […] You can control that length through the You can control that length through the You can control that length through the effort levels that I described. effort levels that I described. effort levels that I described. Evals are often the best way to find Evals are often the best way to find Evals are often the best way to find your ideal balance."
+    },
+    {
+      "evidence_id": "1ef7ea308a07ef4355f91fc11363154fa0e3ee81052d80549e2d2ce7992a7430",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "IA5LWIGqnyM",
+      "canonical_url": "https://www.youtube.com/watch?v=IA5LWIGqnyM",
+      "published_at": "2026-05-22T14:04:44+00:00",
+      "title": "Running an AI-native engineering org",
+      "kind": "transcript",
+      "locator": "00:02:10.310–00:02:10.320",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260522_IA5LWIGqnyM/transcripts/IA5LWIGqnyM.srt",
+      "snippet": "And so I found it's always increasing. And so I found it's always helpful to look at what are either team helpful to look at what are either team helpful to look at what are either team norms that you've set up for your team norms that you've set up for your team norms that you've set up for your team or team processes and always ask or team processes and always ask or team processes and always ask yourself, is it still serving its yourself, is it still serving its yourself, is it still serving its purpose? purpose? […] Or is it still serving its purpose? So, for still serving its purpose? So, for still serving its purpose? […] Again, it's the e- even our team principles and even e- even our team principles and even e- even our team principles and even processes as we put on, even after a few processes as we put on, even after a few processes as we put on, even after a few months when we notice, \"Hey, is this months when we notice, \"Hey, is this months when we notice, \"Hey, is this really serving its intended purpose?\" We really serving its intended purpose?\" We really serving its intended purpose?\""
+    },
+    {
+      "evidence_id": "7abd810a0066e1bac35fbe9b5cf841acb526c897efb2f10de7ac2fe0788e6940",
+      "platform": "youtube",
+      "source_key": "bycloudAI",
+      "content_id": "aD93kfArOik",
+      "canonical_url": "https://www.youtube.com/watch?v=aD93kfArOik",
+      "published_at": "2026-07-13T18:13:54+00:00",
+      "title": "Microsoft Just Dropped LLM's Frontier Data Engineering Secrets",
+      "kind": "transcript",
+      "locator": "00:05:28.350–00:05:28.360",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/bycloudAI/videos/20260713_aD93kfArOik/transcripts/aD93kfArOik.srt",
+      "snippet": "At a small scale, the stem heavy mix. At a small scale, the stem heavy mix looked better on stem stem heavy mix looked better on stem stem heavy mix looked better on stem evals, which is exactly what you would evals, which is exactly what you would evals, which is exactly what you would expect. […] And they even built their own internet. And they even built their own AI content detection model to filter out AI content detection model to filter out AI content detection model to filter out AI slop from the web corpus, too. For AI slop from the web corpus, too. For AI slop from the web corpus, too. For STEM pages, they classify by topic, STEM pages, they classify by topic, STEM pages, they classify by topic, educational value, and education level."
+    },
+    {
+      "evidence_id": "7425f99a8e5bcc82d14a80b1daae7170ebd25bcd76ab0dedf1757c3776f0dfed",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "N4efO8viXXo",
+      "canonical_url": "https://www.youtube.com/watch?v=N4efO8viXXo",
+      "published_at": "2026-06-12T01:13:08+00:00",
+      "title": "Code with Claude Tokyo 2026: Opening Keynote",
+      "kind": "transcript",
+      "locator": "00:22:19.760–00:22:22.070",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260612_N4efO8viXXo/transcripts/N4efO8viXXo.srt",
+      "snippet": "product offering. Fable 5 is the best model for building Fable 5 is the best model for building Fable 5 is the best model for building longunning agents, and manage agents is longunning agents, and manage agents is longunning agents, and manage agents is purpose-built for Claude. This means purpose-built for Claude. This means purpose-built for Claude. […] something that can happen today. And we've worked with so many companies And we've worked with so many companies And we've worked with so many companies that have built agentic systems on cloud that have built agentic systems on cloud that have built agentic systems on cloud managed agents. […] And so if memory is called dreaming. And so if memory is real time deciding to write to a file real time deciding to write to a file real time deciding to write to a file system, dreaming allows the agent to system, dreaming allows the agent to system, dreaming allows the agent to look back over all of its past sessions look back over all of its past sessions look back over all of its past sessions and update its memory and its skills so and update its memory and its skills so and update its memory and its skills so that it does even better next time that it does even better next time that it does even better next time around."
+    },
+    {
+      "evidence_id": "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+      "platform": "youtube",
+      "source_key": "IBMTechnology",
+      "content_id": "FgaBdwSvOGM",
+      "canonical_url": "https://www.youtube.com/watch?v=FgaBdwSvOGM",
+      "published_at": "2026-08-03T11:00:35+00:00",
+      "title": "Agentic Engineering vs Software Engineering: Beyond Vibe Coding",
+      "kind": "transcript",
+      "locator": "00:05:10.611–00:05:17.075",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/IBMTechnology/videos/20260803_FgaBdwSvOGM/transcripts/FgaBdwSvOGM.srt",
+      "snippet": "So agentic refers to an organization of agents that write the code and the human developer that oversees and validates the output, as the agent or multi-agent system iterates through the subtasks we maintain a human in the loop. Engineering, on the other hand, describes a level of expertise required to use agentic workflows for a meaningful code production that doesn't jeopardize the code quality. […] And finally, we have agentic engineering, which expands beyond code generation entirely. Here, engineers are not just building software, but describing environments and designing them in which autonomous systems can reason, coordinate, evaluate outcomes, and adapt dynamically under constraints. […] And importantly, this is not about removing humans from the loop. In fact, one of the biggest misconceptions around agentic systems is the idea that they eliminate the need for engineering expertise. […] You think about it, if there's a bug, you can often trace it directly to a faulty condition, state transition, or implementation detail. Agentic systems are different."
+    }
+  ],
+  "completed_stages": [
+    "retrieve",
+    "cite",
+    "classify",
+    "checkpoint"
+  ],
+  "created_at": "2026-08-14T09:50:32.869079+00:00"
+}

@@ -1,0 +1,110 @@
+{
+  "case_id": "what_are_evals",
+  "question": "What does the corpus describe as the purpose of evals for agent systems?",
+  "mode": "live_retrieval",
+  "model": "glm-5.2",
+  "provider_prefix": "OPEN_WEIGHT",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T17:00:01.134133+00:00",
+  "finished_at": "2026-08-16T17:00:42.516362+00:00",
+  "stop_reason": "QUALITY_GATE_PASSED",
+  "error": null,
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "INSUFFICIENT_EVIDENCE",
+      "relevant_evidence_count": 3,
+      "assessed_evidence_count": 8,
+      "citation_ids": [
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+        "7abd810a0066e1bac35fbe9b5cf841acb526c897efb2f10de7ac2fe0788e6940"
+      ],
+      "suggested_queries": [
+        "purpose of evals for agent systems",
+        "why run evals for AI agents",
+        "evals agent evaluation methodology goals"
+      ],
+      "answer": "The retrieved evidence describes evals for agent systems as serving two main purposes. First, evals are used to evaluate an agent's non-deterministic characteristics, such as personality, tone, style, and output quality, using a non-deterministic grader as part of the evaluation process. Second, evals are described as \"often the best way to find your ideal balance,\" specifically in the context of controlling length through effort levels. The evidence also references evals being used to assess model performance at small scale, where a STEM-heavy mix \"looked better on stem evals,\" though this appears to relate to corpus composition rather than agent system evaluation specifically.",
+      "usage": {
+        "input_tokens": 3074,
+        "output_tokens": 1080,
+        "cost_usd": 0.009055599999999999,
+        "latency_seconds": 8.9895,
+        "output_tokens_per_second": 120.14
+      }
+    },
+    {
+      "round": 2,
+      "classification": "SUPPORTED",
+      "relevant_evidence_count": 9,
+      "assessed_evidence_count": 20,
+      "citation_ids": [
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+        "ecdeadf4616096071836ec3206171c2641b8e8f8407150da32c7613c8e867f20",
+        "00ba6181d26b9aeae64641a6321007d4ddd9a33b5cb3fda798279093056142e8",
+        "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+        "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+        "03c1737387b69175837556b21a9cb0704c5c5142dae89bb02003433033e0cab1",
+        "045c60f18d6cf59486b70176d9842403bca0c53d8b07e9880e3100dbdd4b96b2",
+        "b204b7cab693f36077ad854f38c41911b718f408f6145806035a518cf2d3a0cf"
+      ],
+      "suggested_queries": [
+        "purpose of evaluations for LLM agent systems",
+        "why run evals on AI agents",
+        "role of evals in agentic workflows"
+      ],
+      "answer": "The retrieved evidence describes several purposes for evals in agent systems. Evals are used to evaluate an agent's non-deterministic characteristics, such as personality, tone, style, and output quality, using a non-deterministic grader. They are also described as often being the best way to find an ideal balance, such as controlling length through effort levels. Additionally, evals are used to test skills, with every skill being visible, tagged, and tested with evals. In the context of coding agents, evals can be run as part of a deployment process, serving as another step in the eval suite. Evals are also used to address failure modes and test cases, with the expectation that running an eval on an updated prompt will show an improvement in output and address test cases. Running evals is described as a way to make decisions based on results, though it is noted that it is easy to overlook the work of running evals multiple times to ensure results hold. Evals are also mentioned as something that can be run on traces sent to an observability platform, alongside other activities like adding traces to data sets and debugging. Internally, running very tight evals is associated with keeping agents running for longer times through tight feedback loops. Finally, evals are mentioned as a way to evaluate what is actually needed in an AI layer.",
+      "usage": {
+        "input_tokens": 6707,
+        "output_tokens": 2454,
+        "cost_usd": 0.0201874,
+        "latency_seconds": 19.9252,
+        "output_tokens_per_second": 123.16
+      }
+    }
+  ],
+  "model_calls": 2,
+  "provider_calls": 2,
+  "model_latency_seconds": 28.915,
+  "output_tokens": 3534,
+  "output_tokens_per_second": 122.22,
+  "rejected_call_latency_seconds": 0,
+  "rejected_calls_with_usage": 0,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 20,
+  "evidence_expanded": true,
+  "max_evidence_items": 20,
+  "refined_queries": [
+    "purpose of evals for agent systems",
+    "why run evals for AI agents",
+    "evals agent evaluation methodology goals"
+  ],
+  "final_evidence_ids": [
+    "89f0dd7a752aa844c90df8b16a8067a5eb7829b9ce656e29afc4d2ec456669c6",
+    "11c5afbe557f59b2e8bbdb7dc084fced2a1d9fda15da0bd997ac71e047e4ac63",
+    "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+    "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+    "1ef7ea308a07ef4355f91fc11363154fa0e3ee81052d80549e2d2ce7992a7430",
+    "7abd810a0066e1bac35fbe9b5cf841acb526c897efb2f10de7ac2fe0788e6940",
+    "7425f99a8e5bcc82d14a80b1daae7170ebd25bcd76ab0dedf1757c3776f0dfed",
+    "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+    "31a36ac4a470a58a4030af20264e12015f2ab1fb16c33c6808c68fdf6235a7da",
+    "a38b17716687d9d9c678961d9e7dfc12198d8dd4d793870b5768711b783141da",
+    "ecdeadf4616096071836ec3206171c2641b8e8f8407150da32c7613c8e867f20",
+    "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+    "00ba6181d26b9aeae64641a6321007d4ddd9a33b5cb3fda798279093056142e8",
+    "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+    "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+    "b4c49d8d41c95ebb66a4803cc6f53fbf123f8f341ef44a69959592ac9b2fd8f7",
+    "03c1737387b69175837556b21a9cb0704c5c5142dae89bb02003433033e0cab1",
+    "045c60f18d6cf59486b70176d9842403bca0c53d8b07e9880e3100dbdd4b96b2",
+    "6dff47d6099c5a8690bb2d0b57c440fccdaf139a6c106cbf6abb92d150c29d39",
+    "b204b7cab693f36077ad854f38c41911b718f408f6145806035a518cf2d3a0cf"
+  ],
+  "frozen_expected_outcome": "SUPPORTED",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model.",
+  "repetition": 3,
+  "cost_usd": 0.029243
+}

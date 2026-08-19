@@ -1,0 +1,96 @@
+.env
+.env.*
+!.env.example
+.fieldnotes.md
+.dossier.md
+.slides.md
+.notes.md
+demo.sh
+.DS_Store
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.sqlite3-shm
+*.sqlite3-wal
+*.sqlite3
+*.db
+*.csv
+*.tsv
+*.parquet
+*.pkl
+*.pickle
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.tmp
+*.part
+*.ytdl
+*.info.json
+source/**/ingestion-state.sqlite3
+source/**/ingestion-events.jsonl
+
+# Generated source information and media. Keep source definitions, rules,
+# code, tests, and configuration version-controlled; keep acquired content
+# and derived per-source artifacts out of Git.
+source/**/videos/
+source/**/posts/
+source/**/x-posts/
+source/**/content/
+source/**/media/
+source/**/audio/
+source/**/temporary-audio/
+source/**/transcripts/
+source/**/subtitles/
+source/**/platform-subtitles/
+source/**/attachments/
+source/**/images/
+source/**/channel-ingestion-report.json
+
+# Future source adapters may use different generated folder names. Source
+# content is runtime data; source definitions remain in config/.
+source/**
+!source/**/.gitkeep
+!source/README.md
+.refactor-log.md
+
+# ---- data/: exclude by default, commit model output only --------------------
+# Anything deterministic code produces is reproducible by running a command and
+# must not consume repository space. Anything a model produced cost real money
+# and is the evidence of the work, so it is committed — small enough to read on
+# GitHub without cloning hundreds of megabytes.
+data/*
+!data/README.md
+
+# Digest reports: per-item model judgements with their grounding quotes.
+# Checkpoints are excluded — transient resume state that duplicates the report.
+!data/digests/
+data/digests/*
+!data/digests/README.md
+!data/digests/*-report.json
+
+# Live-run traces and measurement summaries, including the archived mixed set
+# kept as evidence of a data-integrity failure.
+!data/runs/
+!data/runs/**
+data/runs/**/*.sqlite3
+
+# Evaluation suite reports. The per-case caches beside them are excluded: they
+# duplicate the reports and exist to avoid paying twice.
+!data/eval-*-report.json
+
+# Verification drafter output: proposed claim checks awaiting human confirmation.
+!data/verification-drafts/
+!data/verification-drafts/**
+
+# Human audit decisions are costly manual evidence and belong in version
+# control. Generated review cards remain ignored under data/human-review/.
+!data/human-labels/
+!data/human-labels/**
+
+# Frozen window snapshots are deterministic — reproducible with
+# scripts/corpus_freeze_digest_window.py — so only the explanation is committed.
+!data/digest-windows/
+data/digest-windows/*
+!data/digest-windows/README.md
+.fable-review-prompt.md

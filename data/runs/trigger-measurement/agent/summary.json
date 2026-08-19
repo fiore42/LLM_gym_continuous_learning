@@ -1,0 +1,123 @@
+{
+  "measurement_version": 1,
+  "model": "claude-sonnet-5",
+  "provider_prefix": "AGENT",
+  "created_at": "2026-08-16T17:11:12.485800+00:00",
+  "summary": {
+    "runs": 6,
+    "trigger_counts": {
+      "label": 5,
+      "relevance_only": 1
+    },
+    "relevance_only_fired": 1,
+    "expanded": 6,
+    "round_one_labels": {
+      "SUPPORTED": 1,
+      "INSUFFICIENT_EVIDENCE": 5
+    },
+    "errors": 1,
+    "total_completed_rounds": 11,
+    "total_provider_calls": 14,
+    "total_model_latency_seconds": 498.537,
+    "output_tokens_per_second": 67.88,
+    "total_cost_usd": 0.540322
+  },
+  "runs": [
+    {
+      "case_id": "what_are_evals",
+      "repetition": 1,
+      "trigger": "label",
+      "round_one_classification": "INSUFFICIENT_EVIDENCE",
+      "round_one_relevant": 2,
+      "round_one_assessed": 8,
+      "evidence_expanded": true,
+      "stop_reason": "QUALITY_GATE_PASSED",
+      "error": null,
+      "model_calls": 2,
+      "provider_calls": 3,
+      "model_latency_seconds": 114.513,
+      "output_tokens": 7773,
+      "cost_usd": 0.123092
+    },
+    {
+      "case_id": "what_are_evals",
+      "repetition": 2,
+      "trigger": "label",
+      "round_one_classification": "INSUFFICIENT_EVIDENCE",
+      "round_one_relevant": 2,
+      "round_one_assessed": 8,
+      "evidence_expanded": true,
+      "stop_reason": "QUALITY_GATE_PASSED",
+      "error": null,
+      "model_calls": 2,
+      "provider_calls": 2,
+      "model_latency_seconds": 61.954,
+      "output_tokens": 4091,
+      "cost_usd": 0.068412
+    },
+    {
+      "case_id": "what_are_evals",
+      "repetition": 3,
+      "trigger": "relevance_only",
+      "round_one_classification": "SUPPORTED",
+      "round_one_relevant": 2,
+      "round_one_assessed": 8,
+      "evidence_expanded": true,
+      "stop_reason": "QUALITY_GATE_PASSED",
+      "error": null,
+      "model_calls": 2,
+      "provider_calls": 2,
+      "model_latency_seconds": 64.686,
+      "output_tokens": 4486,
+      "cost_usd": 0.071766
+    },
+    {
+      "case_id": "independent_evaluation",
+      "repetition": 1,
+      "trigger": "label",
+      "round_one_classification": "INSUFFICIENT_EVIDENCE",
+      "round_one_relevant": 3,
+      "round_one_assessed": 8,
+      "evidence_expanded": true,
+      "stop_reason": "QUALITY_GATE_PASSED",
+      "error": null,
+      "model_calls": 2,
+      "provider_calls": 2,
+      "model_latency_seconds": 74.16,
+      "output_tokens": 5277,
+      "cost_usd": 0.080882
+    },
+    {
+      "case_id": "independent_evaluation",
+      "repetition": 2,
+      "trigger": "label",
+      "round_one_classification": "INSUFFICIENT_EVIDENCE",
+      "round_one_relevant": 5,
+      "round_one_assessed": 8,
+      "evidence_expanded": true,
+      "stop_reason": "PROVIDER_OR_VALIDATION_ERROR",
+      "error": "ValueError: evidence_assessment must contain each supplied evidence ID exactly once",
+      "model_calls": 1,
+      "provider_calls": 3,
+      "model_latency_seconds": 116.51,
+      "output_tokens": 7754,
+      "cost_usd": 0.12554
+    },
+    {
+      "case_id": "independent_evaluation",
+      "repetition": 3,
+      "trigger": "label",
+      "round_one_classification": "INSUFFICIENT_EVIDENCE",
+      "round_one_relevant": 1,
+      "round_one_assessed": 8,
+      "evidence_expanded": true,
+      "stop_reason": "QUALITY_GATE_PASSED",
+      "error": null,
+      "model_calls": 2,
+      "provider_calls": 2,
+      "model_latency_seconds": 66.714,
+      "output_tokens": 4461,
+      "cost_usd": 0.07063
+    }
+  ]
+}

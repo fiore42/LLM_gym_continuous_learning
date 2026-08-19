@@ -1,0 +1,50 @@
+{
+  "verification_version": 1,
+  "question": "What parts of an agent system does the corpus identify around the harness and loop?",
+  "answer": "The retrieved evidence is limited to a single social media post that describes a walkthrough organized around several components: an AI agent harness, agent loops, context engineering, and deterministic behavior. Beyond listing these as topics covered in the linked walkthrough, the evidence does not elaborate on what each of these parts specifically consists of or how they relate to one another within an agent system.",
+  "model": "claude-haiku-4-5",
+  "prompt": {
+    "system_prompt": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+    "rendered_user_prompt": "Question: What parts of an agent system does the corpus identify around the harness and loop?\n\nAnswer:\nThe retrieved evidence is limited to a single social media post that describes a walkthrough organized around several components: an AI agent harness, agent loops, context engineering, and deterministic behavior. Beyond listing these as topics covered in the linked walkthrough, the evidence does not elaborate on what each of these parts specifically consists of or how they relate to one another within an agent system.\n\nEvidence:\nEVIDENCE_ID: 79fb8668620e7a9abcf1547773ad9d093d0021709712971e7f7c93d995fa76a8\nTEXT: The post links a walkthrough organized around an AI agent harness, agent loops, context engineering, and deterministic behavior."
+  },
+  "claims": [
+    {
+      "claim": "The corpus identifies an AI agent harness as a component of an agent system",
+      "verdict": "proven",
+      "evidence_id": "79fb8668620e7a9abcf1547773ad9d093d0021709712971e7f7c93d995fa76a8",
+      "quote": "The post links a walkthrough organized around an AI agent harness, agent loops, context engineering, and deterministic behavior.",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "The corpus identifies agent loops as a component of an agent system",
+      "verdict": "proven",
+      "evidence_id": "79fb8668620e7a9abcf1547773ad9d093d0021709712971e7f7c93d995fa76a8",
+      "quote": "The post links a walkthrough organized around an AI agent harness, agent loops, context engineering, and deterministic behavior.",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "The corpus identifies context engineering as related to the harness and loop",
+      "verdict": "proven",
+      "evidence_id": "79fb8668620e7a9abcf1547773ad9d093d0021709712971e7f7c93d995fa76a8",
+      "quote": "The post links a walkthrough organized around an AI agent harness, agent loops, context engineering, and deterministic behavior.",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "The corpus identifies deterministic behavior as related to the harness and loop",
+      "verdict": "proven",
+      "evidence_id": "79fb8668620e7a9abcf1547773ad9d093d0021709712971e7f7c93d995fa76a8",
+      "quote": "The post links a walkthrough organized around an AI agent harness, agent loops, context engineering, and deterministic behavior.",
+      "quote_valid": true,
+      "flag": null
+    }
+  ],
+  "usage": {
+    "input_tokens": 322,
+    "output_tokens": 466,
+    "cost_usd": 0.002652
+  },
+  "advisory_only": true
+}

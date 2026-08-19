@@ -1,0 +1,50 @@
+{
+  "ingestion": {
+    "default_window_days": 3,
+    "max_window_days": 3,
+    "short_video_max_seconds": 120,
+    "screenshot_interval_seconds": 5
+  },
+  "x": {
+    "include_replies": false,
+    "include_retweets": false,
+    "max_results_per_request": 100,
+    "download_media": true,
+    "download_linked_documents": true,
+    "max_media_bytes": 536870912,
+    "max_document_bytes": 52428800,
+    "download_timeout_seconds": 120,
+    "post_read_cost_usd": 0.005,
+    "user_read_cost_usd": 0.01
+  },
+  "tools": {
+    "yt_dlp": "yt-dlp",
+    "ffmpeg": "ffmpeg",
+    "whisper_script": "whispermlx-subtitles.sh",
+    "ffprobe": "ffprobe"
+  },
+  "runtime": {
+    "subprocess_timeout_seconds": 1800
+  },
+  "agent": {
+    "max_rounds": 3,
+    "max_minutes": 60,
+    "max_model_calls": 100,
+    "stop_at_budget_fraction": 0.8,
+    "minimum_eval_pass_fraction": 0.8,
+    "max_output_tokens": 4000,
+    "max_model_calls_ceiling": 2000,
+    "max_cost_usd_per_task": 0.5,
+    "max_cost_usd_ceiling": 25.0,
+    "max_cost_usd": 0.5
+  },
+  "model_evaluation": {
+    "max_minutes": 120,
+    "max_model_calls": 100,
+    "max_cost_usd": 50.0,
+    "stop_at_budget_fraction": 0.8
+  },
+  "digest": {
+    "max_cost_usd_per_window_day": 0.25
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "benchmark_version": 1,
+  "description": "Small grounded cases for comparing model providers.",
+  "cases": [
+    {
+      "case_id": "direct_support",
+      "question": "What does the source say agents should preserve when they use memory?",
+      "expected_outcome": "SUPPORTED",
+      "evidence": [
+        {
+          "evidence_id": "benchmark-memory-1",
+          "canonical_url": "https://example.test/agent-memory",
+          "snippet": "An agent should preserve relevant prior context and cite the evidence used to form its answer."
+        }
+      ]
+    },
+    {
+      "case_id": "insufficient_evidence",
+      "question": "What was the system's measured production latency?",
+      "expected_outcome": "INSUFFICIENT_EVIDENCE",
+      "evidence": [
+        {
+          "evidence_id": "benchmark-latency-1",
+          "canonical_url": "https://example.test/agent-memory",
+          "snippet": "The system stores relevant prior context for later steps."
+        }
+      ]
+    },
+    {
+      "case_id": "conflicting_evidence",
+      "question": "Do the supplied sources agree on whether the agent retries failed work?",
+      "expected_outcome": "CONFLICTING_EVIDENCE",
+      "evidence": [
+        {
+          "evidence_id": "benchmark-conflict-1",
+          "canonical_url": "https://example.test/source-a",
+          "snippet": "The agent retries a failed step up to three times."
+        },
+        {
+          "evidence_id": "benchmark-conflict-2",
+          "canonical_url": "https://example.test/source-b",
+          "snippet": "The agent does not retry a failed step; it escalates immediately."
+        }
+      ]
+    }
+  ]
+}

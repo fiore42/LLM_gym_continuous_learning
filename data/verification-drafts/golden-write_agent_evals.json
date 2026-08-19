@@ -1,0 +1,26 @@
+{
+  "verification_version": 1,
+  "question": "What does the corpus recommend considering when writing evaluations for an agent?",
+  "answer": "The retrieved evidence does not specify concrete recommendations or best practices for what to consider when writing evaluations for an agent. It only notes that evaluations are used to evaluate and improve an agent at scale, without detailing specific considerations, criteria, or methodology for constructing such evaluations.",
+  "model": "claude-haiku-4-5",
+  "prompt": {
+    "system_prompt": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+    "rendered_user_prompt": "Question: What does the corpus recommend considering when writing evaluations for an agent?\n\nAnswer:\nThe retrieved evidence does not specify concrete recommendations or best practices for what to consider when writing evaluations for an agent. It only notes that evaluations are used to evaluate and improve an agent at scale, without detailing specific considerations, criteria, or methodology for constructing such evaluations.\n\nEvidence:\nEVIDENCE_ID: b679e8c25f9b238942cc942dba86b1ece58a4d0615b7c9ada65447f0ae1e38bf\nTEXT: The presentation discusses how evaluations are used to evaluate and improve an agent at scale."
+  },
+  "claims": [
+    {
+      "claim": "The corpus does not specify concrete recommendations or best practices for what to consider when writing evaluations for an agent",
+      "verdict": "proven",
+      "evidence_id": "b679e8c25f9b238942cc942dba86b1ece58a4d0615b7c9ada65447f0ae1e38bf",
+      "quote": "The presentation discusses how evaluations are used to evaluate and improve an agent at scale.",
+      "quote_valid": true,
+      "flag": null
+    }
+  ],
+  "usage": {
+    "input_tokens": 294,
+    "output_tokens": 134,
+    "cost_usd": 0.000964
+  },
+  "advisory_only": true
+}

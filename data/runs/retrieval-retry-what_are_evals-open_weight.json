@@ -1,0 +1,61 @@
+{
+  "case_id": "what_are_evals",
+  "question": "What does the corpus describe as the purpose of evals for agent systems?",
+  "mode": "live_retrieval",
+  "model": "glm-5.2",
+  "provider_prefix": "OPEN_WEIGHT",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T16:35:13.588000+00:00",
+  "finished_at": "2026-08-16T16:35:23.535106+00:00",
+  "stop_reason": "RETRIEVAL_RETRY_NOT_REQUESTED",
+  "error": null,
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "SUPPORTED",
+      "relevant_evidence_count": 2,
+      "assessed_evidence_count": 8,
+      "citation_ids": [
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40"
+      ],
+      "suggested_queries": [
+        "purpose of evals for agent systems",
+        "why use evals for AI agents",
+        "evals for agent systems best practices"
+      ],
+      "answer": "The retrieved evidence describes evals for agent systems as serving two main purposes. First, evals are used to evaluate an agent's non-deterministic characteristics, such as personality, tone, style, and output quality, using a non-deterministic grader as part of the evaluation process. Second, evals are described as \"often the best way to find your ideal balance,\" specifically in the context of controlling effort levels, suggesting they serve as a tool for tuning and optimizing agent behavior.",
+      "usage": {
+        "input_tokens": 3074,
+        "output_tokens": 964,
+        "cost_usd": 0.008545200000000001,
+        "latency_seconds": 8.7382,
+        "output_tokens_per_second": 110.32
+      }
+    }
+  ],
+  "model_calls": 1,
+  "provider_calls": 1,
+  "model_latency_seconds": 8.738,
+  "output_tokens": 964,
+  "output_tokens_per_second": 110.32,
+  "rejected_call_latency_seconds": 0,
+  "rejected_calls_with_usage": 0,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 8,
+  "evidence_expanded": false,
+  "max_evidence_items": 20,
+  "refined_queries": [],
+  "final_evidence_ids": [
+    "89f0dd7a752aa844c90df8b16a8067a5eb7829b9ce656e29afc4d2ec456669c6",
+    "11c5afbe557f59b2e8bbdb7dc084fced2a1d9fda15da0bd997ac71e047e4ac63",
+    "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+    "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+    "1ef7ea308a07ef4355f91fc11363154fa0e3ee81052d80549e2d2ce7992a7430",
+    "7abd810a0066e1bac35fbe9b5cf841acb526c897efb2f10de7ac2fe0788e6940",
+    "7425f99a8e5bcc82d14a80b1daae7170ebd25bcd76ab0dedf1757c3776f0dfed",
+    "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681"
+  ],
+  "frozen_expected_outcome": "SUPPORTED",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model."
+}

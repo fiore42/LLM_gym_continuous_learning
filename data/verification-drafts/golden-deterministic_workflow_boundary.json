@@ -1,0 +1,42 @@
+{
+  "verification_version": 1,
+  "question": "What contrast does the corpus draw between deterministic software engineering and agentic engineering?",
+  "answer": "The retrieved evidence indicates that a transcript from the cited source frames traditional software engineering as fundamentally deterministic, and draws a contrast with agentic engineering, but the retrieved excerpt does not specify what characteristics define agentic engineering or elaborate on the precise nature of the contrast beyond noting that it is made. Because the supplied evidence only states that this contrast exists without detailing its substance, a fuller account of what the corpus says about the distinction cannot be given from the material provided.",
+  "model": "claude-haiku-4-5",
+  "prompt": {
+    "system_prompt": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+    "rendered_user_prompt": "Question: What contrast does the corpus draw between deterministic software engineering and agentic engineering?\n\nAnswer:\nThe retrieved evidence indicates that a transcript from the cited source frames traditional software engineering as fundamentally deterministic, and draws a contrast with agentic engineering, but the retrieved excerpt does not specify what characteristics define agentic engineering or elaborate on the precise nature of the contrast beyond noting that it is made. Because the supplied evidence only states that this contrast exists without detailing its substance, a fuller account of what the corpus says about the distinction cannot be given from the material provided.\n\nEvidence:\nEVIDENCE_ID: 4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681\nTEXT: The transcript describes traditional software engineering as fundamentally deterministic and contrasts it with agentic engineering."
+  },
+  "claims": [
+    {
+      "claim": "The corpus describes traditional software engineering as fundamentally deterministic",
+      "verdict": "proven",
+      "evidence_id": "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+      "quote": "traditional software engineering as fundamentally deterministic",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "The corpus contrasts deterministic software engineering with agentic engineering",
+      "verdict": "proven",
+      "evidence_id": "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+      "quote": "contrasts it with agentic engineering",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "The corpus specifies what characteristics define agentic engineering",
+      "verdict": "not_proven",
+      "evidence_id": "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+      "quote": "contrasts it with agentic engineering",
+      "quote_valid": true,
+      "flag": null
+    }
+  ],
+  "usage": {
+    "input_tokens": 336,
+    "output_tokens": 297,
+    "cost_usd": 0.001821
+  },
+  "advisory_only": true
+}

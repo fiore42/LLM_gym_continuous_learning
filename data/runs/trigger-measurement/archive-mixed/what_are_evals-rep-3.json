@@ -1,0 +1,104 @@
+{
+  "case_id": "what_are_evals",
+  "question": "What does the corpus describe as the purpose of evals for agent systems?",
+  "mode": "live_retrieval",
+  "model": "claude-sonnet-5",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T16:11:58.053085+00:00",
+  "finished_at": "2026-08-16T16:13:06.905445+00:00",
+  "stop_reason": "QUALITY_GATE_PASSED",
+  "error": null,
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "INSUFFICIENT_EVIDENCE",
+      "relevant_evidence_count": 2,
+      "assessed_evidence_count": 8,
+      "citation_ids": [
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40"
+      ],
+      "suggested_queries": [
+        "why do teams build evals for AI agents",
+        "evals for measuring agent reliability and safety",
+        "purpose of agent evaluation benchmarks in production"
+      ],
+      "answer": "The retrieved evidence gives only fragmentary and indirect information about the purpose of evals for agent systems. One source describes using a 'non-deterministic grader' as part of an eval to assess an agent's non-deterministic characteristics such as personality, tone, style, and output quality, and mentions running evals to establish a baseline for an agent—suggesting evals are used to measure and baseline qualitative agent behavior. Another source, discussing a Claude agent playing Pokémon and controllable 'effort levels,' states that 'evals are often the best way to find your ideal balance,' implying evals help tune a tradeoff (e.g., between effort/length and performance) for an agent. Beyond these two points, the rest of the supplied evidence does not address the purpose of evals for agent systems specifically.",
+      "usage": {
+        "input_tokens": 4303,
+        "output_tokens": 1427,
+        "cost_usd": 0.022876,
+        "latency_seconds": 19.2336,
+        "output_tokens_per_second": 74.19
+      }
+    },
+    {
+      "round": 2,
+      "classification": "SUPPORTED",
+      "relevant_evidence_count": 6,
+      "assessed_evidence_count": 20,
+      "citation_ids": [
+        "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+        "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+        "78f31560b0410776cef9add2eae4f146683253af19be7c4ebb471bff7c8fbbb8"
+      ],
+      "suggested_queries": [
+        "why are evals important for AI agent reliability",
+        "how to design evals for multi-step agent tasks",
+        "eval-driven development for AI agents"
+      ],
+      "answer": "The retrieved evidence describes evals for agent systems as systematic tests used to measure how well an AI agent performs on a specific domain or task. One source defines evals as 'systematic tests that measure how well an AI system performs on a specific domain or use case,' citing examples like SWE-bench (agentic coding abilities), ToolBench, and OSWorld as evals that measure different agent capabilities, and stresses asking 'what are you trying to measure' to build a good eval. Another source similarly emphasizes building custom evals for a specific workload—e.g., using an LLM-as-judge to check whether a customer service agent's response matches an expected response—and frames building an eval dataset as one of the highest-leverage uses of human time. A separate account describes using a non-deterministic grader as part of an eval to assess an agent's non-deterministic characteristics, such as personality, tone, style, and output quality, and running baseline evals before making changes. Evals are also described as a way to find an 'ideal balance,' such as tuning effort/length levels, using a Pokémon-playing agent as an example. One additional source notes wanting 'your own benchmarks' and 'your own evals' to measure agent performance rather than relying solely on leaderboards, and suggests measuring outputs. Together, the retrieved evidence characterizes evals' purpose as measuring, validating, and tuning agent behavior/performance—both on standardized benchmarks and on custom, workload-specific criteria—rather than as a single, uniformly defined process.",
+      "usage": {
+        "input_tokens": 8964,
+        "output_tokens": 3056,
+        "cost_usd": 0.048488,
+        "latency_seconds": 45.1235,
+        "output_tokens_per_second": 67.73
+      }
+    }
+  ],
+  "model_calls": 2,
+  "provider_calls": 2,
+  "model_latency_seconds": 64.357,
+  "output_tokens": 4483,
+  "output_tokens_per_second": 69.66,
+  "rejected_call_latency_seconds": 0,
+  "rejected_calls_with_usage": 0,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 20,
+  "evidence_expanded": true,
+  "max_evidence_items": 20,
+  "refined_queries": [
+    "why do teams build evals for AI agents",
+    "evals for measuring agent reliability and safety",
+    "purpose of agent evaluation benchmarks in production"
+  ],
+  "final_evidence_ids": [
+    "89f0dd7a752aa844c90df8b16a8067a5eb7829b9ce656e29afc4d2ec456669c6",
+    "11c5afbe557f59b2e8bbdb7dc084fced2a1d9fda15da0bd997ac71e047e4ac63",
+    "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+    "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+    "1ef7ea308a07ef4355f91fc11363154fa0e3ee81052d80549e2d2ce7992a7430",
+    "7abd810a0066e1bac35fbe9b5cf841acb526c897efb2f10de7ac2fe0788e6940",
+    "7425f99a8e5bcc82d14a80b1daae7170ebd25bcd76ab0dedf1757c3776f0dfed",
+    "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+    "69817502cb7112dd44ebc92432f3bda1fe93a844240bcbab08fe76e85db43905",
+    "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e",
+    "71260df95377e02ccd24a04d2e2d9c3861b61cfb34cb9fc3afcd42234e015eef",
+    "af0dad2a795a5de82568fa2126c882bb0766426147e446da935a1d9ea5126242",
+    "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+    "b8adec83cae6c5aed08e451721d6a8c40e41b855571580f65f6b67fbeaaaea75",
+    "42d777a8caa67764eaab1ffbfb64676cc313cdd3f7f3e2792f5245e5d8090084",
+    "44fa52fc107bde4391fa4f04c5385e45fb306f80fbd499b7ef834fa4ac449c66",
+    "af78815aa3e6376e2aa0b65fec8d818246e6748bf05eefddf3cb9c71815406b5",
+    "78f31560b0410776cef9add2eae4f146683253af19be7c4ebb471bff7c8fbbb8",
+    "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+    "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027"
+  ],
+  "frozen_expected_outcome": "SUPPORTED",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model.",
+  "repetition": 3,
+  "cost_usd": 0.071364
+}

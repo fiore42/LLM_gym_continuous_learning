@@ -1,0 +1,109 @@
+{
+  "case_id": "independent_evaluation",
+  "question": "Does the corpus consistently describe an agent reviewing its own work as sufficient quality control?",
+  "mode": "live_retrieval",
+  "model": "claude-sonnet-5",
+  "provider_prefix": "AGENT",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T17:06:06.157521+00:00",
+  "finished_at": "2026-08-16T17:07:36.206286+00:00",
+  "stop_reason": "QUALITY_GATE_PASSED",
+  "error": null,
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "INSUFFICIENT_EVIDENCE",
+      "relevant_evidence_count": 3,
+      "assessed_evidence_count": 8,
+      "citation_ids": [
+        "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+        "58d7d3dd942584047553b117261a9059a01ea257add6ca695b9da6a3524964c3",
+        "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e"
+      ],
+      "suggested_queries": [
+        "agent self-critique verification of own outputs",
+        "AI agent self-review versus human oversight quality assurance",
+        "limitations of AI agents checking their own work"
+      ],
+      "answer": "The retrieved evidence does not support the claim that the corpus consistently describes an agent reviewing its own work as sufficient quality control. In fact, the one piece of evidence that speaks directly to this issue says the opposite: it states that even frontier models 'can pretty much do anything, but you need to review the decisions,' implying that human or external review is necessary rather than self-review being sufficient (688db16e). Other evidence touches on quality control only tangentially or in unrelated contexts—one describes a model splitting itself into departments including a 'quality control' function without stating whether this self-organized review was deemed sufficient (58d7d3dd), another describes human overseers deleting or editing an agent's memory/context to ensure consistent behavior, which is external rather than self-review (15ec12e7), and another describes humans, not the agent itself, controlling release quality on the R&D side (15ec12e7). The remaining evidence items discuss post-training/alignment processes (602612e9), model consistency of opinions (063b5d53), eval performance (5aab8a09), and an unrelated security/exploit narrative (7e9d1987) and a developer's personal workflow bottlenecks (e8d2e671), none of which address whether agent self-review is treated as adequate quality control. Overall, the available evidence does not establish a consistent narrative on this point, and the one relevant data point actually argues against self-review being sufficient.",
+      "usage": {
+        "input_tokens": 4144,
+        "output_tokens": 1574,
+        "cost_usd": 0.024028,
+        "latency_seconds": 20.895,
+        "output_tokens_per_second": 75.33
+      }
+    },
+    {
+      "round": 2,
+      "classification": "CONFLICTING_EVIDENCE",
+      "relevant_evidence_count": 9,
+      "assessed_evidence_count": 20,
+      "citation_ids": [
+        "297d57607b6ad49ab223e8435d6c892783091b1f202c35dc07244d25ba76ba25",
+        "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+        "d84d89d17c79ca34e076bbf44b153b1c17272f3145ae0c7a870d8c8051e324bb",
+        "6b95d853b5726dd7bbaa57c84b38db308e0af2975aa8b07696cd7c4592503b70",
+        "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+        "c14a300a3b42431880977451b6fd8c7bf744defc7008eee8263bf3978a870140",
+        "fe14e9d9ee8858f358feeb408ef126aa0764d5d7268dc672b53a58804f49ce1b",
+        "13af94df979fd6858eed7b86f2bc89e9fc8afd91043ed9badc4119eee4dee437"
+      ],
+      "suggested_queries": [
+        "agent self-review versus human review quality control",
+        "does an AI agent checking its own output count as sufficient QA",
+        "risks of relying solely on model self-critique for verification"
+      ],
+      "answer": "No. The retrieved evidence does not support the idea that the corpus consistently treats an agent reviewing its own work as sufficient quality control. Where the topic comes up, the evidence actually points the other way: speakers describe multi-agent verification setups where a separate agent checks or refutes another agent's output rather than relying on self-review (EVIDENCE_ID 297d57607b6ad49ab223e8435d6c892783091b1f202c35dc07244d25ba76ba25; EVIDENCE_ID 2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e), and one speaker explicitly frames looking at one's own output as something agents/bots 'often' fail to do, implying it is necessary but not treated as sufficient on its own, alongside a broader agent-loop design that requires 'verification of how do you know when you're done' (EVIDENCE_ID d84d89d17c79ca34e076bbf44b153b1c17272f3145ae0c7a870d8c8051e324bb). Other evidence emphasizes verification steps that run CI builds (EVIDENCE_ID 6b95d853b5726dd7bbaa57c84b38db308e0af2975aa8b07696cd7c4592503b70), synthetic-data quality control needing verification, diversity, external grounding, and human validation rather than self-review alone (EVIDENCE_ID 297d57607b6ad49ab223e8435d6c892783091b1f202c35dc07244d25ba76ba25 is a different item; the relevant one here is 297d57607... no—correcting: the synthetic data point is EVIDENCE_ID 297d57607b6ad49ab223e8435d6c892783091b1f202c35dc07244d25ba76ba25 is verification-step evidence, while the synthetic data claim is under EVIDENCE_ID 297d57607b6ad49ab223e8435d6c892783091b1f202c35dc07244d25ba76ba25). Several other items stress that human oversight or human review remains necessary even when agents work autonomously (EVIDENCE_ID 688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3: 'you need to review the decisions'; EVIDENCE_ID c14a300a3b42431880977451b6fd8c7bf744defc7008eee8263bf3978a870140: human oversight is 'really key'; EVIDENCE_ID fe14e9d9ee8858f358feeb408ef126aa0764d5d7268dc672b53a58804f49ce1b: agent work reviewed with '500,000 PRs with human oversight'; EVIDENCE_ID a38b17716687d9d9c678961d9e7dfc12198d8dd4d793870b5768711b783141da: benefits of AI-found vulnerabilities were 'only marginal when paired with decent human oversight'; EVIDENCE_ID a38b17716687d9d9c678961d9e7dfc12198d8dd4d793870b5768711b783141da also notes '100% of your' workflow consideration around self-hosting, unrelated). None of the retrieved evidence states or implies that an agent reviewing its own output, by itself, is treated as adequate quality control.",
+      "usage": {
+        "input_tokens": 9912,
+        "output_tokens": 3703,
+        "cost_usd": 0.056854,
+        "latency_seconds": 53.2648,
+        "output_tokens_per_second": 69.52
+      }
+    }
+  ],
+  "model_calls": 2,
+  "provider_calls": 2,
+  "model_latency_seconds": 74.16,
+  "output_tokens": 5277,
+  "output_tokens_per_second": 71.16,
+  "rejected_call_latency_seconds": 0,
+  "rejected_calls_with_usage": 0,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 20,
+  "evidence_expanded": true,
+  "max_evidence_items": 20,
+  "refined_queries": [
+    "agent self-critique verification of own outputs",
+    "AI agent self-review versus human oversight quality assurance",
+    "limitations of AI agents checking their own work"
+  ],
+  "final_evidence_ids": [
+    "602612e9dcc7a1464d3862e881a3aaf56dbb15353bb0c62184b72b0f172e41b7",
+    "58d7d3dd942584047553b117261a9059a01ea257add6ca695b9da6a3524964c3",
+    "5aab8a09ce205512bb9faa2d6f733b7ba3e74344b9c971b304320895223c823e",
+    "063b5d5374683df28f4aabd98890646b3677716f91c5e0e389911d9611f4e8fa",
+    "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+    "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027",
+    "15ec12e77b2cb14cc5e3041a64dea66619cfb5dad31420bb66d90d22443bb75e",
+    "7e9d198773ef5eee3e408c9e73709e39b2c36da06332386607c31198f1510c6c",
+    "bbb84ca82d69dc2b941db5d0bc8542f9b69d433a91bf41662151c6b111230a78",
+    "6b95d853b5726dd7bbaa57c84b38db308e0af2975aa8b07696cd7c4592503b70",
+    "297d57607b6ad49ab223e8435d6c892783091b1f202c35dc07244d25ba76ba25",
+    "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+    "a38b17716687d9d9c678961d9e7dfc12198d8dd4d793870b5768711b783141da",
+    "d84d89d17c79ca34e076bbf44b153b1c17272f3145ae0c7a870d8c8051e324bb",
+    "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+    "c14a300a3b42431880977451b6fd8c7bf744defc7008eee8263bf3978a870140",
+    "fe14e9d9ee8858f358feeb408ef126aa0764d5d7268dc672b53a58804f49ce1b",
+    "b4c49d8d41c95ebb66a4803cc6f53fbf123f8f341ef44a69959592ac9b2fd8f7",
+    "13af94df979fd6858eed7b86f2bc89e9fc8afd91043ed9badc4119eee4dee437",
+    "11c5afbe557f59b2e8bbdb7dc084fced2a1d9fda15da0bd997ac71e047e4ac63"
+  ],
+  "frozen_expected_outcome": "CONFLICTING_EVIDENCE",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model.",
+  "repetition": 1,
+  "cost_usd": 0.080882
+}

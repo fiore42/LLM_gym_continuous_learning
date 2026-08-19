@@ -1,0 +1,133 @@
+{
+  "loop_version": 2,
+  "loop_type": "RESEARCH_QUERY",
+  "run_id": "2e2058ce3bc542b2951324ba06670582",
+  "status": "COMPLETED",
+  "question": "What exact measured production latency does the corpus establish for the evaluated agent?",
+  "classification": "SUPPORTED",
+  "retrieval": {
+    "limit": 8,
+    "returned_count": 8,
+    "matched_chunk_count": 11932,
+    "matched_evidence_count": 472,
+    "truncated": true,
+    "index_version": 2,
+    "scope": "supplied retrieved evidence",
+    "index_signature": "2:192634880:1786691909643582812"
+  },
+  "answer": null,
+  "answer_note": "Model synthesis is intentionally not run in this retrieval-only stage.",
+  "evidence": [
+    {
+      "evidence_id": "7bcbbbbfe622a391c48bcd52ca892d0ab1742678dc53baa0b4b05599b7c12a44",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "5YHIrTYxM3w",
+      "canonical_url": "https://www.youtube.com/watch?v=5YHIrTYxM3w",
+      "published_at": "2026-05-20T11:56:25+00:00",
+      "title": "AI with Claude on AWS: From code to orchestration",
+      "kind": "transcript",
+      "locator": "00:15:48.640–00:15:50.910",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260520_5YHIrTYxM3w/transcripts/5YHIrTYxM3w.srt",
+      "snippet": "Cloud platform Cloud platform in on AWS. Cloud platform on AWS is actually generally available on AWS is actually generally available on AWS is actually generally available since a few days ago, and this allows since a few days ago, and this allows since a few days ago, and this allows you to have the same exact experience you to have the same exact experience you to have the same exact experience that you might be using today directly that you might be using today directly that you might be using today directly with Anthropic, but in this case, with a with Anthropic, but in this case, with a with Anthropic, but in this case, with a consolidated billing through AWS and consolidated billing through AWS and consolidated billing through AWS and having the access control fully done on having the access control fully done on having the access control fully done on AWS as well. […] scalability, cost control, and so on. So, in example, you could see uh how to So, in example, you could see uh how to So, in example, you could see uh how to set up dashboards like this one for set up dashboards like this one for set up dashboards like this one for making sure that you can control all the making sure that you can control all the making sure that you can control all the use that you are doing of cloud code use that you are doing of cloud code use that you are doing of cloud code tokens tokens tokens uh in your accounts and so on and so uh in your accounts and so on and so uh in your accounts and so on and so forth, developer productivity forth, developer productivity forth, developer productivity measurements, measuring return of measurements, measuring return of measurements, measuring return of investment of your applications, and so investment of your applications, and so investment of your applications, and so on."
+    },
+    {
+      "evidence_id": "4fe16be84daef2e04952138d47a4532376ecd59302bfc6c40b454bc8a5f2c743",
+      "platform": "youtube",
+      "source_key": "ColeMedin",
+      "content_id": "R-5_2nsF_ZM",
+      "canonical_url": "https://www.youtube.com/watch?v=R-5_2nsF_ZM",
+      "published_at": "2026-07-09T00:00:36+00:00",
+      "title": "I Love the Karpathy LLM Wiki but it Doesn't Scale. Here's What Does.",
+      "kind": "transcript",
+      "locator": "00:10:28.830–00:10:28.840",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/ColeMedin/videos/20260709_R-5_2nsF_ZM/transcripts/R-5_2nsF_ZM.srt",
+      "snippet": "I still love in the description as well. I still love using Pydantic AI for all of my using Pydantic AI for all of my using Pydantic AI for all of my production agents because coding agent production agents because coding agent production agents because coding agent SDKs, like the Claude agent SDK or Codex SDKs, like the Claude agent SDK or Codex SDKs, like the Claude agent SDK or Codex SDK, I know they're very popular now, SDK, I know they're very popular now, SDK, I know they're very popular now, but they're slow because they're made but they're slow because they're made but they're slow because they're made for longer agentic coding tasks, and for longer agentic coding tasks, and for longer agentic coding tasks, and they're also more token heavy. […] And so, when we set up of those things. And so, when we set up a retriever service, it is going to a retriever service, it is going to a retriever service, it is going to essentially help us document and essentially help us document and essentially help us document and establish the structure for our agent. establish the structure for our agent. establish the structure for our agent. And it even takes it as far as creating And it even takes it as far as creating And it even takes it as far as creating an MCP server."
+    },
+    {
+      "evidence_id": "523f4898fbc3f48811664613c4e217c7a7e61e481c68b8227b1d9b13f67a07a0",
+      "platform": "youtube",
+      "source_key": "WesRoth",
+      "content_id": "9lSIHaXT1rU",
+      "canonical_url": "https://www.youtube.com/watch?v=9lSIHaXT1rU",
+      "published_at": "2026-07-29T04:01:32+00:00",
+      "title": "OpenAI JUST revealed the truth about it's \"Rogue Agent\"",
+      "kind": "transcript",
+      "locator": "00:30:14.630–00:30:14.640",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/WesRoth/videos/20260729_9lSIHaXT1rU/transcripts/9lSIHaXT1rU.srt",
+      "snippet": "So recon drop a stager, right? So that's the idea of putting in something that's the idea of putting in something that's the idea of putting in something so you can get more and more stuff in so you can get more and more stuff in so you can get more and more stuff in there and establishing command and there and establishing command and there and establishing command and control C2. […] So as referring to it as persistence. So as referring to it as persistence. So as they say here, the agent established a they say here, the agent established a they say here, the agent established a second stage remote loader that second stage remote loader that second stage remote loader that refetched and executed code from a paste refetched and executed code from a paste refetched and executed code from a paste bin on every submission."
+    },
+    {
+      "evidence_id": "2fe1cf091e7367798441ac4f8dc8a9d8f94357275f56d947e5c2c070c82c091e",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "v9FTCvkV_a0",
+      "canonical_url": "https://www.youtube.com/watch?v=v9FTCvkV_a0",
+      "published_at": "2026-05-23T05:39:25+00:00",
+      "title": "Evals for taste: Hill-climbing a slide-generation agent",
+      "kind": "transcript",
+      "locator": "00:03:45.190–00:03:45.200",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260523_v9FTCvkV_a0/transcripts/v9FTCvkV_a0.srt",
+      "snippet": "Like for example, suspects, right? Like for example, um um um SweetBench is a very famous one which SweetBench is a very famous one which SweetBench is a very famous one which measures agentic coding abilities. measures agentic coding abilities. measures agentic coding abilities. Terminal Bench is one that's also quite Terminal Bench is one that's also quite Terminal Bench is one that's also quite popular. […] We measure these are building on, right? We measure these are building on, right? We measure these generic general benchmark that measure a generic general benchmark that measure a generic general benchmark that measure a lot of capabilities, lot of capabilities, lot of capabilities, but they might not be applicable to your but they might not be applicable to your but they might not be applicable to your specific use case, right?"
+    },
+    {
+      "evidence_id": "4b2089f4bfbeefc00353744e391dfa0251340bbf1d70a7b9f3f1e4663290ddbe",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "EPUg9pmfPk0",
+      "canonical_url": "https://www.youtube.com/watch?v=EPUg9pmfPk0",
+      "published_at": "2026-05-18T16:02:53+00:00",
+      "title": "Claude Cowork for legal teams",
+      "kind": "transcript",
+      "locator": "00:02:29.800–00:02:31.790",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260518_EPUg9pmfPk0/transcripts/EPUg9pmfPk0.srt",
+      "snippet": "[music] what's due today. [music] Two are routine, one's new, and one's Two are routine, one's new, and one's Two are routine, one's new, and one's that follow up on the product that the that follow up on the product that the that follow up on the product that the product manager requested. That's what product manager requested. […] That way the rest of my team has ticket. That way the rest of my team has context the next time a question comes context the next time a question comes context the next time a question comes up about this topic or this product up about this topic or this product up about this topic or this product area. And we're building out a corpus of area. And we're building out a corpus of area. And we're building out a corpus of knowledge so that anybody in the legal knowledge so that anybody in the legal knowledge so that anybody in the legal department, or department, or department, or >> [music] >> [music] >> [music] >> if needed, the rest of the company can >> if needed, the rest of the company can >> if needed, the rest of the company can access that information instead of access that information instead of access that information instead of building information silos."
+    },
+    {
+      "evidence_id": "af0dad2a795a5de82568fa2126c882bb0766426147e446da935a1d9ea5126242",
+      "platform": "youtube",
+      "source_key": "bycloudAI",
+      "content_id": "3KwpmSpEplY",
+      "canonical_url": "https://www.youtube.com/watch?v=3KwpmSpEplY",
+      "published_at": "2026-07-23T21:22:04+00:00",
+      "title": "GLM-5.2: DeepSeek Was Wrong About RL?",
+      "kind": "transcript",
+      "locator": "00:01:46.990–00:01:47.000",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/bycloudAI/videos/20260723_3KwpmSpEplY/transcripts/3KwpmSpEplY.srt",
+      "snippet": "And their extremely or Claude 4.8. And their extremely strong performance can also be observed strong performance can also be observed strong performance can also be observed on multiple highly difficult private on multiple highly difficult private on multiple highly difficult private benchmarks like Frontier Suite, which benchmarks like Frontier Suite, which benchmarks like Frontier Suite, which measures agents on open-ended technical measures agents on open-ended technical measures agents on open-ended technical problems, a post-train bench, which problems, a post-train bench, which problems, a post-train bench, which measures how well agents can post-train measures how well agents can post-train measures how well agents can post-train language models, Deep Suite, which language models, Deep Suite, which language models, Deep Suite, which measures agents on extremely long measures agents on extremely long measures agents on extremely long horizon engineering tasks, and AA horizon engineering tasks, and AA horizon engineering tasks, and AA Briefcase, which measures agents on Briefcase, which measures agents on Briefcase, which measures agents on realistic business workflows such as realistic business workflows such as realistic business workflows such as making spreadsheets, presentations, and making spreadsheets, presentations, and making spreadsheets, presentations, and memos."
+    },
+    {
+      "evidence_id": "e8d2e671619e659efb0e9e10fefc5038a9ee237884c90b8a57f3f3e3a65ad027",
+      "platform": "youtube",
+      "source_key": "DavidOndrej",
+      "content_id": "8ZgpAXe5V5w",
+      "canonical_url": "https://www.youtube.com/watch?v=8ZgpAXe5V5w",
+      "published_at": "2026-07-17T17:49:39+00:00",
+      "title": "L8 Principal's Agentic Engineering Setup (just copy him)",
+      "kind": "transcript",
+      "locator": "00:44:21.430–00:44:21.440",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/DavidOndrej/videos/20260717_8ZgpAXe5V5w/transcripts/8ZgpAXe5V5w.srt",
+      "snippet": "doing. >> That's another great thing about AI is >> That's another great thing about AI is >> That's another great thing about AI is like you can measure like so many things like you can measure like so many things like you can measure like so many things that like otherwise would be a hassle to that like otherwise would be a hassle to that like otherwise would be a hassle to measure thanks to like agentic measure thanks to like agentic measure thanks to like agentic engineering. It just you know you can engineering. […] The software that gives happening. The software that gives agents really good interfaces so that agents really good interfaces so that agents really good interfaces so that agents can work very productively with agents can work very productively with agents can work very productively with those services those I think will those services those I think will those services those I think will remain."
+    },
+    {
+      "evidence_id": "b679e8c25f9b238942cc942dba86b1ece58a4d0615b7c9ada65447f0ae1e38bf",
+      "platform": "youtube",
+      "source_key": "claude",
+      "content_id": "snroDwX1-JU",
+      "canonical_url": "https://www.youtube.com/watch?v=snroDwX1-JU",
+      "published_at": "2026-05-08T18:50:01+00:00",
+      "title": "Evaluating and improving Replit Agent at scale",
+      "kind": "transcript",
+      "locator": "00:09:34.760–00:09:36.790",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260508_snroDwX1-JU/transcripts/snroDwX1-JU.srt",
+      "snippet": "And president and head of AI at Replit. And today I'm going to be talking about our today I'm going to be talking about our today I'm going to be talking about our both evaluating and improving on a daily both evaluating and improving on a daily both evaluating and improving on a daily basis Replit agent at scale. […] implementation looks like. And what our evaluator And what our evaluator And what our evaluator evaluator agent does is it reads the evaluator agent does is it reads the evaluator agent does is it reads the code base, it then opens a browser and code base, it then opens a browser and code base, it then opens a browser and points it to the application that our points it to the application that our points it to the application that our agent has built and then step-by-step agent has built and then step-by-step agent has built and then step-by-step goes through our testing plan. […] And I I don't believe better products. And I I don't believe better products. And I I don't believe in competing on evaluations. I come from in competing on evaluations."
+    }
+  ],
+  "completed_stages": [
+    "retrieve",
+    "cite",
+    "classify",
+    "checkpoint"
+  ],
+  "created_at": "2026-08-14T09:44:52.873155+00:00"
+}

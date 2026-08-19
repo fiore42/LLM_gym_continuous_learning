@@ -1,0 +1,113 @@
+{
+  "verification_version": 1,
+  "question": "Does the corpus prove that persistent memory alone caused the reported agent benchmark result?",
+  "answer": "The retrieved evidence does not support the claim that persistent memory alone caused the reported benchmark result. The single supplied source attributes the high benchmark result to a bundle of scaffolding elements—persistent memory, programmable context, reusable skills, long-running subagents, and a stronger model—rather than isolating persistent memory as the sole cause. Since only one piece of evidence is available and it explicitly describes multiple contributing factors without disentangling their individual effects, there is insufficient evidence to attribute the result to persistent memory alone.",
+  "model": "claude-haiku-4-5",
+  "prompt": {
+    "system_prompt": "Extract every material claim from the supplied answer and verify each claim only against the supplied evidence snippets. Return JSON only with a claims array. Each entry must contain claim, verdict (proven, not_proven, or unclear), evidence_id, and quote. Each row must use exactly one supplied evidence_id; split a claim into multiple rows when it needs multiple sources, and never write values like 'multiple' or 'several' as evidence_id. The quote must be copied verbatim from the evidence snippet. Use not_proven when the answer makes a material claim that the supplied evidence does not establish; use unclear when the evidence is ambiguous. Do not use outside knowledge.",
+    "rendered_user_prompt": "Question: Does the corpus prove that persistent memory alone caused the reported agent benchmark result?\n\nAnswer:\nThe retrieved evidence does not support the claim that persistent memory alone caused the reported benchmark result. The single supplied source attributes the high benchmark result to a bundle of scaffolding elements—persistent memory, programmable context, reusable skills, long-running subagents, and a stronger model—rather than isolating persistent memory as the sole cause. Since only one piece of evidence is available and it explicitly describes multiple contributing factors without disentangling their individual effects, there is insufficient evidence to attribute the result to persistent memory alone.\n\nEvidence:\nEVIDENCE_ID: fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39\nTEXT: The post attributes a high benchmark result to a bundle of scaffolding: persistent memory, programmable context, reusable skills, long-running subagents, and a stronger model."
+  },
+  "claims": [
+    {
+      "claim": "The single supplied source attributes the high benchmark result to a bundle of scaffolding elements—persistent memory, programmable context, reusable skills, long-running subagents, and a stronger model—rather than isolating persistent memory as the sole cause",
+      "verdict": "proven",
+      "evidence_id": "fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39",
+      "quote": "The post attributes a high benchmark result to a bundle of scaffolding: persistent memory, programmable context, reusable skills, long-running subagents, and a stronger model.",
+      "quote_valid": true,
+      "flag": null
+    },
+    {
+      "claim": "There is insufficient evidence to attribute the result to persistent memory alone",
+      "verdict": "proven",
+      "evidence_id": "fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39",
+      "quote": "The post attributes a high benchmark result to a bundle of scaffolding: persistent memory, programmable context, reusable skills, long-running subagents, and a stronger model.",
+      "quote_valid": true,
+      "flag": null
+    }
+  ],
+  "usage": {
+    "input_tokens": 367,
+    "output_tokens": 312,
+    "cost_usd": 0.001927
+  },
+  "advisory_only": true,
+  "evidence": [
+    {
+      "evidence_id": "fcfc5e3163ab037ffd97307ab0e1db83e5e11f4b5917476512a81c02dd4b9e39",
+      "platform": "x",
+      "source_key": "WesRoth",
+      "canonical_url": "https://x.com/WesRoth/status/2085168985201365411",
+      "published_at": "2026-08-06T01:00:01.000Z",
+      "title": null,
+      "locator": null,
+      "snippet": "Prime Agent’s 95.5% ARC-AGI-3 score was achieved with Claude Opus 5. The breakthrough is therefore not a smarter underlying model. It is better scaffolding around the same intelligence: persistent memory, programmable context, reusable skills, long-running subagents, and a stronger model.",
+      "artifact_path": "source/x/WesRoth/posts/20260806_2085168985201365411/post.json"
+    }
+  ],
+  "retrieval_evidence": [
+    {
+      "evidence_id": "2a804220ddaa0de8a3d1d8564944fc4fa50ad27bfaadf4e1d3439c1daf9f29ea",
+      "canonical_url": "https://www.youtube.com/watch?v=wzY2fV4Mp3U",
+      "title": "GPT-6 Goes Rogue? The HuggingFace Incident, Sans Hype",
+      "locator": "00:02:52.870–00:02:52.880",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/aiexplained-official/videos/20260722_wzY2fV4Mp3U/transcripts/wzY2fV4Mp3U.srt",
+      "snippet": "All of this in a manic cause mayhem. All of this in a manic cause mayhem. All of this in a manic attempt to solve a single benchmark attempt to solve a single benchmark attempt to solve a single benchmark question. […] It's a unreleased model on exploit gym. It's a unreleased model on exploit gym. It's a benchmark they report their results on benchmark they report their results on benchmark they report their results on regularly with each new model release."
+    },
+    {
+      "evidence_id": "51641023e719885496f84351fe94ba837c88b21172b5ea587ef4bbf11cd297ee",
+      "canonical_url": "https://www.youtube.com/watch?v=CXSvKcLovAk",
+      "title": "The most controversial rewrite in history just shipped...",
+      "locator": "00:02:19.270–00:02:19.280",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/Fireship/videos/20260715_CXSvKcLovAk/transcripts/CXSvKcLovAk.srt",
+      "snippet": "At one point, the dev freeing it at all. At one point, the dev server was leaking 3 megabytes every server was leaking 3 megabytes every server was leaking 3 megabytes every time it rebuilt, all because a single time it rebuilt, all because a single time it rebuilt, all because a single error path forgot to clean up after error path forgot to clean up after error path forgot to clean up after itself. And though memory bugs alone itself. And though memory bugs alone itself. And though memory bugs alone might not have justified a rewrite, might not have justified a rewrite, might not have justified a rewrite, there was still a bigger problem. […] He also takes some personal swings, Zig. He also takes some personal swings, pointing out that Jared skipped college pointing out that Jared skipped college pointing out that Jared skipped college at 18 to take Peter Thiel's money and at 18 to take Peter Thiel's money and at 18 to take Peter Thiel's money and chase startup glory, which Andrew blames chase startup glory, which Andrew blames chase startup glory, which Andrew blames for his beginner energy and passing for his beginner energy and passing for his beginner energy and passing along second-hand reports that Jared along second-hand reports that Jared along second-hand reports that Jared wasn't exactly a great manager to work wasn't exactly a great manager to work wasn't exactly a great manager to work under."
+    },
+    {
+      "evidence_id": "523f4898fbc3f48811664613c4e217c7a7e61e481c68b8227b1d9b13f67a07a0",
+      "canonical_url": "https://www.youtube.com/watch?v=9lSIHaXT1rU",
+      "title": "OpenAI JUST revealed the truth about it's \"Rogue Agent\"",
+      "locator": "00:31:58.230–00:31:58.240",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/WesRoth/videos/20260729_9lSIHaXT1rU/transcripts/9lSIHaXT1rU.srt",
+      "snippet": "It was using the internet as an later. It was using the internet as an external memory storage to create a external memory storage to create a external memory storage to create a persistent memory for itself. This is persistent memory for itself. This is persistent memory for itself. This is when when Sam Alman is talking about when when Sam Alman is talking about when when Sam Alman is talking about like the visceral reaction. […] State did not persist. So every tool. State did not persist. So the agent rebuilt its foothold every the agent rebuilt its foothold every the agent rebuilt its foothold every time rather than relying on a single time rather than relying on a single time rather than relying on a single implant."
+    },
+    {
+      "evidence_id": "5cd958bd5d1eb54443a3d7fad9f84e73e2b90c953875180b664ac9135961ccf6",
+      "canonical_url": "https://www.youtube.com/watch?v=O0FGCxkHM-U",
+      "title": "The CLAUDE.md file",
+      "locator": "00:00:08.800–00:00:10.430",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260510_O0FGCxkHM-U/transcripts/O0FGCxkHM-U.srt",
+      "snippet": "Code is the claw.md file. >> [music] >> It gives Claude Code persistent memory >> It gives Claude Code persistent memory >> It gives Claude Code persistent memory about your project. […] And before you ask, the answer is yes. You share this in your version control You share this in your version control You share this in your version control for your team to use, but there's for your team to use, but there's for your team to use, but there's actually a hierarchy of memory files actually a hierarchy of memory files actually a hierarchy of memory files depending on who it's for."
+    },
+    {
+      "evidence_id": "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+      "canonical_url": "https://www.youtube.com/watch?v=P0uMXS6emHA",
+      "title": "Picking the right model",
+      "locator": "00:00:56.350–00:00:56.360",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260521_P0uMXS6emHA/transcripts/P0uMXS6emHA.srt",
+      "snippet": "We will We will give prompting guides. We will We will give prompting guides. We will give benchmark results. give benchmark results. give benchmark results. Um Um Um you'll also see a lot of hot takes on X you'll also see a lot of hot takes on X you'll also see a lot of hot takes on X or Twitter from, you know, AGI is here or Twitter from, you know, AGI is here or Twitter from, you know, AGI is here all the way to Anthropic is cooked. […] So, in at coding or various other tasks. So, in our model releases will often include our model releases will often include our model releases will often include benchmark results on things like SWE benchmark results on things like SWE benchmark results on things like SWE bench verified or browse com, bench verified or browse com, bench verified or browse com, which are basically what they what they which are basically what they what they which are basically what they what they say on the tin."
+    },
+    {
+      "evidence_id": "e51515705d9b05663c4ddb63d95e3bf9612d6e2e567149b4c4d89ed77037fdbf",
+      "canonical_url": "https://www.youtube.com/watch?v=geUv4CjPpxI",
+      "title": "Agents that remember",
+      "locator": "00:01:29.950–00:01:29.960",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/claude/videos/20260523_geUv4CjPpxI/transcripts/geUv4CjPpxI.srt",
+      "snippet": "Uh so a one here is a memory store. Uh so a one here is a memory store. Uh so a memory store is a persistent file system memory store is a persistent file system memory store is a persistent file system like store that gives uh that it like store that gives uh that it like store that gives uh that it attaches as a resource to sessions that attaches as a resource to sessions that attaches as a resource to sessions that you create and it gives agents access to you create and it gives agents access to you create and it gives agents access to uh it gives agents the ability to read uh it gives agents the ability to read uh it gives agents the ability to read and write information across sessions. […] Uh and then I'll show you also in console later then I'll show you also in console later then I'll show you also in console later that there are two additional parameters that there are two additional parameters that there are two additional parameters that you can set here, but let me just that you can set here, but let me just that you can set here, but let me just follow through with the simple example. Uh once I create this memory store, you Uh once I create this memory store, you Uh once I create this memory store, you can actually see it in console can actually see it in console can actually see it in console under manage agents, memory stores."
+    },
+    {
+      "evidence_id": "2e4dc0325ecd18777df744ff70ddf55aa3bb007ec0692fd10fddcab515bf4938",
+      "canonical_url": "https://www.youtube.com/watch?v=sUmx-Yi6TwE",
+      "title": "AI News: An INSANE Week… Here’s What Matters",
+      "locator": "00:01:10.550–00:01:10.560",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/mreflow/videos/20260731_sUmx-Yi6TwE/transcripts/sUmx-Yi6TwE.srt",
+      "snippet": "So if you're going by with Fable 5. So if you're going by with Fable 5. So if you're going by benchmarks alone, it's a model that's benchmarks alone, it's a model that's benchmarks alone, it's a model that's about as good as Fable 5, but a lot more about as good as Fable 5, but a lot more about as good as Fable 5, but a lot more efficient and cheaper to use. […] So if I wanted, I could say, have done. So if I wanted, I could say, \"Hey honey, go and fix the things that \"Hey honey, go and fix the things that \"Hey honey, go and fix the things that Bumble suggested you do to fix your Bumble suggested you do to fix your Bumble suggested you do to fix your website and get all of these agents sort website and get all of these agents sort website and get all of these agents sort of working together, offering feedback of working together, offering feedback of working together, offering feedback to each other, and then going and to each other, and then going and to each other, and then going and causing each one to improve what they causing each one to improve what they causing each one to improve what they built initially.\""
+    },
+    {
+      "evidence_id": "4fe16be84daef2e04952138d47a4532376ecd59302bfc6c40b454bc8a5f2c743",
+      "canonical_url": "https://www.youtube.com/watch?v=R-5_2nsF_ZM",
+      "title": "I Love the Karpathy LLM Wiki but it Doesn't Scale. Here's What Does.",
+      "locator": "00:17:22.270–00:17:22.280",
+      "artifact_path": "/Users/alfonso/LLM_gym_cybersierra/source/youtube/ColeMedin/videos/20260709_R-5_2nsF_ZM/transcripts/R-5_2nsF_ZM.srt",
+      "snippet": "And I've been seriously impressed by what they've released here with by what they've released here with by what they've released here with context retriever and agent memory. context retriever and agent memory. […] And so, going not being that explicit. And so, going into a brand new conversation here to into a brand new conversation here to into a brand new conversation here to prove that there's no short-term memory prove that there's no short-term memory prove that there's no short-term memory guiding this, we're going to ask it guiding this, we're going to ask it guiding this, we're going to ask it about our preferences, and it's going to about our preferences, and it's going to about our preferences, and it's going to quickly pull the memories and tell us quickly pull the memories and tell us quickly pull the memories and tell us everything we need to know."
+    }
+  ]
+}

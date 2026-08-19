@@ -1,0 +1,90 @@
+{
+  "case_id": "what_are_evals",
+  "question": "What does the corpus describe as the purpose of evals for agent systems?",
+  "mode": "live_retrieval",
+  "model": "claude-sonnet-5",
+  "index_signature": "2:192634880:1786691909643582812",
+  "started_at": "2026-08-16T13:22:15.205541+00:00",
+  "finished_at": "2026-08-16T13:23:41.000606+00:00",
+  "stop_reason": "QUALITY_GATE_PASSED",
+  "error": null,
+  "rounds": [
+    {
+      "round": 1,
+      "classification": "INSUFFICIENT_EVIDENCE",
+      "relevant_evidence_count": 2,
+      "assessed_evidence_count": 8,
+      "citation_ids": [
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40"
+      ],
+      "suggested_queries": [
+        "why do we need evals for AI agents",
+        "purpose of agent evaluation benchmarks",
+        "how evals guide agent development decisions"
+      ],
+      "answer": "The retrieved evidence gives only a fragmentary picture. One source describes evals concretely in the context of building an agent: they are used to evaluate an agent's characteristics, including non-deterministic qualities like personality, tone, style, and output quality, using a non-deterministic grader, and running evals establishes a baseline for the agent before further work. Another source, discussing a Pokémon-playing agent eval, states that evals are often the best way to find an ideal balance (in that case, of effort/thinking length). Beyond these points, the supplied evidence does not offer a general statement of 'the purpose of evals for agent systems' as a unified concept."
+    },
+    {
+      "round": 2,
+      "classification": "SUPPORTED",
+      "relevant_evidence_count": 6,
+      "assessed_evidence_count": 28,
+      "citation_ids": [
+        "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+        "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+        "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+        "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+        "fe14e9d9ee8858f358feeb408ef126aa0764d5d7268dc672b53a58804f49ce1b",
+        "b679e8c25f9b238942cc942dba86b1ece58a4d0615b7c9ada65447f0ae1e38bf"
+      ],
+      "suggested_queries": [
+        "why do we build evals for AI agents",
+        "evals catch regressions agent behavior",
+        "difference between benchmarks and evals for agents"
+      ],
+      "answer": "The retrieved evidence describes evals as a mechanism for measuring and rigorously verifying agent behavior and quality, used both to establish a performance baseline and to detect the impact of changes. One source explains that building an eval involves composing a set of tasks (the atomic unit of the eval) and, for something like a customer service agent, using an LLM as a judge to check whether the agent's final response matches the expected response. Another source describes running evals on an agent to get a baseline, including using a non-deterministic grader to evaluate qualitative, non-deterministic characteristics of the agent such as personality, tone, style, and output quality. A related source states that evals are needed to 'rigorously see any impacts of changing our prompt on the output,' i.e., to verify that changes (such as applying general prompting hygiene) actually improve performance before targeting specific failure modes. Separately, one source frames evals as a tool for finding an 'ideal balance,' such as tuning effort/length settings, and another notes that as models become more intelligent, harder evals need to keep being created alongside product prototypes to keep pushing and testing capability. Evals are also described as extending beyond human review: one source explains that automated evaluator agents can be built so that evaluation (e.g., of whether a generated implementation matches a testing plan) can run automatically on every code change rather than requiring humans to manually evaluate outputs, enabling continuous evaluation instead of periodic benchmark runs."
+    }
+  ],
+  "model_calls": 2,
+  "evidence_count_initial": 8,
+  "evidence_count_final": 28,
+  "evidence_expanded": true,
+  "refined_queries": [
+    "why do we need evals for AI agents",
+    "purpose of agent evaluation benchmarks",
+    "how evals guide agent development decisions"
+  ],
+  "final_evidence_ids": [
+    "89f0dd7a752aa844c90df8b16a8067a5eb7829b9ce656e29afc4d2ec456669c6",
+    "11c5afbe557f59b2e8bbdb7dc084fced2a1d9fda15da0bd997ac71e047e4ac63",
+    "96c492f11d533ebaf909a17d1ec6ffe6b1aadf2a7361b6ac1e44aedbf5ceb7b5",
+    "663b7f29c420196f678d92279fd447bcd77389e80e16c74e206fcfbfa0d46a40",
+    "1ef7ea308a07ef4355f91fc11363154fa0e3ee81052d80549e2d2ce7992a7430",
+    "7abd810a0066e1bac35fbe9b5cf841acb526c897efb2f10de7ac2fe0788e6940",
+    "7425f99a8e5bcc82d14a80b1daae7170ebd25bcd76ab0dedf1757c3776f0dfed",
+    "4a1b7429dacdf12b780edda05773f7c042bcceff4d323d0f741b53075ce13681",
+    "2bceefeb83df7ccdd0d7eda88a54ce525468ac910e60920d2afa9fac6fdb16a1",
+    "fa49a5905610c5d0560f6542e3ca7b1b600c770518e68e816013bdc67269ffeb",
+    "518ed49f094e1df7f7326c5f3eea08dce69b21c056769529112ba54032db77f1",
+    "faff96de8be4a5c698777b96a3e17ffc05c829542ddbec7c6a1c1b9878d8d2ed",
+    "758c3a59ae8208f81a29976c8228b678832b63745e33ed22234125dfeea037ad",
+    "adb6fe629749de4cc1e97d8132521903bf4ca89f739ff56c7c1e834638125cb9",
+    "fe14e9d9ee8858f358feeb408ef126aa0764d5d7268dc672b53a58804f49ce1b",
+    "6d4bd4a4349dbc59f30ff759dbf8d38aac3281c7d5137b62bb18c220f71fcb71",
+    "f69b013cc979e3d330060d2d339520c299c3b0b56e47dd5cac997bfe8838bb8f",
+    "44fa52fc107bde4391fa4f04c5385e45fb306f80fbd499b7ef834fa4ac449c66",
+    "063b5d5374683df28f4aabd98890646b3677716f91c5e0e389911d9611f4e8fa",
+    "7e9d198773ef5eee3e408c9e73709e39b2c36da06332386607c31198f1510c6c",
+    "b679e8c25f9b238942cc942dba86b1ece58a4d0615b7c9ada65447f0ae1e38bf",
+    "5f16431dc71adfe47246243fb9b6903428230d8e5408f7e424c22aea130268fc",
+    "827a4463ee963513d0525bac34e23aebd9cc5d7516cdd5ab04246b029ea21a24",
+    "7f10c524a16177d144b3badb5a389db319f476f22699b9dad6d514f492e37a87",
+    "00ba6181d26b9aeae64641a6321007d4ddd9a33b5cb3fda798279093056142e8",
+    "688db16e329befd8448eefbc3cba9613aebb5c18aa03056bf97d5709e5ccadc3",
+    "5bae5592d90096b2f97a8bcc5e4ec06a389e0468e409b49be2e4d8347ef8a9d3",
+    "c4c1b249ad89b4fdc6ec9a9d3add46ae4fdb7c6f4f989c731ddc2a21826031f7"
+  ],
+  "frozen_expected_outcome": "SUPPORTED",
+  "comparison_note": "Live retrieval supplies different evidence than the frozen case. Diff the evidence sets before attributing any difference to the model."
+}

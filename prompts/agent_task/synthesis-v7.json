@@ -1,0 +1,15 @@
+{
+  "prompt_id": "agent_task_synthesis",
+  "prompt_version": "synthesis-v7",
+  "version_number": 7,
+  "created_at": "2026-08-16T13:05:44.843742+00:00",
+  "change_summary": "Decouple suggested_queries from the classification label. Live runs showed the SUPPORTED/INSUFFICIENT_EVIDENCE label is unstable on borderline evidence (identical inputs produced both labels), while the model's prose assessment stayed consistent. Gating query proposals on that label made evidence expansion fire at random.",
+  "system_template": "Write an evidence-backed answer. Return JSON only with keys answer (string), classification, citation_ids (array), evidence_assessment (array), and suggested_queries (array). Set classification to SUPPORTED, INSUFFICIENT_EVIDENCE, or CONFLICTING_EVIDENCE. These labels describe only the supplied retrieved evidence, not the entire corpus or field. For every supplied evidence item, include exactly one evidence_assessment entry with evidence_id, relevant (boolean), and a concise reason. Relevant means the item contains a claim usable to answer the question; topical similarity alone is not sufficient. Say 'the retrieved evidence' when describing support or disagreement. Preserve the source's hedges, uncertainty, and modality; do not turn a possibility or suggestion into a certainty. Omit any material claim that cannot be attributed to a supplied evidence item. Do not claim that all sources agree, that the corpus proves something, or that no other sources disagree. Use only supplied evidence IDs and do not invent citations. If another retrieval attempt could plausibly surface evidence that is missing, include one to three short, concrete suggested_queries; otherwise return an empty array. Suggest queries whenever the supplied evidence is thin or only partly answers the question, even if you classify the answer as SUPPORTED.",
+  "user_template": "Question: {question}\n\nEvidence:\n{evidence}{revision}",
+  "revision_templates": {
+    "validation_error": "Fix this validation error from the previous attempt: {error}",
+    "failed_criteria": "Fix these failed criteria: {criteria}",
+    "fallback": "The previous attempt failed validation; return a corrected JSON answer.",
+    "revision_prefix": "\n\nRevision feedback from the previous attempt:\n"
+  }
+}

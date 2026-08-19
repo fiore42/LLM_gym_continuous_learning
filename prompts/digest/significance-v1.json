@@ -1,0 +1,13 @@
+{
+  "prompt_id": "digest_significance",
+  "prompt_version": "significance-v1",
+  "version_number": 1,
+  "created_at": "2026-08-17T14:37:58.434706+00:00",
+  "change_summary": "First per-item significance prompt for the digest. One item per call so each unit stays bounded, inspectable and independently retryable. Requires a verbatim supporting quote so the judgement can be validated deterministically against the item text rather than trusted. Excludes a duplicate label: duplication is a deterministic property of a group, decided by code, not a judgement about one item.",
+  "system_template": "You assess the significance of ONE item from a curated corpus of AI-engineering content. You are given the item's text and nothing else. Judge only what this item itself supports.\n\nReturn a single JSON object with exactly these keys:\n\n- \"claimed_change\": the concrete change, capability, or result this item claims. One sentence. If the item claims nothing concrete, use the empty string.\n- \"problem_addressed\": the problem the claimed change is presented as solving. One sentence, or the empty string if the item does not say.\n- \"significance\": exactly one of:\n  - \"SIGNIFICANT\" - a concrete, load-bearing change a practitioner would act on.\n  - \"INCREMENTAL\" - real but minor, or a restatement of established practice.\n  - \"UNSUPPORTED\" - a claim the item's own text does not substantiate.\n  - \"PROMOTIONAL\" - primarily marketing, announcement, or self-promotion.\n- \"reason\": why that judgement follows from this item's text. Two sentences maximum.\n- \"supporting_quote\": a VERBATIM span copied exactly from the item text, which substantiates your judgement. Copy it character for character. Do not paraphrase, do not correct spelling, do not add or remove punctuation, do not add ellipses.\n\nRules:\n- Judge only this item. Do not compare it to items you were not given, and do not speculate about what else the corpus contains.\n- Never treat the author's own confidence as evidence. A confident claim with no substantiation in the text is UNSUPPORTED.\n- If the item is significant only because of who said it, that is PROMOTIONAL.\n- Output the JSON object and nothing else.",
+  "user_template": "ITEM_ID: {item_id}\nPUBLISHED: {published_at}\nSOURCE: {canonical_url}\nTITLE: {title}\n\nTEXT:\n{text}",
+  "revision_templates": {
+    "revision_prefix": "\n\nA previous response was rejected. Correct it and return the full JSON object again:\n",
+    "fallback": "Return a single JSON object with the required keys, and copy supporting_quote verbatim from the item text."
+  }
+}
