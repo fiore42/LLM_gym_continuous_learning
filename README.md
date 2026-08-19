@@ -12,9 +12,30 @@ The project demonstrates durability, provenance, retrieval adaptation, and safe
 failure handling. Deep chains of dependent long-horizon reasoning and
 human-validated digest ranking accuracy remain unimplemented.
 
+<a id="retrieval-overview"></a>
+## Retrieval in plain language — no model call
+
+Retrieval here is not an AI judgement. It uses SQLite's built-in FTS5
+full-text search in two deterministic stages:
+
+1. **Indexing:** `scripts/corpus_build_evidence_index.py` tokenizes transcript
+   and post chunks and builds an inverted index—similar to the index at the
+   back of a book—that maps each searchable term to the chunks containing it.
+   The index is built or refreshed offline without calling a model.
+2. **Querying:** FTS5 finds chunks containing the query terms and BM25 ranks
+   the lexical matches. `INDEX_VERSION 2` uses FTS5's Porter tokenizer, so
+   related forms such as “reliable” and “reliability” can match the same root.
+
+Because both stages are local string processing, retrieval is free,
+repeatable, and testable. A model is called only later, when the system asks it
+to interpret the retrieved evidence, answer a question, or propose a more
+focused follow-up query. The detailed failure taxonomy and inspection commands
+are in [Inspect retrieval instead of treating it as a black box](#explore-retrieval).
+
 <a id="readme-index"></a>
 ## Index
 
+- [Retrieval in plain language — no model call](#retrieval-overview)
 - [How to explore this project](#explore-project)
   - [Show adaptive agent behavior](#explore-adaptation)
   - [Inspect retrieval instead of treating it as a black box](#explore-retrieval)
