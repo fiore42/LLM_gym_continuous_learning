@@ -17,6 +17,7 @@ human-validated digest ranking accuracy remain unimplemented.
 
 - [How to explore this project](#explore-project)
   - [Show adaptive agent behavior](#explore-adaptation)
+  - [Inspect retrieval instead of treating it as a black box](#explore-retrieval)
   - [Show a long-running, resumable workload](#explore-long-running)
   - [Check answer consistency](#explore-consistency)
   - [Check the evaluations](#explore-evals)
@@ -72,6 +73,84 @@ Follow these fields in order:
 This is the project's clearest adaptive loop: the first result changes the
 next information-gathering action. It has dependency depth two; it is not a
 deep chain of dependent reasoning.
+
+<a id="explore-retrieval"></a>
+### Inspect retrieval instead of treating it as a black box
+
+Retrieval is deterministic SQLite full-text search, not a model call. FTS5
+builds an inverted index from terms to transcript or post chunks. At query
+time, BM25 ranks lexical matches using signals such as term frequency and term
+rarity. The current index also removes common stopwords, applies Porter
+stemming, keeps the best chunk per evidence record, and returns bounded context
+around each match. Retrieval is therefore local, free, repeatable, and directly
+testable.
+
+“The right evidence was not in the top eight” is a symptom, not a diagnosis.
+The project separates at least three failure classes:
+
+| Failure class | What happened | Appropriate response |
+|---|---|---|
+| Vocabulary | The question and relevant passage do not share searchable words or stems, so the passage never enters the candidate pool. | Consider query rewriting, synonyms, or semantic retrieval such as embeddings. |
+| Ranking | The relevant passage is in the matched pool but falls below the top-k cutoff. | Inspect its position and competing results; improve ranking, query specificity, or the cutoff before replacing retrieval. |
+| Decomposition | One broad question contains narrower claims that a single umbrella query does not express well. | Split the information need into focused queries or let the bounded retrieval loop propose them. |
+
+The project's observed misses included a historical ranking failure—the
+relevant item was at rank 18 in a much wider matched pool—and a decomposition
+failure in which an umbrella question could not reach a narrow claim. Neither
+was a demonstrated vocabulary failure: the first item was already present in
+the lexical candidate pool, while the second needed a more specific query.
+Adding embeddings would therefore have targeted a different failure class
+without first fixing the measured cause.
+
+The historical rank is not a permanent property. Ranking changes when the
+query, corpus, tokenizer, or index version changes. Inspect the current ordered
+results directly:
+
+```bash
+.venv/bin/python scripts/corpus_search_evidence_index.py \
+  --limit 20 \
+  "agent harness loops context engineering deterministic behavior" | less
+```
+
+Print the current rank of that evaluation case's expected evidence under the
+current index:
+
+```bash
+.venv/bin/python - <<'PY'
+import json
+
+from llm_gym.corpus.evidence import index_signature, search_index_with_metadata
+
+suite = json.load(open("config/agent_eval_suite.json", encoding="utf-8"))
+case = next(
+    item for item in suite["answer_cases"]
+    if item["case_id"] == "harness_loop_context"
+)
+result = search_index_with_metadata(
+    case["retrieval_query"], "data/evidence.sqlite3", limit=50
+)
+positions = {
+    item["evidence_id"]: rank
+    for rank, item in enumerate(result["matches"], start=1)
+}
+for evidence_id in case["retrieval_expected_evidence_ids"]:
+    print(evidence_id, "rank", positions.get(evidence_id, "not in top 50"))
+print("matched evidence records:", result["matched_evidence_count"])
+print("index signature:", index_signature("data/evidence.sqlite3"))
+PY
+```
+
+Validate every curated retrieval expectation against the current corpus:
+
+```bash
+.venv/bin/python scripts/eval_validate_suite.py --check-retrieval
+```
+
+The adaptive trace in the previous section shows the decomposition response in
+practice: round one proposes focused queries, deterministic FTS5/BM25 executes
+them, and round two receives the merged evidence. Semantic retrieval remains a
+possible future tool, but it should be introduced only after a measured
+vocabulary failure shows that lexical retrieval cannot find the evidence.
 
 <a id="explore-long-running"></a>
 ### Show a long-running, resumable workload
@@ -320,6 +399,48 @@ external or production system.
 
 <a id="explore-human-review"></a>
 ### Inspect grounding, human review, and safe failure
+
+#### Why groundedness review is a bounded task
+
+“Is this answer grounded?” has a narrower meaning than “Is this statement true
+in the world?” Groundedness asks whether every material part of the answer is
+supported by the evidence that was actually placed in the model's prompt. A
+reviewer checks the answer against that supplied evidence for scope, numbers,
+negation, uncertainty, and missing support. The reviewer does not need to read
+the entire corpus or search the web.
+
+The normal first retrieval supplies eight distinct evidence snippets. The
+adaptive loop may expand that set, but it is capped at 20. This is why the
+review remains tractable: verification effort scales with the context given to
+the model, and the project deliberately bounds that context. Describing an
+ordinary eight-snippet review as a “ten-minute check” communicates the intended
+scale, not a measured service-level guarantee.
+
+That check can establish:
+
+- each material statement has support in the supplied evidence;
+- citations point to evidence the model was allowed to use;
+- the answer preserves important qualifications and does not broaden the
+  source.
+
+It cannot establish:
+
+- that the source itself is factually correct;
+- that retrieval found every relevant source in the corpus;
+- that no outside evidence contradicts the answer;
+- that a significance or ranking judgement is the best possible one.
+
+Inspect one answer beside all eight evidence snippets supplied to it:
+
+```bash
+.venv/bin/python -m json.tool \
+  data/runs/manual/trace-evals-answer.json | less
+```
+
+The difficult semantic step is therefore small and explicit: map the answer's
+material statements to a bounded evidence set. Provenance and quote-location
+checks help prepare that review, but a human remains responsible for deciding
+whether the evidence actually supports the wording.
 
 Show accepted significance-v2 assessments with the one to three verbatim
 passages that deterministic code located in each source:
@@ -724,7 +845,9 @@ The boundary is equally important:
 - **Provenance is not truth.** A quote may accurately represent a source whose
   underlying statement is wrong.
 - **Citation validity is not complete semantic support.** Human review checks
-  whether the cited passage establishes each material part of the answer.
+  whether the cited passage establishes each material part of the answer. That
+  review is kept tractable by checking only the bounded evidence supplied to
+  the model, not by reopening the entire corpus or the outside world.
 - **Cache consistency is not model consistency.** A cache intentionally returns
   the prior validated result for identical inputs; repeated uncached runs remain
   a separate evaluation question.
