@@ -231,29 +231,117 @@ a paid command and is capped at USD 1:
 <a id="explore-evals"></a>
 ### Check the evaluations
 
-Validate the suite structure and all eight live-retrieval expectations without
-calling a model:
+#### What the evaluations are used for
+
+The evaluation suite is a small set of failure-mode fixtures. It is not a list
+of everything the corpus knows. A new case is added when a run exposes a
+behavior worth preventing or measuring again.
+
+The suite contains two kinds of evaluation:
+
+| Type | Question it answers | What is reviewed |
+|---|---|---|
+| Answer case | Given this frozen evidence, did the model produce the expected evidence-scoped answer? | Required claims, forbidden overclaims, classification, citations, uncertainty, and completeness |
+| Trajectory case | Did the runtime behave correctly while trying to produce an answer? | Targeted retry, duplicate-failure detection, budget stopping, checkpoint resume, successful stopping, escalation packages, and cache invalidation |
+
+Answer cases test model behavior without live retrieval changing the inputs.
+Trajectory cases test the surrounding machine, often without calling a model
+at all. A good final answer does not excuse a broken checkpoint, misleading stop
+reason, uncontrolled retry, or stale cache.
+
+Evaluation results are used as regression evidence and as a diagnostic tool:
+
+1. run the fixed case;
+2. inspect the stored trace rather than only the aggregate score;
+3. identify whether the failure came from retrieval, synthesis, validation, or
+   orchestration;
+4. change the smallest responsible layer;
+5. rerun the same fixture and check that unrelated cases did not regress.
+
+Only recurring or important observed failures become new fixtures. Development
+cases may guide a change; holdout cases are reserved for checking whether the
+change generalizes.
+
+#### Validate the suite before reviewing it
+
+Validate the 13 answer cases, seven trajectory cases, and all eight current
+live-retrieval expectations without calling a model:
 
 ```bash
 .venv/bin/python scripts/eval_validate_suite.py --check-retrieval
 ```
 
-Inspect one frozen case, including its question, separate required claims,
-expected outcome, evidence, and review rationale:
+This checks schema integrity, referenced evidence, review status, and whether
+the current index still returns each expected retrieval item. A changed
+retrieval expectation is a triage finding, not permission to silently edit the
+case.
+
+#### Review an answer case
+
+List the available answer cases:
+
+```bash
+.venv/bin/python scripts/eval_validate_suite.py --case
+```
+
+Print one complete frozen case:
 
 ```bash
 .venv/bin/python scripts/eval_validate_suite.py \
   --case independent_evaluation
 ```
 
-Run the full deterministic test suite:
+Read it in this order:
+
+1. **Question:** What behavior is this fixture testing?
+2. **Required claims:** These are separate propositions. Confirm that the
+   frozen evidence supports every one; topical similarity is not enough.
+3. **Expected outcome:** Decide whether the supplied evidence is `SUPPORTED`,
+   `INSUFFICIENT_EVIDENCE`, or `CONFLICTING_EVIDENCE`.
+4. **Evidence:** Read every supplied passage, including items the stored answer
+   may not cite. Preserve qualifications, uncertainty, quantities, and
+   negation.
+5. **Forbidden overclaims:** Confirm that each forbidden statement would really
+   exceed the supplied evidence.
+6. **Citation requirements:** Confirm that required evidence IDs establish the
+   claims assigned to them.
+7. **Review rationale:** Check that it records why the fixture is valid and
+   what source material was inspected.
+
+Human judgement enters here. A validator can confirm that IDs exist and fields
+are well formed; it cannot decide whether a passage semantically proves a
+claim. If the evidence does not support the expected outcome, the case is
+wrong—even if the model has learned to pass it.
+
+#### Review a trajectory case
+
+List the runtime-behavior fixtures:
+
+```bash
+.venv/bin/python scripts/eval_review_trajectory_case.py --case
+```
+
+Display one fixture beside the exact test that proves it, then run that test:
+
+```bash
+.venv/bin/python scripts/eval_review_trajectory_case.py \
+  --case actionable_escalation
+```
+
+The output shows the expected outcome, stop reason, required persisted fields,
+the named test, its source, and the test result. This makes a trajectory case a
+reviewable contract rather than an unevaluated JSON description.
+
+#### Run the evaluations
+
+Run all deterministic tests, including every trajectory proof:
 
 ```bash
 .venv/bin/python -m pytest -q
 ```
 
-Run the paid frozen-evidence answer suite after changing a prompt or agent
-behavior:
+Run the paid frozen-evidence answer suite after changing a prompt, model adapter,
+or agent behavior:
 
 ```bash
 .venv/bin/python scripts/eval_run_suite.py \
@@ -262,10 +350,34 @@ behavior:
   --max-cost-usd 1.0
 ```
 
-These checks answer different questions. The validator checks fixture and
-retrieval contracts; pytest checks deterministic behavior; the paid suite
-observes current model behavior on frozen evidence. Human semantic review is
-still required for meaning that structural checks cannot decide.
+For repeatability, use three uncached repetitions and compare results per case,
+not only as one aggregate total. The exact command and interpretation are in
+[Check answer consistency](#explore-consistency).
+
+#### Interpret a mismatch correctly
+
+Each answer case contains two related but different tests:
+
+- **Frozen-evidence synthesis:** the model receives the evidence stored in the
+  case. `expected_outcome` applies here and remains stable as the corpus grows.
+- **Live retrieval:** the current query runs against the current index. Its
+  evidence may differ from the frozen fixture, so its classification may also
+  legitimately differ.
+
+When a live result disagrees with the frozen expectation:
+
+1. compare the live and frozen evidence IDs;
+2. if they differ, investigate retrieval recall, ranking, query decomposition,
+   or corpus growth and compare `index_signature`;
+3. if they match but the outcome differs, investigate the model, prompt, or
+   semantic evaluation;
+4. if output structure, stopping, retries, checkpoints, or cache behavior is
+   wrong, investigate deterministic runtime code.
+
+The validator checks fixture and retrieval contracts; pytest checks
+deterministic behavior; the paid suite observes current model behavior on
+frozen evidence; human review checks meaning. None of those layers can replace
+the others.
 
 <a id="explore-models"></a>
 ### Inspect the model comparison
