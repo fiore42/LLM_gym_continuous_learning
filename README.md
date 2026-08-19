@@ -16,6 +16,14 @@ human-validated digest ranking accuracy remain unimplemented.
 ## Index
 
 - [How to explore this project](#explore-project)
+  - [Show adaptive agent behavior](#explore-adaptation)
+  - [Show a long-running, resumable workload](#explore-long-running)
+  - [Check answer consistency](#explore-consistency)
+  - [Check the evaluations](#explore-evals)
+  - [Inspect the model comparison](#explore-models)
+  - [Inspect observability, traceability, and auditability](#explore-observability)
+  - [Inspect when human escalation is required](#explore-escalation)
+  - [Inspect grounding, human review, and safe failure](#explore-human-review)
 - [Project at a glance](#project-at-a-glance)
 - [What the live artifacts demonstrate](#live-artifacts)
 - [Architecture](#architecture)
@@ -26,6 +34,7 @@ human-validated digest ranking accuracy remain unimplemented.
   - [Run a long time-window digest](#run-digest)
   - [Run evaluations](#run-evaluations)
 - [How the agentic loops work](#agentic-loops)
+  - [Inspect the live retrieve-observe-adapt loop](#live-dependent-loop)
 - [Reliability and human-review boundary](#reliability-boundary)
 - [Setup and configuration](#setup)
 - [Repository and data layout](#repository-layout)
@@ -37,51 +46,311 @@ human-validated digest ranking accuracy remain unimplemented.
 ## How to explore this project
 
 Start with the evidence produced by the system rather than the repository
-layout. These commands are read-only, make no model calls, and cost nothing.
-The digest reader intentionally returns a nonzero exit status for an incomplete
-or escalated report, even though it still displays the report for inspection.
+layout. Unless a command is explicitly marked as paid, the commands in this
+section are read-only, make no model calls, and cost nothing. The digest reader
+intentionally returns a nonzero exit status for an incomplete or escalated
+report, even though it still displays the report for inspection.
 
-1. **Inspect adaptive action.** Compare round 1 and round 2 in one retrieval-
-   retry trace. The trace shows the thin initial evidence, model-proposed query,
-   changed evidence set, and second synthesis.
+<a id="explore-adaptation"></a>
+### Show adaptive agent behavior
+
+Inspect one live retrieval-retry trace:
+
+```bash
+.venv/bin/python -m json.tool \
+  data/runs/trigger-measurement/agent/what_are_evals-rep-1.json | less
+```
+
+Follow these fields in order:
+
+1. the round-one evidence IDs and classification;
+2. the model's `suggested_queries` observation;
+3. the query accepted by the deterministic controller;
+4. the newly added evidence IDs;
+5. the round-two answer, usage, and stop reason.
+
+This is the project's clearest adaptive loop: the first result changes the
+next information-gathering action. It has dependency depth two; it is not a
+deep chain of dependent reasoning.
+
+<a id="explore-long-running"></a>
+### Show a long-running, resumable workload
+
+Read the committed 30-day stress report:
+
+```bash
+.venv/bin/python scripts/show_digest.py \
+  data/digests/2026-07-08-to-2026-08-07-youtube-glm-5.2-open-weight-report.json
+```
+
+The run attempted a frozen 328-item window under checkpoints and budgets. It
+retained accepted work across an operator-observed interruption and ended with
+321 accepted items and unresolved work marked `ESCALATED_FOR_REVIEW` rather
+than presenting an incomplete run as success. This demonstrates durable,
+resumable breadth. Each item is assessed independently, so the run does not
+demonstrate a 328-step reasoning dependency.
+
+Size a local frozen window before making any paid calls:
+
+```bash
+.venv/bin/python scripts/agent_run_digest.py \
+  --snapshot data/digest-windows/2026-07-31-to-2026-08-07-youtube.json \
+  --estimate
+```
+
+To exercise checkpoint resume on local data, run the paid command below,
+interrupt it with `Ctrl-C`, and then run the exact same command again. Accepted
+items should be loaded from the checkpoint rather than purchased again:
+
+```bash
+.venv/bin/python scripts/agent_run_digest.py \
+  --snapshot data/digest-windows/2026-07-31-to-2026-08-07-youtube.json \
+  --model glm-5.2 \
+  --provider-prefix OPEN_WEIGHT
+```
+
+<a id="explore-consistency"></a>
+### Check answer consistency
+
+Consistency is measured with repeated, uncached runs over frozen inputs. It is
+not inferred from cache hits: a cache deliberately returns an earlier validated
+answer and therefore says nothing about fresh model variance.
+
+Recreate the existing prompt-arm analysis from the six committed reports:
+
+```bash
+.venv/bin/python scripts/eval_compare_prompt_arms.py \
+  --arm-a data/eval-synthesis-v5-rep-1-report.json \
+          data/eval-synthesis-v5-rep-2-report.json \
+          data/eval-synthesis-v5-rep-3-report.json \
+  --arm-b data/eval-synthesis-v6-rep-1-report.json \
+          data/eval-synthesis-v6-rep-2-report.json \
+          data/eval-synthesis-v6-rep-3-report.json \
+  --output /tmp/eval-comparison-synthesis-v5-vs-synthesis-v6.json
+```
+
+The measured result was 13/13 classification-consistent cases in each arm and
+33/39 expected-outcome matches in each arm. There were zero discriminating
+cases: 11 cases always passed and two always missed in both arms. That is
+evidence of classification repeatability on these frozen fixtures, not proof
+that every answer was semantically correct or that the prompts were equivalent.
+
+Run a new three-repetition measurement with the current answer prompt. This is
+a paid command and is capped at USD 1:
+
+```bash
+.venv/bin/python scripts/eval_run_suite.py \
+  --model claude-sonnet-5 \
+  --prompt-version synthesis-v7 \
+  --repetitions 3 \
+  --max-cost-usd 1.0 \
+  --output data/explore-consistency-report.json \
+  --state data/explore-consistency-state.json \
+  --cache-dir data/explore-consistency-cache
+```
+
+<a id="explore-evals"></a>
+### Check the evaluations
+
+Validate the suite structure and all eight live-retrieval expectations without
+calling a model:
+
+```bash
+.venv/bin/python scripts/eval_validate_suite.py --check-retrieval
+```
+
+Inspect one frozen case, including its question, separate required claims,
+expected outcome, evidence, and review rationale:
+
+```bash
+.venv/bin/python scripts/eval_validate_suite.py \
+  --case independent_evaluation
+```
+
+Run the full deterministic test suite:
+
+```bash
+.venv/bin/python -m pytest -q
+```
+
+Run the paid frozen-evidence answer suite after changing a prompt or agent
+behavior:
+
+```bash
+.venv/bin/python scripts/eval_run_suite.py \
+  --model claude-sonnet-5 \
+  --prompt-version synthesis-v7 \
+  --max-cost-usd 1.0
+```
+
+These checks answer different questions. The validator checks fixture and
+retrieval contracts; pytest checks deterministic behavior; the paid suite
+observes current model behavior on frozen evidence. Human semantic review is
+still required for meaning that structural checks cannot decide.
+
+<a id="explore-models"></a>
+### Inspect the model comparison
+
+The project ran the same two live retrieval-loop cases three times with each
+provider. Inspect both summaries side by side:
+
+```bash
+.venv/bin/python -m json.tool \
+  data/runs/trigger-measurement/agent/summary.json | less
+```
+
+```bash
+.venv/bin/python -m json.tool \
+  data/runs/trigger-measurement/open_weight/summary.json | less
+```
+
+On this small workload, Claude Sonnet 5 used 14 provider calls, cost USD
+0.540322, and produced 67.88 output tokens/second. GLM-5.2 used 10 provider
+calls, cost USD 0.130997, and produced 123.83 output tokens/second. GLM was
+about 4.1 times cheaper and 1.8 times faster by measured output throughput.
+The providers produced different labels and stopping behavior, and one Sonnet
+run failed validation, so this experiment does not establish a quality winner.
+
+Rerun the matched measurement in separate output directories. These are paid
+commands, each capped at USD 1:
+
+```bash
+.venv/bin/python scripts/agent_measure_retrieval_trigger.py \
+  --model claude-sonnet-5 \
+  --cases what_are_evals independent_evaluation \
+  --repetitions 3 \
+  --max-cost-usd 1.0 \
+  --provider-prefix AGENT \
+  --output-dir data/runs/explore-model-comparison/agent
+```
+
+```bash
+.venv/bin/python scripts/agent_measure_retrieval_trigger.py \
+  --model glm-5.2 \
+  --cases what_are_evals independent_evaluation \
+  --repetitions 3 \
+  --max-cost-usd 1.0 \
+  --provider-prefix OPEN_WEIGHT \
+  --output-dir data/runs/explore-model-comparison/open_weight
+```
+
+<a id="explore-observability"></a>
+### Inspect observability, traceability, and auditability
+
+The project treats these as related but distinct properties:
+
+- **Observability:** live and persisted events expose stage, attempts, usage,
+  cost, validation failures, and stop reason.
+- **Traceability:** outputs retain the model, prompt, corpus signature,
+  evidence IDs, queries, attempts, and citations needed to reconstruct how a
+  result was produced.
+- **Auditability:** immutable prompt history, source-locatable evidence,
+  checkpoints, explicit rejected work, and human labels preserve a reviewable
+  record rather than only a final answer.
+
+Inspect a complete per-attempt trace:
+
+```bash
+.venv/bin/python -m json.tool \
+  data/runs/trigger-measurement/agent/what_are_evals-rep-1.json | less
+```
+
+Inspect the chronological runtime event log on a local working copy:
+
+```bash
+.venv/bin/python scripts/show_recent_run_log.py --all-runs --limit 50
+```
+
+Inspect immutable answer-prompt history:
+
+```bash
+ls -la prompts/agent_task/
+.venv/bin/python -m json.tool prompts/agent_task/synthesis-v7.json | less
+```
+
+Inspect the code/model/human ownership contract:
+
+```bash
+rg -n "deterministic|stochastic|human|escalat" CONTRACTS.md
+```
+
+<a id="explore-escalation"></a>
+### Inspect when human escalation is required
+
+The project represents human escalation in three concrete situations.
+
+1. **The task domain requires human authority.** One reviewed evaluation case
+   contains source evidence that a support agent should escalate unresolved
+   billing errors or conflicts rather than choose an unsupported explanation.
+   Inspect the complete frozen case:
 
    ```bash
-   .venv/bin/python -m json.tool data/runs/trigger-measurement/agent/what_are_evals-rep-1.json | less
+   .venv/bin/python scripts/eval_validate_suite.py --case human_escalation
    ```
 
-2. **Inspect durable breadth.** Read the 30-day stress report summary and its
-   significant items. The run attempted a 328-item frozen window under
-   checkpoints and budgets, retained accepted work, and ended
-   `ESCALATED_FOR_REVIEW` rather than presenting incomplete work as success.
+2. **The answer task cannot satisfy its quality contract within its bounded
+   rounds.** The runtime returns `ESCALATED_FOR_REVIEW` with
+   `QUALITY_GATE_NOT_REACHED`, not a false success or a misleading budget
+   failure. Its review package contains the failed criteria, last output,
+   supplied evidence IDs, budget state, and an explicit reviewer next action.
+   Display the trajectory fixture and run the exact test that proves this
+   package survives in the checkpoint:
 
    ```bash
-   .venv/bin/python scripts/show_digest.py data/digests/2026-07-08-to-2026-08-07-youtube-glm-5.2-open-weight-report.json
+   .venv/bin/python scripts/eval_review_trajectory_case.py \
+     --case actionable_escalation
    ```
 
-3. **Inspect evidence grounding.** Show significance-v2 summaries with the one
-   to three verbatim passages that deterministic code located in each source
-   before accepting the judgement.
+3. **A digest finishes its bounded attempts with unresolved source items.** In
+   the live significance-v2 run, three items still violated the evidence
+   contract after four attempts each. They remained visible as rejected work,
+   and the whole run ended `ESCALATED_FOR_REVIEW` instead of silently dropping
+   them or weakening quote validation. Inspect those records:
 
    ```bash
-   .venv/bin/python scripts/show_digest.py data/digests/2026-07-31-to-2026-08-07-youtube-glm-5.2-open-weight-significance-v2-report.json --quotes
+   .venv/bin/python scripts/show_digest.py \
+     data/digests/2026-07-31-to-2026-08-07-youtube-glm-5.2-open-weight-significance-v2-report.json \
+     --rejected
    ```
 
-4. **Inspect safe failure.** Show the v2 report's rejected items. Bounded
-   retries recovered some invalid responses and escalated the three that still
-   could not satisfy the evidence contract.
+Escalation is not triggered by every uncertainty, and budget exhaustion is
+kept distinct from quality-gate escalation. The human receives a bounded,
+inspectable decision package; the project does not autonomously modify an
+external or production system.
 
-   ```bash
-   .venv/bin/python scripts/show_digest.py data/digests/2026-07-31-to-2026-08-07-youtube-glm-5.2-open-weight-significance-v2-report.json --rejected
-   ```
+<a id="explore-human-review"></a>
+### Inspect grounding, human review, and safe failure
 
-5. **Inspect the human-review boundary.** Open the completed 20-card audit.
-   The reviewer—not a second uncalibrated model—found two out-of-scope
-   selections and only 11 of 18 in-scope summaries fully supported by their
-   mapped passages.
+Show accepted significance-v2 assessments with the one to three verbatim
+passages that deterministic code located in each source:
 
-   ```bash
-   .venv/bin/python -m json.tool data/human-labels/digest-claim-audit-v1/glm-5.2-audit-report.json | less
-   ```
+```bash
+.venv/bin/python scripts/show_digest.py \
+  data/digests/2026-07-31-to-2026-08-07-youtube-glm-5.2-open-weight-significance-v2-report.json \
+  --quotes
+```
+
+Show the unresolved items after bounded retries:
+
+```bash
+.venv/bin/python scripts/show_digest.py \
+  data/digests/2026-07-31-to-2026-08-07-youtube-glm-5.2-open-weight-significance-v2-report.json \
+  --rejected
+```
+
+Inspect the completed 20-card human audit:
+
+```bash
+.venv/bin/python -m json.tool \
+  data/human-labels/digest-claim-audit-v1/glm-5.2-audit-report.json | less
+```
+
+Deterministic quote-location checks passed for accepted items, but the human
+review found two out-of-scope selections and only 11 of 18 in-scope summaries
+fully supported by their mapped passages. Exact provenance is therefore a
+necessary control, not a substitute for semantic review. Three unresolved v2
+items remained visible and the run escalated instead of silently weakening the
+evidence contract.
 
 Current status is split across two implemented paths: the digest provides
 durable, resumable breadth, while the adaptive retrieval trace provides a
@@ -309,6 +578,19 @@ defines the triage procedure.
 The project uses several bounded loops with different purposes. A background
 library-update loop is not the same thing as an answer-producing agent.
 
+A repeated model call is not enough to make a loop agentic. The important test
+is whether the system observes the result of one round and uses that observation
+to change the next action. The project currently has two such feedback paths:
+
+- a failed validation produces targeted repair instructions for the next
+  answer attempt;
+- a model judgement that the evidence is thin produces new search queries,
+  which change the evidence in the next synthesis prompt.
+
+The digest is different. It is a long-running and resumable workload, but each
+source item is independent. Repeating the same bounded operation across many
+items demonstrates durability, not a deep chain of dependent reasoning.
+
 ### Cited-answer revision loop
 
 ```text
@@ -341,6 +623,72 @@ This is the clearest agentic example: the model observes that the current state
 is inadequate and proposes a different information-gathering action. The
 controller executes that action, bounds the merged evidence, and records what
 changed. It is currently a two-round loop, not a deep long-horizon chain.
+
+<a id="live-dependent-loop"></a>
+### Inspect the live retrieve-observe-adapt loop
+
+The committed `what_are_evals` trace is a live example in which round two
+depends on round one:
+
+1. Round one received eight evidence items. The model marked only two relevant,
+   classified the evidence as `INSUFFICIENT_EVIDENCE`, and returned three
+   focused search queries.
+2. Deterministic code accepted those query strings, searched the local index,
+   removed duplicate evidence, and expanded the evidence set from 8 to 20.
+3. Round two's prompt used the same question, the expanded 20-item evidence
+   set, and feedback saying that new evidence had been retrieved. It therefore
+   depended on round one's output without blindly copying round one's answer.
+4. Round two marked eight items relevant and returned `SUPPORTED` with a more
+   complete answer.
+
+This is an honest loop rather than a deliberately forced failure: the first
+model output diagnosed the evidence gap and supplied the action that changed
+the next model input. Deterministic code still owned retrieval, deduplication,
+the 20-item cap, and the two-round stopping limit.
+
+Inspect the complete live trace:
+
+```bash
+.venv/bin/python -m json.tool \
+  data/runs/trigger-measurement/agent/what_are_evals-rep-1.json | less
+```
+
+Print only the fields that show the state transition:
+
+```bash
+.venv/bin/python - <<'PY'
+import json
+
+path = "data/runs/trigger-measurement/agent/what_are_evals-rep-1.json"
+trace = json.load(open(path, encoding="utf-8"))
+
+print(f"evidence: {trace['evidence_count_initial']} -> {trace['evidence_count_final']}")
+for round_ in trace["rounds"]:
+    print(
+        f"round {round_['round']}: "
+        f"classification={round_['classification']}, "
+        f"relevant={round_['relevant_evidence_count']}/"
+        f"{round_['assessed_evidence_count']}, "
+        f"suggested_queries={round_['suggested_queries']}"
+    )
+print(f"queries executed: {trace['refined_queries']}")
+print(f"stop reason: {trace['stop_reason']}")
+PY
+```
+
+Inspect the controller code that turns round one's query suggestions into the
+expanded evidence and revision feedback used for round two:
+
+```bash
+rg -n -C 8 \
+  "new_queries =|current = expanded|revision_feedback =" \
+  llm_gym/agent/retrieval_retry.py
+```
+
+The specialized measurement trace stores each round's output and the evidence
+transition, but not a duplicate of each fully rendered prompt. The command
+above connects the recorded round-one queries to the deterministic construction
+of round two's input.
 
 ### Digest workload
 

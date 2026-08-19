@@ -2,12 +2,32 @@
 
 [Project rules](../../PROJECT_RULES.md)
 
-This family drafts an advisory review sheet from an existing answer and its
-supplied evidence. It breaks the answer into material statements and proposes
-`proven`, `not_proven`, or `unclear` for each statement, with one evidence ID
-and one exact snippet passage per row. Deterministic code verifies that every
-proposed passage occurs in the referenced snippet; human decisions remain
-authoritative.
+## What this prompt is for
+
+A cited answer can still say more than its sources establish. Checking every
+sentence against every evidence excerpt by hand is slow, so this prompt prepares
+the first draft of that review.
+
+It breaks the answer into factual statements and, for each one, proposes:
+
+- `proven`, `not_proven`, or `unclear`;
+- the evidence record that should support the statement;
+- the exact passage on which the proposed verdict rests.
+
+The result is a checklist for a person, not an automatic quality score. The
+reviewer agrees, disagrees, or edits each proposed verdict.
+
+## How it fits into the project
+
+This prompt runs after an answer already exists. It does not retrieve new
+evidence, change the answer, or decide whether a run passes. Deterministic code
+checks that each proposed passage actually appears in the referenced evidence
+snippet. A fabricated passage is downgraded and flagged before the sheet reaches
+the reviewer.
+
+Human decisions remain authoritative. Agreement reports can measure how often
+the drafter and reviewer agree, but the drafter's proposal is never treated as
+a verified label on its own.
 
 ## Versions
 

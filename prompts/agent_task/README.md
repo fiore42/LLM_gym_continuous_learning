@@ -2,11 +2,40 @@
 
 [Project rules](../../PROJECT_RULES.md)
 
-This family turns one question and a bounded set of supplied evidence into a
-JSON answer. The response includes an evidence-scoped classification,
-citations, and one assessment for every supplied evidence item. Newer versions
-can also propose retrieval queries; deterministic code decides whether to run
-those queries and when to stop.
+## What this prompt is for
+
+A person asks a research question. The retrieval code finds a small set of
+possibly useful excerpts from the local corpus. This prompt tells the model to
+answer the question using only those excerpts—not its memory or outside
+knowledge.
+
+The model must:
+
+- write an answer supported by the supplied material;
+- cite the evidence records it used;
+- say whether the evidence supports an answer, is insufficient, or conflicts;
+- explain which supplied records were actually useful;
+- suggest a more focused search when important evidence is still missing.
+
+In plain language, this is the prompt that turns search results into a cited
+research answer while making uncertainty visible.
+
+## How it fits into the project
+
+This prompt runs after evidence retrieval. In the ordinary question-answering
+workflow, `agent_retrieve_evidence_for_question.py` creates a checkpoint and
+`agent_run_task_on_checkpoint.py` uses this prompt to write the answer.
+
+It is also used by the adaptive retrieval loop. If the first evidence set is
+thin, the model can suggest a better query. Ordinary code decides whether that
+query is allowed, retrieves more evidence, and gives the expanded evidence set
+back to the same prompt for a second answer. The model proposes the search;
+deterministic code executes and bounds it.
+
+The JSON response includes the answer, its evidence-scoped classification,
+citations, an assessment of every supplied evidence item, and any suggested
+queries. The evaluation suite uses the same prompt with frozen evidence so
+prompt behavior can be compared without retrieval changing underneath it.
 
 ## Versions
 
