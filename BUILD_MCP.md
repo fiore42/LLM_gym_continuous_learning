@@ -133,7 +133,7 @@ Environment configuration is loaded from the project `.env` file without printin
 - [x] Add credential-safe log inspection with `scripts/show_recent_run_log.py`
 - [x] Keep warnings separate from failures in reports and exit status
 
-### 6. Long-running agent task — bounded runner wired; finite validation next
+### 6. Long-running agent task — run live against two providers; semantic calibration incomplete
 
 - [x] Create a deterministic corpus inventory excluding audio, video, and logs
 - [x] Write a versioned corpus profile for reuse by downstream analysis
@@ -166,6 +166,13 @@ Environment configuration is loaded from the project `.env` file without printin
 - [x] Report critical failures, retries-to-pass, estimated usage cost, and stop validity
 - [x] Add a runnable `scripts/eval_compare_model_providers.py` entry point
 - [x] Run repeated prompt comparisons and decompose aggregate ties per case
+
+=== CODEX comment ===
+The repetitions ran, but no effective prompt comparison occurred:
+`run_agent_task()` failed to pass the selected prompt into `SynthesisRequest`,
+and all six current v5/v6 detailed runs used `synthesis-v6`.
+=== /CODEX comment ===
+
 - [x] Make live provider contact with Claude Sonnet 5 and GLM-5.2; broader
   quality conclusions remain gated on human labels
 

@@ -58,8 +58,13 @@ def main() -> int:
             records.append(record)
     if not args.noout:
         print(json.dumps(list(records), indent=2, ensure_ascii=False))
+        # The count goes to stderr, not stdout. Rule 3 keeps the human summary
+        # and the machine-readable result on separate streams; printing both to
+        # stdout made the JSON unparseable, so the log could not be piped to
+        # jq or any other reader without stripping the last line first.
         scope = target_run or "all runs"
-        print(f"Showing {len(records)} event(s) from {scope} in {path}")
+        print(f"Showing {len(records)} event(s) from {scope} in {path}",
+              file=sys.stderr)
     return 0
 
 

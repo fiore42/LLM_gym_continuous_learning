@@ -101,6 +101,11 @@ Stochastic model calls are permitted only inside `AGENT_TASK` and optionally
 for planning/review inside `PROJECT_IMPROVEMENT`; their outputs never bypass
 deterministic evaluation or escalation rules.
 
+=== CODEX comment ===
+The exclusivity claim is false. The implemented `DIGEST` loop also makes
+stochastic model calls through `assess_item()` for each source item.
+=== /CODEX comment ===
+
 ## Project-improvement commit rule
 
 The project-improvement loop must commit after each successfully completed

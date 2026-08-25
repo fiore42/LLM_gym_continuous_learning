@@ -30,6 +30,13 @@ def _cache_key(spec: TaskSpec, evidence: tuple[dict[str, Any], ...], model: str,
         "task_id": spec.task_id, "question": spec.question,
         "evidence_ids": sorted(str(item["evidence_id"]) for item in evidence),
         "model": model, "prompt_version": prompt_version,
+        # Bumped when the selected prompt version started actually reaching the
+        # model. Entries written before that carry a key naming one version and
+        # a result rendered from another, so they must not be reused: a nominal
+        # v5 arm and a nominal v6 arm both rendered v6 and cached under
+        # different keys. This is the field that says the meaning of a cached
+        # result changed, per Rule 19.
+        "prompt_binding": 2,
         "output_schema_version": spec.output_schema_version,
         "evaluation_policy": EVALUATION_POLICY_VERSION,
         "limits": {
@@ -181,7 +188,8 @@ def run_agent_task(
     def perform(round_number: int, remaining_seconds: int) -> UnitOutcome:
         nonlocal revision_feedback, non_retryable_provider_error
         request = SynthesisRequest(
-            spec.question, evidence, model, revision_feedback=revision_feedback,
+            spec.question, evidence, model, prompt_version=prompt_version,
+            revision_feedback=revision_feedback,
             request_timeout_seconds=remaining_seconds)
         prompt_record = render_prompt(request)[2]
         round_cost = 0.0

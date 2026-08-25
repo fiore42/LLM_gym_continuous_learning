@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import textwrap
 from pathlib import Path
@@ -92,6 +93,42 @@ def format_assessment(row: dict, *, quotes: bool, width: int = 76) -> list[str]:
     return lines
 
 
+def format_selection(ranked: list[dict], wanted: set[str]) -> str:
+    """Say how much of the run is on screen, and how to see the rest.
+
+    The default view shows only SIGNIFICANT. On a 321-item run that hides 222
+    assessments, and a reader grepping the output counts the summary line
+    instead of the items and concludes the report disagrees with itself. Naming
+    the hidden count and the flag that reveals it costs one line.
+    """
+    shown = [row for row in ranked
+             if "ALL" in wanted or row["significance"] in wanted]
+    header = (f"{len(shown)} of {len(ranked)} assessments"
+              f" ({', '.join(sorted(wanted))})")
+    hidden = len(ranked) - len(shown)
+    if hidden:
+        header += f"; {hidden} hidden by this filter — use --label ALL to show every assessment"
+    return header
+
+
+def _render(args, report: dict) -> None:
+    """Write the human view. Split from main() so one guard covers every print."""
+    wanted = {label.upper() for label in (args.label or ["SIGNIFICANT"])}
+    print("\n".join(format_header(report)))
+    if args.rejected:
+        print(f"\n{'=' * 78}\nREJECTED ({len(report['rejected'])})")
+        for row in report["rejected"]:
+            print(f"  {row['item_id'][:16]}  {row['error_type']}: {row['error'][:60]}"
+                  f"  (attempts {row['attempts']})")
+        return
+    shown = [row for row in report["ranked"]
+             if "ALL" in wanted or row["significance"] in wanted]
+    print(f"\n{'=' * 78}\n{format_selection(report['ranked'], wanted)}")
+    for row in shown:
+        print()
+        print("\n".join(format_assessment(row, quotes=args.quotes)))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("report", help="Digest report JSON")
@@ -105,25 +142,19 @@ def main() -> int:
     args = parser.parse_args()
 
     report = json.loads(Path(args.report).read_text(encoding="utf-8"))
-    wanted = {label.upper() for label in (args.label or ["SIGNIFICANT"])}
     if args.noout:
         return 0 if report.get("complete") else 1
 
-    print("\n".join(format_header(report)))
-    if args.rejected:
-        print(f"\n{'=' * 78}\nREJECTED ({len(report['rejected'])})")
-        for row in report["rejected"]:
-            print(f"  {row['item_id'][:16]}  {row['error_type']}: {row['error'][:60]}"
-                  f"  (attempts {row['attempts']})")
-        return 0 if report.get("complete") else 1
-
-    shown = [row for row in report["ranked"]
-             if "ALL" in wanted or row["significance"] in wanted]
-    print(f"\n{'=' * 78}\n{len(shown)} of {len(report['ranked'])} assessments"
-          f" ({', '.join(sorted(wanted))})")
-    for row in shown:
-        print()
-        print("\n".join(format_assessment(row, quotes=args.quotes)))
+    try:
+        _render(args, report)
+    except BrokenPipeError:
+        # Quitting `less` early, or piping to `head`, closes the pipe while this
+        # is still writing. That is the reader's decision, not a failure of the
+        # report — so swallow it and keep the outcome-derived exit code rather
+        # than printing a traceback over the operator's terminal. stdout is
+        # rebound to devnull so the interpreter's own final flush cannot raise
+        # the same error again on the way out.
+        os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
     return 0 if report.get("complete") else 1
 
 

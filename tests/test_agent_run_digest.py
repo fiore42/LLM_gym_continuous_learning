@@ -2,8 +2,12 @@ import argparse
 import unittest
 
 from llm_gym.agent.agent_task import TaskSpec
-from scripts.agent_run_digest import (MAX_ITEM_RETRIES, bounded_item_retries,
+from llm_gym.agent.significance import SIGNIFICANCE_PROMPT_VERSION
+from scripts.agent_run_digest import (MAX_ITEM_RETRIES,
+                                      available_digest_prompt_versions,
+                                      bounded_item_retries,
                                       digest_artifact_prefix,
+                                      digest_prompt_version,
                                       provider_request_budget_units, window_days)
 
 
@@ -66,3 +70,93 @@ class DigestBudgetTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PromptVersionSelectionTests(unittest.TestCase):
+    """An older digest prompt must be selectable, and must change the paths.
+
+    Without this flag the runner always used the latest registered prompt, so
+    two prompt versions could never be compared on the same window — the only
+    v1-vs-v2 evidence in the repository compares different windows as a result.
+    """
+
+    def test_every_registered_version_is_offered(self):
+        available = available_digest_prompt_versions()
+        self.assertIn(SIGNIFICANCE_PROMPT_VERSION, available)
+        self.assertIn("significance-v1", available)
+        self.assertEqual(available, sorted(available, reverse=True))
+
+    def test_an_unknown_version_is_rejected_before_any_call(self):
+        with self.assertRaises(argparse.ArgumentTypeError) as raised:
+            digest_prompt_version("significance-v99")
+        self.assertIn("available", str(raised.exception))
+
+    def test_a_registered_version_is_accepted(self):
+        self.assertEqual(digest_prompt_version("significance-v1"), "significance-v1")
+
+    def test_two_versions_of_one_window_write_to_different_paths(self):
+        first = digest_artifact_prefix("data/digest-windows/w.json", "glm-5.2",
+                                       "OPEN_WEIGHT", "significance-v1")
+        second = digest_artifact_prefix("data/digest-windows/w.json", "glm-5.2",
+                                        "OPEN_WEIGHT", "significance-v2")
+        self.assertNotEqual(first, second)
+        self.assertTrue(first.endswith("significance-v1"))
+        self.assertTrue(second.endswith("significance-v2"))
+
+
+class PromptVersionReachesTheRunTests(unittest.TestCase):
+    """The flag has to reach `run_digest` and the artifact paths, not just parse.
+
+    Rule 29: `main()` decides the output path from the flag, and that decision
+    needs its own test. Asserting only that the validator accepts a version
+    leaves the wiring uncovered — a `main()` that parses the flag and then keeps
+    passing the module default still passes every other test in this class.
+    """
+
+    def _main_with(self, version):
+        import json, sys, tempfile
+        from pathlib import Path
+        from unittest import mock
+        import scripts.agent_run_digest as cli
+
+        from llm_gym.corpus.window import SNAPSHOT_VERSION
+        snapshot = {"snapshot_version": SNAPSHOT_VERSION,
+                    "since": "2026-07-31T00:00:00+00:00",
+                    "until": "2026-08-07T00:00:00+00:00",
+                    "platforms": ["youtube"], "index_signature": "i:1:2",
+                    "items": [{"evidence_id": "e1"}]}
+        captured = {}
+
+        def fake_run_digest(**kwargs):
+            captured.update(kwargs)
+            return {"outcome": "COMPLETED", "stop_reason": "UNITS_EXHAUSTED",
+                    "complete": True, "cache_hit": False, "items_total": 1,
+                    "items_assessed": 1, "items_rejected": 0, "label_counts": {},
+                    "model_calls": 1, "cost_usd": 0.0, "provider_calls": 1,
+                    "provider_calls_exact": True}
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "w.json"
+            path.write_text(json.dumps(snapshot), encoding="utf-8")
+            argv = ["agent_run_digest.py", "--snapshot", str(path),
+                    "--model", "m", "--prompt-version", version]
+            with mock.patch.object(sys, "argv", argv), \
+                 mock.patch.object(cli, "run_digest", fake_run_digest), \
+                 mock.patch.object(cli, "model_client_from_environment", lambda **k: object()), \
+                 mock.patch.object(cli, "attach_item_text", lambda index, items: [
+                     {**item, "text": "some source text"} for item in items]):
+                cli.main()
+        return captured
+
+    def test_the_requested_version_is_what_the_run_receives(self):
+        for version in ("significance-v1", "significance-v2"):
+            with self.subTest(version=version):
+                captured = self._main_with(version)
+                self.assertEqual(captured["prompt_version"], version)
+
+    def test_the_requested_version_is_what_the_paths_carry(self):
+        for version in ("significance-v1", "significance-v2"):
+            with self.subTest(version=version):
+                captured = self._main_with(version)
+                self.assertTrue(str(captured["output_path"]).endswith(f"{version}-report.json"))
+                self.assertTrue(str(captured["checkpoint_path"]).endswith(f"{version}-checkpoint.json"))

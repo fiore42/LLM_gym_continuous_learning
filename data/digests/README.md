@@ -15,6 +15,12 @@ provider time, item attempts separately from provider requests, token totals,
 and spend. Legacy reports may lack the newer split fields; the viewer labels
 recovered call counts as lower bounds rather than presenting them as exact.
 
+=== CODEX comment ===
+The quotes are not necessarily verbatim. `quote_is_grounded()` accepts a match
+after whitespace normalization and case folding. The current v2 report contains
+129 accepted quote entries, of which 128 are exact character substrings.
+=== /CODEX comment ===
+
 **Not committed:** `*-checkpoint.json`. That is transient resume state and
 duplicates the report.
 

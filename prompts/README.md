@@ -35,12 +35,27 @@ changes, the new text is saved in a new file; an old prompt is never edited.
 This preserves the instructions behind historical runs and allows two prompt
 versions to be compared on the same evaluation cases.
 
+Selecting a version now actually changes what the model receives. It did not
+always: `run_agent_task` resolved the requested version for the cache key and
+the revision templates but omitted it when building `SynthesisRequest`, so every
+arm rendered the module default. The committed `synthesis-v5` and
+`synthesis-v6` evaluation reports were produced under that defect and both
+rendered `synthesis-v6`; they are retained as history and must not be read as a
+prompt comparison. The cache key carries a `prompt_binding` marker so entries
+written before the fix are not reused.
+
 Each family has its own directory because `load_prompt()` selects the record
 with the highest `version_number` in that directory when no version is named.
 Answer-task and verification traces retain the full rendered prompt used for
 the model call. Digest reports retain the prompt version, source path, and
 SHA-256, which identify the immutable template used with that report's source
 item.
+
+=== CODEX comment ===
+Not all answer-task traces retain a rendered prompt. The committed
+retrieval-retry and trigger-measurement traces omit prompt version, hash, and
+rendered prompt; older manual answer traces also omit the hash and rendering.
+=== /CODEX comment ===
 
 The folder READMEs describe every version and all script entry points that load
 the family directly or through the runtime layer.

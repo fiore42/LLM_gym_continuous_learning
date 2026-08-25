@@ -26,7 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from llm_gym.agent.agent_task import TaskSpec
 from llm_gym.agent.digest import run_digest
 from llm_gym.agent.model_client import model_client_from_environment
-from llm_gym.agent.significance import SIGNIFICANCE_PROMPT_VERSION
+from llm_gym.agent.significance import DIGEST_PROMPT_ROOT, SIGNIFICANCE_PROMPT_VERSION
 from llm_gym.corpus.window import attach_item_text, load_snapshot
 from llm_gym.shared.config import load_dotenv
 from llm_gym.shared.settings import digest_parameters
@@ -51,6 +51,28 @@ def provider_request_budget_units(
 ) -> int:
     """Reserve the initial request and configured retries for every item."""
     return item_count * (1 + max_item_retries)
+
+
+def available_digest_prompt_versions() -> list[str]:
+    """Every registered digest prompt, newest first."""
+    return sorted(
+        (json.loads(path.read_text(encoding="utf-8"))["prompt_version"]
+         for path in Path(DIGEST_PROMPT_ROOT).glob("*.json")),
+        reverse=True)
+
+
+def digest_prompt_version(value: str) -> str:
+    """Reject an unknown version at the CLI rather than at the first call.
+
+    An older version has to be selectable, or two prompts can never be compared
+    on the same window: the only v1-vs-v2 evidence in this repository compares
+    different windows, because this flag did not exist when those runs happened.
+    """
+    available = available_digest_prompt_versions()
+    if value not in available:
+        raise argparse.ArgumentTypeError(
+            f"unknown digest prompt version {value!r}; available: {', '.join(available)}")
+    return value
 
 
 def digest_artifact_prefix(snapshot_path: str | Path, model: str, provider_prefix: str,
@@ -93,6 +115,11 @@ def main() -> int:
         help=("Retries after the first request for each item (default: 1; "
               f"maximum: {MAX_CONFIGURABLE_ITEM_RETRIES})"),
     )
+    parser.add_argument(
+        "--prompt-version", type=digest_prompt_version, default=SIGNIFICANCE_PROMPT_VERSION,
+        help=("Digest prompt version to run (default: the latest, "
+              f"{SIGNIFICANCE_PROMPT_VERSION}). Artifact paths include it, so two "
+              "versions of one window cannot overwrite each other."))
     parser.add_argument("--estimate", action="store_true",
                         help="Report size and projected tokens without calling a provider")
     args = parser.parse_args()
@@ -123,7 +150,7 @@ def main() -> int:
     if not args.model:
         parser.error("--model is required unless --estimate is given")
     prefix = digest_artifact_prefix(
-        args.snapshot, args.model, args.provider_prefix, SIGNIFICANCE_PROMPT_VERSION)
+        args.snapshot, args.model, args.provider_prefix, args.prompt_version)
     result = run_digest(
         snapshot=snapshot, model=args.model,
         client=model_client_from_environment(prefix=args.provider_prefix),
@@ -138,7 +165,7 @@ def main() -> int:
             * float(digest_parameters()["max_cost_usd_per_window_day"])),
         checkpoint_path=args.checkpoint or f"{prefix}-checkpoint.json",
         output_path=args.output or f"{prefix}-report.json",
-        prompt_version=SIGNIFICANCE_PROMPT_VERSION,
+        prompt_version=args.prompt_version,
         max_item_retries=args.max_item_retries,
     )
     print(json.dumps({

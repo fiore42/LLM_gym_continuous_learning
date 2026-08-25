@@ -77,6 +77,13 @@ of assigning one label to each full transcript:
    Ask scope first: a general technology, security, or business claim without a
    substantive AI/agent connection is `OUT_OF_SCOPE`, stops there, and is
    reported as a selection failure rather than a significance judgement.
+
+=== CODEX comment ===
+The selected passages are not all exact character copies. Digest validation
+normalizes whitespace and case-folds text; the audited v2 report contains 129
+accepted passages but only 128 exact character-substring matches.
+=== /CODEX comment ===
+
 3. For in-scope cards, hide the model's proposed label and reason until the
    evidence-support verdict, human classification, and rationale are saved. Model
    suggestions can shift subjective human labels

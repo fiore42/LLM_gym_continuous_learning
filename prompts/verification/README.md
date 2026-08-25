@@ -25,6 +25,12 @@ checks that each proposed passage actually appears in the referenced evidence
 snippet. A fabricated passage is downgraded and flagged before the sheet reaches
 the reviewer.
 
+=== CODEX comment ===
+The check is not exact character matching as claimed above. `_normalized()`
+collapses whitespace before containment testing, so a reflowed passage can pass
+without appearing verbatim in the evidence snippet.
+=== /CODEX comment ===
+
 Human decisions remain authoritative. Agreement reports can measure how often
 the drafter and reviewer agree, but the drafter's proposal is never treated as
 a verified label on its own.

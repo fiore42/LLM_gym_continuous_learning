@@ -336,6 +336,15 @@ completeness. Each evaluator returns a boolean and a diagnostic. Additional
 evaluators are extensions, not prerequisites, unless a benchmark case requires
 one to express its expected behavior.
 
+=== CODEX comment ===
+This no longer describes the runtime evaluator. `_evaluate()` emits seven
+structural checks: `answer_nonempty`, `citations_present`,
+`citation_validation`, `classification_valid`, `conflict_citation_coverage`,
+`citation_coverage`, and `output_schema`. The fixture's four named semantic
+evaluation requirements are metadata and are not four executed boolean
+evaluators over the answer.
+=== /CODEX comment ===
+
 ## 11. Evaluation-method contract
 
 Executable Level 1 checks, human/validated-judge Level 2 checks, and
@@ -412,6 +421,14 @@ and rejects the response when any span cannot be found. Historical
 significance-v1 reports retain their single-span shape. The judgement is
 therefore auditable rather than trusted: a confident assessment quoting
 something the item never said fails at validation, not downstream.
+
+=== CODEX comment ===
+The span is not required to be verbatim. In addition to collapsing whitespace,
+`quote_is_grounded()` applies `casefold()` to both strings, so capitalization
+changes are accepted. The accepted 30-day v1 report has 321 normalized matches
+but only 312 exact character substrings; the seven-day v2 report has 129 and
+128 respectively.
+=== /CODEX comment ===
 
 Window freezing excludes source text containing only bracketed transcript cues
 or no alphanumeric content before a model call. This is a deterministic source-

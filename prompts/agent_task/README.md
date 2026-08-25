@@ -57,7 +57,21 @@ prompt behavior can be compared without retrieval changing underneath it.
 | `scripts/eval_compare_model_providers.py` | Calls the shared bounded answer runner for each provider and therefore uses the current default. |
 | `run_prompt_comparison.sh` | Calls `eval_run_suite.py --prompt-version ...` for two explicitly named historical prompt arms, then compares their reports. |
 
+Those selection claims are true again. They were not: `run_agent_task()`
+resolved the requested version but did not pass it into `SynthesisRequest`, so
+an explicitly named arm still rendered the module default. The six committed
+`synthesis-v5` / `synthesis-v6` reports were produced under that defect and all
+rendered `synthesis-v6`, which makes them six repetitions of one prompt rather
+than a comparison. They are kept as history; a real comparison needs a re-run.
+
 The loader path is `llm_gym/agent/prompt_registry.py` →
 `llm_gym/agent/synthesis.py` → `llm_gym/agent/agent_runner.py`. The runtime
 stores the complete rendered prompt in every synthesis attempt, not only the
 version name.
+
+=== CODEX comment ===
+This is true for attempts retained by `run_agent_task`, but false as a statement
+about this family's runtime traces: `agent_run_retrieval_retry.py` strips the
+prompt record when serializing its rounds, and trigger-measurement traces inherit
+that omission.
+=== /CODEX comment ===

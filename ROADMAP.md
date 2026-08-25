@@ -220,6 +220,13 @@ one failure class.
 
 ### M2.3 — Compare prompt v5 against the v4 baseline — complete
 
+=== CODEX comment ===
+The controlled prompt comparison was not completed. The runner used the named
+version for paths/cache metadata but omitted it from `SynthesisRequest`; the
+archived namespaced v4/v5 detailed artifacts record effective
+`synthesis-v6`. The reports therefore cannot establish a v4-versus-v5 result.
+=== /CODEX comment ===
+
 *Historical. The default has since advanced to `synthesis-v7`; v5 and v6 are
 retained in the registry and remain selectable for comparison.*
 

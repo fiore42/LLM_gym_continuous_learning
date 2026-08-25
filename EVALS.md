@@ -29,6 +29,12 @@ quality benchmark. It has been exercised through repeated prompt/provider
 runs, but criterion-level semantic labels over stored answers remain a separate
 calibration task. The process is defined in [EVAL_METHOD.md](EVAL_METHOD.md).
 
+=== CODEX comment ===
+Repeated provider runs were exercised, but repeated distinct prompt arms were
+not. The selected prompt version is not forwarded into `SynthesisRequest`; the
+current nominal v5 and v6 artifacts all rendered `synthesis-v6`.
+=== /CODEX comment ===
+
 Answer cases are failure-mode fixtures for the machinery, not knowledge-
 coverage entries. The suite grows only when a new failure mode needs a
 fixture; it does not grow with topic curiosity. The knowledge product—a
@@ -104,17 +110,53 @@ The current cases cover:
 
 ## Required answer gate
 
-Every answer task must pass these four boolean evaluations:
+Two different gates exist, at two different layers. Conflating them overstates
+what runs automatically, so they are stated separately.
+
+### The declared fixture criteria
+
+Every answer case declares `required_evaluations`, drawn from the vocabulary
+defined in the suite's `evaluation_contract`. Four are mandatory in every case:
 
 1. `evidence_relevant`
 2. `claims_supported`
 3. `citations_valid`
 4. `answer_complete`
 
+`scripts/eval_validate_suite.py` enforces that these four are *defined* in the
+contract (`REQUIRED_ANSWER_EVALUATIONS`) and that no case references an
+undefined name. **That is a schema check, not an execution.** No code scores an
+answer against `claims_supported`; these names record what a reviewer is
+expected to judge, and semantic support is established by human review
+(`scripts/eval_draft_claim_verification_sheet.py` and the digest claim audit in
+[EVAL_METHOD.md](EVAL_METHOD.md)), not by the runtime.
+
 The suite also defines optional evaluations for classification calibration,
 conflict handling, source diversity, temporal calibration, and uncertainty.
 They should be enabled when the benchmark case requires them, not added as
-unbounded complexity to every task.
+unbounded complexity to every task. They are declarative in the same way.
+
+### The enforced runtime gate
+
+What actually stops or retries a live answer task is
+`llm_gym/agent/agent_runner.py::_evaluate`, which applies seven structural
+checks through `evaluate_quality`:
+
+| Evaluation | Critical | What it checks |
+|---|---|---|
+| `answer_nonempty` | yes | The answer text is not blank |
+| `citations_present` | yes | At least one citation was returned |
+| `citation_validation` | yes | Every cited ID was supplied to the model |
+| `classification_valid` | yes | The label is one of the three permitted values |
+| `conflict_citation_coverage` | yes | A `CONFLICTING_EVIDENCE` result cites at least two distinct sources |
+| `citation_coverage` | no | At least `min(2, len(evidence))` distinct citations |
+| `output_schema` | no | Answer and classification are both present |
+
+A run passes when no critical check fails and the pass fraction reaches
+`agent.minimum_eval_pass_fraction` (currently 0.8). Every critical check is
+structural and mechanically decidable. **None of them establishes that the
+cited passage supports the claim** — that is the boundary this project has
+measured rather than assumed, and it is why the human audit exists.
 
 Classification is scoped to the supplied retrieved evidence. In particular,
 CONFLICTING_EVIDENCE means that the supplied items materially disagree; it does

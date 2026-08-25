@@ -37,6 +37,12 @@ matching proves where the model got its evidence; it does not prove that the
 model chose the best update or assigned the correct significance label. That
 semantic judgement is checked separately through human review.
 
+=== CODEX comment ===
+The implemented matching is not exact: `quote_is_grounded()` collapses
+whitespace and applies `casefold()`. One accepted quote in the current v2 report
+is not an exact character substring even though it passes this normalized test.
+=== /CODEX comment ===
+
 ## Versions
 
 | Version | What it does |
@@ -51,9 +57,10 @@ semantic judgement is checked separately through human review.
 | `scripts/agent_run_digest.py` | Loads the current default (`significance-v2`) and applies it independently to each item in a frozen window. Validation failures receive bounded revision feedback from the same prompt record. |
 
 The loader path is `llm_gym/agent/significance.py` →
-`llm_gym/agent/digest.py`. `agent_run_digest.py` does not expose a prompt-version
-flag; it uses the latest registered digest prompt and includes that version in
-checkpoint and report paths. Historical versions remain loadable
+`llm_gym/agent/digest.py`. `agent_run_digest.py` exposes `--prompt-version`,
+defaulting to the latest registered digest prompt and rejecting an unknown
+version at the CLI. The selected version appears in the checkpoint and report
+paths, so two versions of one window cannot overwrite each other. Historical versions remain loadable
 programmatically through `SignificanceRequest(prompt_version=...)`.
 
 `scripts/show_digest.py` and `scripts/eval_audit_digest_claims.py` read the

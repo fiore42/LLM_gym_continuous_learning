@@ -39,6 +39,14 @@ source/
 Audio and video files appear during processing and are removed once a transcript
 exists, which is why a completed folder can hold only subtitles.
 
+=== CODEX comment ===
+The documented X layout and cleanup are false. The implementation writes
+`media/`, `documents/`, `transcripts/`, `temporary-audio/`, `screenshots/`, and
+optionally `article.json`; it does not create `attachments/` or `images/`.
+Downloaded X video remains in `media/` after transcription. Only temporary audio
+and stale transcript intermediates are removed.
+=== /CODEX comment ===
+
 Two invariants worth knowing when reading the code:
 
 - **The date prefix is the publication date, never the download date** (Rule 9).

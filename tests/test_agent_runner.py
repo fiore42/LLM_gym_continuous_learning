@@ -497,3 +497,63 @@ class AgentRunnerTests(unittest.TestCase):
                                     checkpoint_path=root / "checkpoint.json", cache_path=root / "cache.json")
             self.assertEqual(first["outcome"], "CONFLICTING_EVIDENCE")
             self.assertTrue(second["cache_hit"])
+
+
+class PromptVersionBindingTests(unittest.TestCase):
+    """The requested prompt version must reach the model, not just the report.
+
+    `run_agent_task` resolved the version for the cache key, the revision
+    templates and the report header, then built `SynthesisRequest` without it —
+    so every arm rendered the module default. Two nominal prompt arms were
+    compared and both had rendered the same prompt.
+    """
+
+    EVIDENCE = ({"evidence_id": "e1", "canonical_url": "https://example.test/1",
+                 "snippet": "Evaluations measure agent behaviour."},)
+    RESPONSE = json.dumps({
+        "answer": "An answer.", "classification": "SUPPORTED",
+        "citation_ids": ["e1"], "suggested_queries": [],
+    })
+
+    def _run(self, prompt_version):
+        with tempfile.TemporaryDirectory() as directory:
+            return run_agent_task(
+                TaskSpec.from_global_parameters("task", "A question?"),
+                self.EVIDENCE, SequenceClient([self.RESPONSE]), model="test-model",
+                checkpoint_path=Path(directory) / "checkpoint.json",
+                cache_path=Path(directory) / "cache.json",
+                prompt_version=prompt_version)
+
+    def test_the_rendered_prompt_matches_the_requested_version(self):
+        for requested in ("synthesis-v5", "synthesis-v6", "synthesis-v7"):
+            with self.subTest(requested=requested):
+                result = self._run(requested)
+                attempt = result["attempts"][0]["synthesis"]
+                self.assertEqual(attempt["prompt_version"], requested)
+                self.assertEqual(attempt["prompt"]["prompt_version"], requested)
+
+    def test_two_versions_do_not_render_the_same_prompt(self):
+        older = self._run("synthesis-v5")["attempts"][0]["synthesis"]["prompt"]
+        newer = self._run("synthesis-v7")["attempts"][0]["synthesis"]["prompt"]
+        self.assertNotEqual(older["system_prompt"], newer["system_prompt"])
+
+    def test_the_cache_key_changed_so_pre_fix_entries_are_not_reused(self):
+        from llm_gym.agent.agent_runner import _cache_key
+        spec = TaskSpec.from_global_parameters("task", "A question?")
+        key = _cache_key(spec, self.EVIDENCE, "test-model", "synthesis-v5")
+        # A cache written before the binding fix hashed the same inputs without
+        # the marker; the two keys must differ or that entry would be replayed.
+        import hashlib, json as _json
+        legacy = hashlib.sha256(_json.dumps({
+            "task_id": spec.task_id, "question": spec.question,
+            "evidence_ids": ["e1"], "model": "test-model",
+            "prompt_version": "synthesis-v5",
+            "output_schema_version": spec.output_schema_version,
+            "evaluation_policy": "answer-gates-v3",
+            "limits": {"max_rounds": spec.max_rounds, "max_minutes": spec.max_minutes,
+                       "max_model_calls": spec.max_model_calls,
+                       "max_cost_usd": spec.max_cost_usd,
+                       "stop_at_budget_fraction": spec.stop_at_budget_fraction,
+                       "minimum_eval_pass_fraction": spec.minimum_eval_pass_fraction},
+        }, sort_keys=True).encode("utf-8")).hexdigest()
+        self.assertNotEqual(key, legacy)

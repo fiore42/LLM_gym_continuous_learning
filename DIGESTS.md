@@ -101,6 +101,12 @@ precision and recall on significant developments are unmeasured and every report
 each of which deterministic code located in the source item before accepting
 the response. Historical significance-v1 reports retain their single quote.
 
+=== CODEX comment ===
+"Verbatim" is false for the enforced comparison. The validator collapses
+whitespace and case-folds both strings. All 129 accepted v2 quote entries pass
+that normalized test, but 128 are exact character substrings of the item text.
+=== /CODEX comment ===
+
 The 30-day report is a historical stress artifact, not a clean completion:
 `data/digests/2026-07-08-to-2026-08-07-youtube-glm-5.2-open-weight-report.json`
 contains 321 accepted assessments and 10 rejection records, with three item IDs

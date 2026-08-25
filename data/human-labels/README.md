@@ -3,7 +3,10 @@
 [Project rules](../../PROJECT_RULES.md)
 
 This directory stores committed human audit decisions and provisional audit
-reports. Compact review cards remain local under `data/human-review/`; the
+reports. The rubric that defines scope, the support question, and the four
+significance labels is immutable and versioned at
+[`config/digest_claim_audit_v1.json`](../../config/digest_claim_audit_v1.json)
+(`rubric_version` 1); the audit records which rubric produced it. Compact review cards remain local under `data/human-review/`; the
 committed decisions retain passage hashes, rubric provenance, and the corpus
 `index_signature` needed to detect drift.
 
@@ -16,6 +19,12 @@ each mapped to a claim component, while showing its YouTube channel or X
 account and hiding the model's proposed label and reason. Optional context can
 clarify a passage but cannot supply facts missing from the evidence set.
 
+=== CODEX comment ===
+The passages are not universally exact character copies. The source validator
+collapses whitespace and case-folds text; the audited v2 report has 129 accepted
+passages and 128 exact character-substring matches.
+=== /CODEX comment ===
+
 The paid significance-v2 seven-day report, compact packet, human decisions,
 model review, and canonical audit report exist. The digest report contains 46
 accepted assessments and three visible rejections after bounded retries; the
@@ -23,15 +32,33 @@ packet deterministically sampled 20 accepted assessments. Historical
 significance-v1 reports are rejected because one selected quote cannot ground a
 compound summary.
 
-Decide first whether the claim is substantively about AI or agent systems.
-Out-of-scope cards stop there and are counted as selection failures. For
-in-scope cards, judge whether the evidence set jointly supports the claim, then classify
-what is actually supported. The command saves after every card, so `Ctrl-C` is
-safe and the same command resumes:
+The packet is built first. This step is deterministic and free: it samples the
+accepted assessments, balances them across the hidden model labels, and writes
+compact cards carrying the claim, its mapped passages, and their hashes.
+
+```bash
+.venv/bin/python scripts/eval_audit_digest_claims.py prepare \
+  --report data/digests/2026-07-31-to-2026-08-07-youtube-glm-5.2-open-weight-significance-v2-report.json \
+  --rubric config/digest_claim_audit_v1.json \
+  --sample-size 20
+```
+
+Then label the cards. Decide first whether the claim is substantively about AI
+or agent systems: out-of-scope cards stop there and are counted as selection
+failures. For in-scope cards, judge whether the evidence set jointly supports
+the claim, then classify what is actually supported. The command saves after
+every card, so `Ctrl-C` is safe and the same command resumes:
 
 ```bash
 .venv/bin/python scripts/eval_audit_digest_claims.py label \
   --reviewer alfonso
+```
+
+Decisions can be checked for completeness before the reveal phase:
+
+```bash
+.venv/bin/python scripts/eval_audit_digest_claims.py validate \
+  --labels data/human-labels/digest-claim-audit-v1/alfonso-blind-claim-decisions.json
 ```
 
 After all 20 decisions are complete, reveal the model reason and proposed label.

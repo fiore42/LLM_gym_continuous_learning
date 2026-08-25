@@ -14,8 +14,16 @@ log viewer and the YouTube ingestion smoke test.
 - `agent_run_task_on_checkpoint.py` — Synthesize a research checkpoint through the configured model provider.
 - `agent_run_retrieval_retry.py` — Live-fire the retrieval-retry loop: draft, expand evidence with a refined query, redraft. Use `--case <id>` or `--question`.
 - `agent_measure_retrieval_trigger.py` — Repeat live retrieval-retry runs to measure which signal fires the loop (classification label vs. relevance count). Spends money; has a `--max-cost-usd` cap.
-- `agent_run_digest.py` — Assess every item in a frozen window as one bounded unit, checkpointed and resumable. Rejected responses retry once by default; `--max-item-retries` permits a bounded 0–5 override. Reports separate item and provider-request counts. Spends money; run `--estimate` first.
-- `show_digest.py` — Read a digest report. Read-only and free. `--quotes` shows the mapped verbatim evidence spans located in each source item, `--label ALL` shows every assessment, `--rejected` shows failed validations.
+- `agent_run_digest.py` — Assess every item in a frozen window as one bounded unit, checkpointed and resumable. Rejected responses retry once by default; `--max-item-retries` permits a bounded 0–5 override. `--prompt-version` selects a registered digest prompt (default: the latest) so two versions can be compared on one window; the version appears in every artifact path. Reports separate item and provider-request counts. Spends money; run `--estimate` first.
+- `show_digest.py` — Read a digest report. Read-only and free. **Defaults to showing only `SIGNIFICANT`**; the
+  selection line names how many assessments the filter hid and points at `--label ALL`, which shows every one.
+  `--quotes` shows the mapped evidence spans located in each source item, `--rejected` shows failed validations.
+
+=== CODEX comment ===
+The displayed spans are not guaranteed verbatim. Digest grounding collapses
+whitespace and uses `casefold()`; the current v2 report has 129 accepted spans
+but 128 exact character-substring matches.
+=== /CODEX comment ===
 
 ## Evaluation
 
@@ -41,6 +49,12 @@ log viewer and the YouTube ingestion smoke test.
 ## Ingestion
 
 - `ingest_all_configured_sources.py` — Ingest configured YouTube sources with bounded download concurrency.
+
+=== CODEX comment ===
+This script is not YouTube-only. Its dispatcher handles both `youtube` and `x`
+rows from `config/SOURCES.md`.
+=== /CODEX comment ===
+
 - `ingest_one_youtube_channel.py` — Discover and ingest recent videos from one YouTube channel.
 - `ingest_discover_youtube_channel_videos.py` — Discover recent videos from one YouTube channel without downloading media.
 - `ingest_update_library_incrementally.py` — Run the incremental daily ingestion-and-library-update loop.
@@ -83,3 +97,11 @@ The remaining scripts are deliberately uncovered, for two distinct reasons:
   `smoke_test_`, and run-log scripts need network access, credentials, or
   external tools. Their underlying modules are tested offline with injected
   boundaries; the scripts themselves are exercised by live smoke runs.
+
+=== CODEX comment ===
+The claim about every `corpus_` and run-log script needing an external
+dependency is false. The corpus index/search/profile/window commands and
+`show_recent_run_log.py` operate on local files/databases without network
+credentials or external services; helper logic from some of these scripts is
+also covered by offline tests.
+=== /CODEX comment ===

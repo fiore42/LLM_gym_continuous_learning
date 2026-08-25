@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.show_digest import format_assessment, format_header
+from scripts.show_digest import format_assessment, format_header, format_selection
 
 
 class DigestHeaderTests(unittest.TestCase):
@@ -76,3 +76,78 @@ class DigestAssessmentTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SelectionSummaryTests(unittest.TestCase):
+    RANKED = [
+        {"significance": "SIGNIFICANT"},
+        {"significance": "SIGNIFICANT"},
+        {"significance": "INCREMENTAL"},
+        {"significance": "PROMOTIONAL"},
+    ]
+
+    def test_filtered_view_names_the_hidden_count_and_the_flag(self):
+        summary = format_selection(self.RANKED, {"SIGNIFICANT"})
+        self.assertIn("2 of 4 assessments", summary)
+        self.assertIn("2 hidden by this filter", summary)
+        self.assertIn("--label ALL", summary)
+
+    def test_unfiltered_view_claims_no_hidden_work(self):
+        summary = format_selection(self.RANKED, {"ALL"})
+        self.assertIn("4 of 4 assessments", summary)
+        self.assertNotIn("hidden", summary)
+
+    def test_a_filter_matching_everything_reports_no_hidden_work(self):
+        summary = format_selection(
+            self.RANKED, {"SIGNIFICANT", "INCREMENTAL", "PROMOTIONAL"})
+        self.assertNotIn("hidden", summary)
+
+
+class BrokenPipeTests(unittest.TestCase):
+    """A reader quitting the pager must not look like a report failure."""
+
+    REPORT = {
+        "window": {"since": "2026-07-01T00:00:00+00:00", "until": "2026-07-31T00:00:00+00:00",
+                   "days": 30.0, "platforms": ["youtube"], "sources": {"c": 1},
+                   "index_signature": "i:1:2", "considered": 1},
+        "loop": {"run_id": "r", "loop_type": "DIGEST"},
+        "prompt_version": "significance-v2", "model": "m",
+        "outcome": "ESCALATED_FOR_REVIEW", "stop_reason": "UNITS_EXHAUSTED",
+        "complete": False, "items_assessed": 1, "items_total": 2, "items_rejected": 1,
+        "label_counts": {"SIGNIFICANT": 1}, "cost_usd": 0.01,
+        "provider_calls": 1, "provider_calls_exact": True,
+        "invocation_elapsed_seconds": 1, "run_wall_elapsed_seconds": 1,
+        "usage_totals": {"model_latency_seconds": 1},
+        # Large enough that the output exceeds the 64 KB pipe buffer. With a
+        # handful of rows everything fits, the writer never blocks, and no
+        # BrokenPipeError is raised — the test then passes with the guard
+        # removed, which is how this fixture was wrong the first time.
+        "ranked": [{"significance": "SIGNIFICANT", "published_at": "2026-07-02",
+                    "title": f"title {index}", "canonical_url": "u",
+                    "claimed_change": "c" * 200, "supporting_quote": "q"}
+                   for index in range(2000)],
+        "rejected": [],
+    }
+
+    def test_a_reader_closing_the_pipe_prints_no_traceback(self):
+        """Runs the real CLI through a pipe a reader abandons after one line.
+
+        In-process fd juggling does not reproduce this: print() buffers, so no
+        BrokenPipeError is raised and the test passes with the guard removed.
+        Only a real subprocess writing into a real closed pipe exercises it.
+        """
+        import json, os, subprocess, sys, tempfile
+        with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as handle:
+            json.dump(self.REPORT, handle)
+            path = handle.name
+        try:
+            script = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                                  "scripts", "show_digest.py")
+            completed = subprocess.run(
+                f'{sys.executable} {script} {path} --label ALL | head -1',
+                shell=True, capture_output=True, text=True)
+        finally:
+            os.unlink(path)
+        self.assertNotIn("BrokenPipeError", completed.stderr)
+        self.assertNotIn("Traceback", completed.stderr)
+        self.assertEqual(completed.stderr.strip(), "")

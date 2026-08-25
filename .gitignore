@@ -94,3 +94,4 @@ data/runs/**/*.sqlite3
 data/digest-windows/*
 !data/digest-windows/README.md
 .fable-review-prompt.md
+.README_old

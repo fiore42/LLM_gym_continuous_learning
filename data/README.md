@@ -10,6 +10,13 @@ This directory holds everything the project produces at runtime. Most of it is
 | **Model output** | yes | Reproducing it costs real money. It is the evidence of the work. |
 | **Deterministic output** | no | Reproducible by running one command, so storing it would only consume space. |
 
+=== CODEX comment ===
+The model-output row is not universally true. `.gitignore` excludes
+model-produced `data/research-answer.json`, `data/agent-task-cache.json`, and
+per-case `data/eval-suite/**/result.json`; only selected reports and traces are
+committed.
+=== /CODEX comment ===
+
 Locally this directory is around 400 MB. Committed, it is about 1 MB — small
 enough to read on GitHub without cloning a corpus.
 
