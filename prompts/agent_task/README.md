@@ -56,6 +56,7 @@ prompt behavior can be compared without retrieval changing underneath it.
 | `scripts/agent_measure_retrieval_trigger.py` | Repeats `agent_run_retrieval_retry.py`, so it uses the current default while measuring why retrieval expansion fired. |
 | `scripts/eval_compare_model_providers.py` | Calls the shared bounded answer runner for each provider and therefore uses the current default. |
 | `run_prompt_comparison.sh` | Calls `eval_run_suite.py --prompt-version ...` for two explicitly named historical prompt arms, then compares their reports. |
+| `run_model_comparison.sh` | Calls `eval_run_suite.py` for two `label:provider_prefix:model` arms holding one prompt version fixed, then compares their reports. |
 
 Those selection claims are true again. They were not: `run_agent_task()`
 resolved the requested version but did not pass it into `SynthesisRequest`, so

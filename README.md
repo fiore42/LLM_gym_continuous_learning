@@ -130,15 +130,16 @@ agent systems?"*
    Then a separate deterministic pass turns those files into something
    searchable: transcripts are split into chunks that keep their **timestamp
    locators**, posts and attachments become records, and the whole set is
-   written to an **SQLite FTS5 index** with Porter stemming.
+   written to an **SQLite FTS5 (Full-Text Search) index** with Porter stemming
+   (evaluating, evaluation, and evaluated all index as the same term).
    Currently **1,645 records — 472 YouTube transcripts and 1,173 X posts —
    split into 193,802 searchable chunks.** The index is *derived*: it can be
    rebuilt from the files at any time, which is why it is not committed.
    [▸ build the index](#cmd-build-index)
 
-1. **[Code](#stage-retrieval) searches.** The question text goes straight into that index.
-   It returns the **8 best-matching passages**, one per source, ranked by BM25.
-   **No model, no cost.**
+2. **[Code](#stage-retrieval) searches.** The question text goes straight into that index.
+   It returns the **8 best-matching passages**, one per source, ranked by
+   BM25 (Best Matching 25). **No model, no cost.**
 
    > **Why eight?** Cost is the obvious answer and it is not the binding one.
    > Each passage costs about **410 input tokens** — but it also *forces* about
@@ -152,11 +153,13 @@ agent systems?"*
    > answers well on the first try. That experiment has not been run**, and it
    > is the right one. [The full argument →](#cmd-evidence-cap)
 
-2. **The model reads those 8 passages.** One prompt, one call. It marks each
+4. **The model reads those 8 passages.** One prompt, one call — the prompt is
+   [`synthesis-v7`](prompts/agent_task/synthesis-v7.json), the answer-task
+   family [→ III.4](#iii-4). It marks each
    passage **usable or not, with a reason**, writes an answer from the usable
    ones, labels the evidence set, and — because the prompt invites it — returns
-   **up to 3 sharper search queries**. Here: **2 of 8 usable**, label
-   **`INSUFFICIENT_EVIDENCE`**, and 3 queries.
+   **up to 3 sharper search queries**. [Here](#cmd-trace-transition): **2 of 8
+   usable**, label **`INSUFFICIENT_EVIDENCE`**, and 3 queries.
 
    > **The three labels, and what each one means.** All three describe **only
    > the passages placed in the prompt** — never the corpus, and never the world.
@@ -174,25 +177,25 @@ agent systems?"*
    > `SIGNIFICANT` / `INCREMENTAL` / `UNSUPPORTED` / `PROMOTIONAL` — for a
    > different question. [That set →](#label-calibration)
 
-3. **[Code](#stage-control) checks two things**, and both must hold to stop:
+5. **[Code](#stage-control) checks two things**, and both must hold to stop:
    the label must **not** be `INSUFFICIENT_EVIDENCE`, **and** at least
    `min(3, n)` passages must have been marked usable. Note it is *not* "must be
    `SUPPORTED`" — **`CONFLICTING_EVIDENCE` also stops the loop**, because
    *"the sources disagree"* is an answer.
 
-4. **Here both conditions failed** — only 2 usable, and the label said
+6. **Here both conditions failed** — only 2 usable, and the label said
    insufficient — **so the one genuinely agentic loop in this project fires.**
 
-5. **[Code](#stage-retrieval) runs the model's 3 queries** against the same index, merges the
+7. **[Code](#stage-retrieval) runs the model's 3 queries** against the same index, merges the
    results with the **8 it already had**, drops duplicates, and stops at **20**.
    Nothing from round one is discarded; the 20 are **8 original + 12 new**. The
    third query contributed nothing, because the cap filled during the second.
 
-6. **The model reads the 20 passages.** Same prompt, same question, plus a note
+8. **The model reads the 20 passages.** Same prompt, same question, plus a note
    that new evidence arrived. Now **8 of 20 usable**, all 8 cited, label
    **`SUPPORTED`**.
 
-7. **[Code](#stage-control) stops.** Eight usable clears the bar of three and the label is no
+9. **[Code](#stage-control) stops.** Eight usable clears the bar of three and the label is no
    longer insufficient, so the question is answered and the run ends. Stop
    reason: **`QUALITY_GATE_PASSED`**. The model had proposed **three more
    queries** — it wanted to keep going. It did not get to.
@@ -266,12 +269,12 @@ there by design.**
 
 | # | Claim | Prompt in that flow | Receipt |
 |---|---|---|---|
-| 1 | The loop visibly changes its own next action | `synthesis-v7` — *not recorded in the artifact*, see [the provenance gap](#cmd-provenance-coverage) | [▸ trace](#cmd-trace-adaptive) · [▸ state transition](#cmd-trace-transition) |
-| 2 | A long run survived a kill and failed honestly | `significance-v1` | [▸ 30-day report](#cmd-30day-report) · [▸ why items failed](#cmd-why-rejected) |
-| 3 | Deterministic checks passed and a human still found the gap | `significance-v2` produced the assessments; the audit itself is **N/A — human only** | [▸ human audit](#cmd-audit-report) · [▸ the two checks disagreeing](#cmd-provenance-vs-support) |
-| 4 | GLM-5.2 changed the economics without winning on quality | `synthesis-v7`, identical across both arms | [▸ provider summaries](#cmd-provider-summaries) · [▸ the behavioural difference](#cmd-trigger-stability) |
-| 5 | Ambiguous judgement and production action stay with the human | `significance-v2` for the digest escalation; the trajectory fixture is **N/A — deterministic** | [▸ escalation package](#cmd-show-digest-rejected) |
-| 6 | The `SIGNIFICANT` label does not yet narrow what to read | `significance-v1` and `significance-v2` | [▸ selectivity](#cmd-digest-selectivity) · [▸ arm comparison](#cmd-label-arms) |
+| 1 | The loop visibly changes its own next action | [`synthesis-v7`](prompts/agent_task/synthesis-v7.json) — *not recorded in the artifact*, see [the provenance gap](#cmd-provenance-coverage) | [▸ trace](#cmd-trace-adaptive) · [▸ state transition](#cmd-trace-transition) |
+| 2 | A long run survived a kill and failed honestly | [`significance-v1`](prompts/digest/significance-v1.json) | [▸ 30-day report](#cmd-30day-report) · [▸ why items failed](#cmd-why-rejected) |
+| 3 | Deterministic checks passed and a human still found the gap | [`significance-v2`](prompts/digest/significance-v2.json) produced the assessments; the audit itself is **N/A — human only** | [▸ human audit](#cmd-audit-report) · [▸ the two checks disagreeing](#cmd-provenance-vs-support) |
+| 4 | GLM-5.2 changed the economics without winning on quality | [`synthesis-v7`](prompts/agent_task/synthesis-v7.json), identical across both arms | [▸ provider summaries](#cmd-provider-summaries) · [▸ the behavioural difference](#cmd-trigger-stability) |
+| 5 | Ambiguous judgement and production action stay with the human | [`significance-v2`](prompts/digest/significance-v2.json) for the digest escalation; the trajectory fixture is **N/A — deterministic** | [▸ escalation package](#cmd-show-digest-rejected) |
+| 6 | The `SIGNIFICANT` label does not yet narrow what to read | [`significance-v1`](prompts/digest/significance-v1.json) and [`significance-v2`](prompts/digest/significance-v2.json) | [▸ selectivity](#cmd-digest-selectivity) · [▸ arm comparison](#cmd-label-arms) |
 
 Retrieval, indexing, window freezing, ranking, budgets and every validation gate
 are **N/A — deterministic**; no prompt is involved at any point in those.
@@ -279,9 +282,9 @@ are **N/A — deterministic**; no prompt is involved at any point in those.
 
 **Why two different `significance` versions appear.** Not a bug and not stale
 code — the digest runner always loads the *latest* registered prompt. The rows
-differ because they are **dated artifacts**: `significance-v1` was written
+differ because they are **dated artifacts**: [`significance-v1`](prompts/digest/significance-v1.json) was written
 2026-08-17 14:37 UTC and the three v1 runs followed at 15:30, 15:33 and 16:19
-the same day. `significance-v2` was written 2026-08-18 16:00 UTC, and the v2 run
+the same day. [`significance-v2`](prompts/digest/significance-v2.json) was written 2026-08-18 16:00 UTC, and the v2 run
 started an hour later. A digest launched today would use v2.
 [▸ verify that each report names the prompt it really used](#cmd-prompt-provenance-check)
 
@@ -608,7 +611,7 @@ Three things to point at when step 6 prints:
 | `cost_usd` | Final total ≈ step-4 cost **plus the remainder only**. A restart would cost the full $0.028 again on top |
 
 For scale only: the committed 1-day run finished at **$0.027794 for 5 items**,
-about $0.0056 each — but that was **`significance-v1`**, which emits one quote
+about $0.0056 each — but that was **[`significance-v1`](prompts/digest/significance-v1.json)**, which emits one quote
 rather than one to three mapped passages, so it is a historical reference and
 not a predicted v2 cost. What to watch is the *shape*: the step-6 total should
 be roughly the step-4 checkpoint total plus the remaining items, not the two
@@ -697,17 +700,17 @@ for arm in ("v5", "v6"):
 PY
 ```
 
-Both print `{'synthesis-v6': 39}` and the same SHA.
+Both print `{'[`synthesis-v6`](prompts/agent_task/synthesis-v6.json)': 39}` and the same SHA.
 
 **13/13 classification-consistent cases in each group**, 33/39 expected-outcome
 matches in each, **zero discriminating cases**.
 
-**What these six runs actually are — not what the filenames claim.** They were launched as a `synthesis-v5` versus `synthesis-v6`
+**What these six runs actually are — not what the filenames claim.** They were launched as a [`synthesis-v5`](prompts/agent_task/synthesis-v5.json) versus [`synthesis-v6`](prompts/agent_task/synthesis-v6.json)
 comparison. They are not one. `run_agent_task()` resolves the requested prompt
 version, uses it for the cache key, the revision templates and the report
 header — and then never passes it into `SynthesisRequest`, which falls back to
 the module default. Every one of the 78 stored attempts across both groups
-records effective prompt `synthesis-v6` with an identical prompt SHA.
+records effective prompt [`synthesis-v6`](prompts/agent_task/synthesis-v6.json) with an identical prompt SHA.
 [▸ prove it](#cmd-effective-prompt)
 
 So the comparison is void, and what remains is **six uncached repetitions of
@@ -750,31 +753,66 @@ results and no cache hits — a report indistinguishable from a fresh one. A fre
 directory is the only thing that prevents demonstrating a replay.
 
 ```bash
-set -e
-RUN_DIR="data/model-comparison/run-$(date -u +%Y%m%dT%H%M%SZ)"
-mkdir -p "$RUN_DIR"
-
-for rep in 1 2 3; do
-  .venv/bin/python scripts/eval_run_suite.py --suite config/agent_eval_suite.json \
-    --provider-prefix AGENT --model claude-sonnet-5 --prompt-version synthesis-v7 \
-    --repetitions 1 --max-cost-usd 1.0 \
-    --output "$RUN_DIR/sonnet-rep-$rep-report.json" \
-    --state  "$RUN_DIR/sonnet-rep-$rep-state.json" \
-    --cache-dir "$RUN_DIR/sonnet-rep-$rep-cache"
-
-  .venv/bin/python scripts/eval_run_suite.py --suite config/agent_eval_suite.json \
-    --provider-prefix OPEN_WEIGHT --model glm-5.2 --prompt-version synthesis-v7 \
-    --repetitions 1 --max-cost-usd 1.0 \
-    --output "$RUN_DIR/glm-rep-$rep-report.json" \
-    --state  "$RUN_DIR/glm-rep-$rep-state.json" \
-    --cache-dir "$RUN_DIR/glm-rep-$rep-cache"
-done
-
-.venv/bin/python scripts/eval_compare_prompt_arms.py \
-  --arm-a "$RUN_DIR"/sonnet-rep-*-report.json \
-  --arm-b "$RUN_DIR"/glm-rep-*-report.json \
-  --output "$RUN_DIR/sonnet-vs-glm-synthesis-v7.json"
+./run_model_comparison.sh    # defaults: claude-sonnet-5 via AGENT vs glm-5.2 via OPEN_WEIGHT
+# override: ARM_A=label:PREFIX:model ARM_B=... PROMPT_VERSION=... ./run_model_comparison.sh
+# DRY_RUN=1 prints the six invocations and the comparison without spending anything
 ```
+
+One arm is one `label:provider_prefix:model` triple, and **the label names both the
+artifacts and the comparison globs** — so the run loop and the comparison cannot
+drift apart, which is how [TP-4](#tp-4) happened. `PROMPT_VERSION` is a single
+shared value: holding the prompt fixed is what makes this a comparison of arms.
+
+**This has been run.** Claude Sonnet 5 against GLM-5.2 on `synthesis-v7`, six
+reports, 78 tasks, **$0.4105**:
+
+```
+Consistency: arm_a 11/13; arm_b 13/13
+Unstable/noise cases: memory_context_retrieval, write_agent_evals
+All cases: arm_a 36/39 vs arm_b 36/39
+Discriminating cases: 1 — arm_a 3/3 vs arm_b 0/3
+```
+
+Four things to say about that, in order.
+
+**1. Cost separated cleanly; quality did not.** Sonnet $0.31195, GLM $0.09857 —
+**3.2× on this workload**, against 4.1× measured on the two-case trigger
+workload in [II.4](#ii-4). Both are real; the ratio depends on what you run, so
+quote the workload with the number. **All-cases scoring is a dead heat: 36/39
+versus 36/39.**
+
+**2. There is exactly one discriminating case — and it does not say what it
+looks like it says.** `unsupported_causal_claim` is a holdout case that asks
+whether the corpus proves persistent memory *alone* caused a benchmark result.
+Sonnet 3/3, GLM 0/3. That reads like a reasoning gap. It is not:
+
+| | Prose answer | Label emitted | Scored |
+|---|---|---|---|
+| Sonnet ×3 | *"No… the source attributes the score to a combination of factors"* | `INSUFFICIENT_EVIDENCE` | match |
+| GLM ×3 | *"No… persistent memory is named as one of several factors, not as the sole cause"* | `SUPPORTED` | miss |
+
+**All six runs refused the causal overclaim.** Both cited the same single piece
+of evidence and both named the same five confounding factors. The entire scored
+difference is which label that refusal gets: GLM labelled *its own answer* as
+supported by the evidence, which it is; the suite wants the label to describe
+*the claim in the question*, which is not. **The suite scores
+`expected_outcome` and nothing else** [→ III.5](#iii-5), so a vocabulary
+disagreement and a reasoning failure are indistinguishable in the number.
+
+**3. That is the same finding the prompt already carries.**
+[`synthesis-v7`](prompts/agent_task/synthesis-v7.json) exists because *"the
+SUPPORTED/INSUFFICIENT_EVIDENCE label is unstable on borderline evidence…
+while the model's prose assessment stayed consistent."* That was measured
+across repetitions of one model. This run reproduces it **across two models**,
+and each model is internally consistent — GLM emitted `SUPPORTED` 3/3, Sonnet
+`INSUFFICIENT_EVIDENCE` 3/3. It is not noise. It is two stable, different
+readings of an underspecified label.
+
+**4. Do not report this as "Sonnet wins."** The defensible statement is: *on 13
+frozen cases, the two arms are indistinguishable on outcome, the open-weight arm
+costs a third as much, and the single case that separates them separates them on
+label vocabulary rather than on whether the model was fooled.* The follow-up is
+to fix the case definition or score the prose, not to switch model.
 
 The comparator now refuses the ways this can go quietly wrong: a report that did
 not reach `SUITE_COMPLETE`, one whose `completed_tasks` and `total_tasks`
@@ -829,7 +867,7 @@ for the reason given above.
 # override with: MODEL=... PROVIDER_PREFIX=... ARM_A=... ARM_B=... ./run_prompt_comparison.sh
 ```
 
-**This has been run.** `synthesis-v6` against `synthesis-v7`, GLM-5.2, six
+**This has been run.** [`synthesis-v6`](prompts/agent_task/synthesis-v6.json) against [`synthesis-v7`](prompts/agent_task/synthesis-v7.json), GLM-5.2, six
 reports, 78 tasks, **$0.1985**:
 
 ```
@@ -850,7 +888,7 @@ arm_b_prompt_version: synthesis-v7   arm_b_effective_prompt: ["synthesis-v7"]
 ```
 
 The header and the rendered prompt agree. Before the binding fix they did not —
-both arms of the committed v5/v6 reports rendered `synthesis-v6`, and the
+both arms of the committed v5/v6 reports rendered [`synthesis-v6`](prompts/agent_task/synthesis-v6.json), and the
 comparator now surfaces that. [TP-5 →](#tp-5)
 
 **2. Zero discriminating cases, again — and this time the number means
@@ -862,7 +900,7 @@ cannot distinguish these two prompts** — which is a fact about the suite, sinc
 v6 and v7 differ by one clause about when to suggest queries.
 
 **3. One case escalated legitimately, and it is the interesting one.** Under
-`synthesis-v7`, `insufficient_exact_latency` failed all three rounds —
+[`synthesis-v7`](prompts/agent_task/synthesis-v7.json), `insufficient_exact_latency` failed all three rounds —
 *"model response requires citation_ids"*, then an evidence-assessment coverage
 failure, then citations again — and the runtime escalated with
 `QUALITY_GATE_NOT_REACHED` rather than inventing an answer. That case expects
@@ -912,7 +950,7 @@ jq -C . data/runs/trigger-measurement/open_weight/summary.json | less -R
 ```
 
 Same 2 cases, 3 repetitions each, identical **round-one** evidence, identical prompt
-(`synthesis-v7`), separate output directories, no shared configuration:
+([`synthesis-v7`](prompts/agent_task/synthesis-v7.json)), separate output directories, no shared configuration:
 
 | | Claude Sonnet 5 | GLM-5.2 |
 |---|---|---|
@@ -1106,7 +1144,7 @@ better than hiding it: it is evidence the reporting is honest enough to record
 its own defects. [TP-11 →](#tp-11)
 
 **3. A stricter contract surfaced a data problem the looser one had absorbed.**
-`significance-v2` requires one to three mapped passages. Two items could not
+[`significance-v2`](prompts/digest/significance-v2.json) requires one to three mapped passages. Two items could not
 satisfy that and failed loudly — and both were `[MUSIC PLAYING]` transcripts
 with no content. Under v1 those same items would have produced *some* summary
 with *some* quote and been accepted. The fix was not in the prompt: it was to
@@ -1456,7 +1494,7 @@ habit whenever a number matters.
 <a id="label-calibration"></a>
 **What the distribution says.** Three things, and only the first is comfortable:
 
-| | 30-day, `significance-v1` | 7-day, `significance-v2` |
+| | 30-day, [`significance-v1`](prompts/digest/significance-v1.json) | 7-day, [`significance-v2`](prompts/digest/significance-v2.json) |
 |---|---|---|
 | SIGNIFICANT | 99 (**30%**) | 22 (**47%**) |
 | INCREMENTAL | 87 (27%) | 13 (28%) |
@@ -1657,9 +1695,9 @@ the system does next.**
 
 | Family | The model's job | Loaded by | Loop | Authority |
 |---|---|---|---|---|
-| [`agent_task/`](prompts/agent_task/) `synthesis-v7` | Answer from supplied evidence; assess each item; classify; propose queries | [synthesis.py](llm_gym/agent/synthesis.py) | `AGENT_TASK` | Gated by deterministic evaluation; queries are proposals only |
-| [`digest/`](prompts/digest/) `significance-v2` | Select 1–3 verbatim passages, write a claim no broader than their union, label it | [significance.py](llm_gym/agent/significance.py) | `DIGEST` | Rejected if any quote isn't located in the source |
-| [`verification/`](prompts/verification/) `verification-v1` | Turn an answer into a claim-by-claim checklist for a reviewer | [eval_draft_claim_verification_sheet.py](scripts/eval_draft_claim_verification_sheet.py) | **none** | **Advisory only** — never gates a run, never feeds control flow |
+| [`agent_task/`](prompts/agent_task/) [`synthesis-v7`](prompts/agent_task/synthesis-v7.json) | Answer from supplied evidence; assess each item; classify; propose queries | [synthesis.py](llm_gym/agent/synthesis.py) | `AGENT_TASK` | Gated by deterministic evaluation; queries are proposals only |
+| [`digest/`](prompts/digest/) [`significance-v2`](prompts/digest/significance-v2.json) | Select 1–3 verbatim passages, write a claim no broader than their union, label it | [significance.py](llm_gym/agent/significance.py) | `DIGEST` | Rejected if any quote isn't located in the source |
+| [`verification/`](prompts/verification/) [`verification-v1`](prompts/verification/verification-v1.json) | Turn an answer into a claim-by-claim checklist for a reviewer | [eval_draft_claim_verification_sheet.py](scripts/eval_draft_claim_verification_sheet.py) | **none** | **Advisory only** — never gates a run, never feeds control flow |
 
 The third has no loop type deliberately: it lives in `scripts/`, creates no run
 context, makes one call, and hands the result to a person. A loop type exists to
@@ -1668,9 +1706,32 @@ none of them.
 
 Prompts are **append-only**. A change creates a new version; an old version is
 never edited. `load_prompt()` returns the highest `version_number` in a family
-directory unless a version is named — one directory per family, enforced by a
+directory unless a version is named — [▸ every version, and which one is
+current](#prompt-registry) — one directory per family, enforced by a
 test, after a near-miss where dropping a second family into `agent_task/` would
 have silently hijacked the synthesis default at v8.
+
+<a id="prompt-registry"></a>
+#### Every version, and which one is current
+
+Generated from the files themselves — `load_prompt()` returns the highest
+`version_number` in a family directory, so **current** below is what runs when no
+`--prompt-version` is given.
+
+| Family | Version | # | Written | State | Why it superseded the previous one |
+|---|---|---|---|---|---|
+| Answer task | [`synthesis-v4`](prompts/agent_task/synthesis-v4.json) | 4 | 2026-08-14 | superseded | Extracted from llm_gym/agent/synthesis.py and llm_gym/agent/agent_runner.py without wording changes. |
+| Answer task | [`synthesis-v5`](prompts/agent_task/synthesis-v5.json) | 5 | 2026-08-14 | superseded | Define usable relevance, preserve source hedging, and omit unsupported material claims based on six manually reviewed live traces. |
+| Answer task | [`synthesis-v6`](prompts/agent_task/synthesis-v6.json) | 6 | 2026-08-16 | superseded | Allow an insufficient-evidence draft to propose up to three refined retrieval queries. |
+| Answer task | [`synthesis-v7`](prompts/agent_task/synthesis-v7.json) | 7 | 2026-08-16 | **current default** | Decouple suggested_queries from the classification label. Live runs showed the SUPPORTED/INSUFFICIENT_EVIDENCE label is unstable on borderline evidence … |
+| Digest significance | [`significance-v1`](prompts/digest/significance-v1.json) | 1 | 2026-08-17 | superseded | First per-item significance prompt for the digest. One item per call so each unit stays bounded, inspectable and independently retryable. Requires a … |
+| Digest significance | [`significance-v2`](prompts/digest/significance-v2.json) | 2 | 2026-08-19 | **current default** | Replace one supporting quote with one to three mapped verbatim evidence spans. The model must select evidence first and write a claim no broader than the … |
+| Verification drafter | [`verification-v1`](prompts/verification/verification-v1.json) | 1 | 2026-08-16 | **current default** | Move the claim-verification drafter prompt out of a module constant and into the versioned registry, so verification sheets record which prompt produced … |
+
+`significance-v3` appears later in this document as **proposed work, not a file** —
+it is the narrow claim-grounding hypothesis from [what I actually learned](#learnings),
+and writing it is [step one of VI.2](#vi-2). Nothing links to it because nothing
+exists to link to.
 
 <a id="cmd-prompt-history"></a>
 **Prompt history and change rationale** — free
@@ -1712,7 +1773,7 @@ PY
 
 Worth running rather than assuming, because **the answer-task path fails this
 exact check** — [TP-5](#tp-5) found both nominal `v5` and `v6` arms rendering
-`synthesis-v6`. The digest path passes `prompt_version` into
+[`synthesis-v6`](prompts/agent_task/synthesis-v6.json). The digest path passes `prompt_version` into
 `SignificanceRequest`; `run_agent_task` does not pass it into
 `SynthesisRequest`. Same feature, two code paths, one of them wired up.
 
@@ -1728,7 +1789,7 @@ one accepted a version and ignored it, the other honoured a version you could
 not choose. Both are repaired:
 
 - `agent_runner.py` now passes `prompt_version` into `SynthesisRequest`. A
-  requested `synthesis-v5` renders v5. The cache key gained a `prompt_binding`
+  requested [`synthesis-v5`](prompts/agent_task/synthesis-v5.json) renders v5. The cache key gained a `prompt_binding`
   marker so entries written before the fix — which name one version and contain
   another — are not replayed.
 - `agent_run_digest.py` gained `--prompt-version`, validated against the
@@ -1737,8 +1798,8 @@ not choose. Both are repaired:
   overwrite each other.
 
 **What this unblocks.** The [label-distribution finding](#label-calibration)
-currently compares `significance-v1` on a 30-day window against
-`significance-v2` on a 7-day one — a confound that could not be removed before,
+currently compares [`significance-v1`](prompts/digest/significance-v1.json) on a 30-day window against
+[`significance-v2`](prompts/digest/significance-v2.json) on a 7-day one — a confound that could not be removed before,
 because re-running the 30-day window under v2 needed a flag that did not exist.
 It now can:
 
@@ -1754,7 +1815,7 @@ observation into a same-window comparison — and it is the one experiment the
 `SIGNIFICANT`-inflation finding actually calls for.
 
 **The six committed `v5`/`v6` reports do not become valid retroactively.** They
-were produced under the defect and both arms rendered `synthesis-v6`. They stay
+were produced under the defect and both arms rendered [`synthesis-v6`](prompts/agent_task/synthesis-v6.json). They stay
 in the repository as history and as six uncached repetitions of one prompt,
 which is a legitimate consistency measurement and nothing more.
 
@@ -2048,7 +2109,7 @@ cancellation. The conclusion drawn was not "the prompts are equivalent" but
 `run_agent_task()` resolves the requested prompt version, uses it for the cache
 key, the revision templates and the report header, and then does not pass it
 into `SynthesisRequest` — which falls back to the module default. All 78 stored
-attempts across both arms rendered `synthesis-v6`, same SHA.
+attempts across both arms rendered [`synthesis-v6`](prompts/agent_task/synthesis-v6.json), same SHA.
 [▸ prove it](#cmd-effective-prompt)
 
 **So the finding inverts.** The tie was not a saturated instrument failing to
@@ -2070,7 +2131,7 @@ are never replayed. Three tests cover it, each mutation-checked.
 [both paths, before and after](#part-iii)
 
 **The six committed reports are not retroactively valid.** They were produced
-under the defect and both arms rendered `synthesis-v6`. They stay in the
+under the defect and both arms rendered [`synthesis-v6`](prompts/agent_task/synthesis-v6.json). They stay in the
 repository as history, and as six uncached repetitions of one prompt — a
 legitimate consistency measurement and nothing more.
 
@@ -2273,7 +2334,7 @@ against one quote, and adding surrounding context made the cards longer without
 making them decidable.
 
 **How it was closed.** Not with a better rubric — by changing the **model's
-output contract**. `significance-v2` requires the model to *select evidence
+output contract**. [`significance-v2`](prompts/digest/significance-v2.json) requires the model to *select evidence
 first*: one to three exact passages, each mapped to one factual component, and a
 claim no broader than their union. Every passage is still mechanically located
 in the source.
@@ -2324,7 +2385,7 @@ context, which made the cards longer and no more decidable.
 The instinct was to work harder at reviewing. The actual problem was upstream:
 the model was being asked for a broad summary and a single supporting quote, and
 no reviewer could check that pairing. So I changed the **model's output
-contract** instead — `significance-v2` requires one concise claim plus one to
+contract** instead — [`significance-v2`](prompts/digest/significance-v2.json) requires one concise claim plus one to
 three passages, each mapped to a specific part of the claim, with the summary
 limited to what their union supports. Then the review became answerable.
 
@@ -3015,7 +3076,7 @@ Every command in this document, once. Free unless marked.
 | 2b | [resume evidence](#cmd-resume-evidence) · [repeat it live **paid**](#cmd-resume-live) | What the record proves, and what only a live run can |
 | 7 | [rejected items](#cmd-show-digest-rejected) · [label distribution](#cmd-label-distribution) · [what it says](#label-calibration) · [escalation fixtures](#cmd-inspect-fixture) · [ranked report](#cmd-show-digest-quotes) | Where the human belongs, and why ranking isn't prioritisation |
 | 7b | [digest selectivity](#cmd-digest-selectivity) · [label arms compared](#cmd-label-arms) | 3.2× reduction, 3.3 items/day, and the v1→v2 label shift |
-| 3 | [prompt-arm comparison](#cmd-compare-prompt-arms) · [fresh run **paid**](#cmd-consistency-run) · [compare two models **paid**](#cmd-model-comparison) · [compare two prompts **paid**](#cmd-prompt-comparison) | Consistency uncached; the same machinery across two model arms; and a run prompt comparison (v6 vs v7, GLM-5.2, $0.198, zero discriminating cases) |
+| 3 | [prompt-arm comparison](#cmd-compare-prompt-arms) · [fresh run **paid**](#cmd-consistency-run) · [compare two models **paid**](#cmd-model-comparison) · [compare two prompts **paid**](#cmd-prompt-comparison) | Consistency uncached; the same machinery across two model arms; and two runs: Sonnet 5 vs GLM-5.2 ($0.411, 36/39 each, one label-vocabulary case) and v6 vs v7 on GLM-5.2 ($0.198, zero discriminating cases) |
 | 4 | [provider summaries](#cmd-provider-summaries) · [trigger stability](#cmd-trigger-stability) · [reproduce **paid**](#cmd-measure-trigger) | GLM-5.2 economics, and the behavioural difference |
 | 5 | [why items failed](#cmd-why-rejected) · [count overlap](#cmd-count-overlap) · [human audit](#cmd-audit-report) · [the two checks](#cmd-provenance-vs-support) · [protocol](#cmd-audit-run) | 1.8% caught mechanically; 7 of 18 incomplete mappings caught only by a human |
 | 6 | [prompt hash](#cmd-prompt-hash) · [index signature](#cmd-show-pinned) · [run log](#cmd-run-log) · [exit code](#cmd-show-failure) · [counters](#cmd-accounting-counters) | Observability, traceability, auditability |
