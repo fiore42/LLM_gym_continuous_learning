@@ -13,14 +13,19 @@ SPEC.loader.exec_module(MODULE)
 
 
 def _write_report(root, arm, rep, rows, *, signature="index:1", model="model",
-                  suite_version=4):
+                  suite_version=4, prompt_version=None, provider_prefix=None,
+                  stop_reason="SUITE_COMPLETE", repetitions=1,
+                  completed=None, total=None, effective_prompt=None):
     report_dir = root / arm / f"rep-{rep}"
     report_dir.mkdir(parents=True)
     results = []
     for case_id, classification, expected in rows:
         result_path = report_dir / f"{case_id}.json"
         result_path.write_text(json.dumps({
-            "attempts": [{"synthesis": {"classification": classification}}]
+            "attempts": [{"synthesis": {
+                "classification": classification,
+                "prompt_version": effective_prompt or prompt_version or arm,
+            }}]
         }))
         results.append({
             "case_id": case_id,
@@ -28,13 +33,20 @@ def _write_report(root, arm, rep, rows, *, signature="index:1", model="model",
             "output_path": str(result_path),
         })
     report_path = report_dir / "report.json"
-    report_path.write_text(json.dumps({
+    payload = {
         "model": model,
-        "prompt_version": arm,
+        "prompt_version": prompt_version or arm,
         "index_signature": signature,
         "suite_version": suite_version,
+        "suite_stop_reason": stop_reason,
+        "repetitions": repetitions,
+        "completed_tasks": len(results) if completed is None else completed,
+        "total_tasks": len(results) if total is None else total,
         "results": results,
-    }))
+    }
+    if provider_prefix is not None:
+        payload["provider_prefix"] = provider_prefix
+    report_path.write_text(json.dumps(payload))
     return report_path
 
 
@@ -88,3 +100,122 @@ def test_mismatched_index_signature_refuses(tmp_path):
     b = [_write_report(tmp_path, "v5", 1, [("one", "SUPPORTED", "SUPPORTED")], signature="index:2")]
     with pytest.raises(ValueError, match="index_signatures"):
         MODULE.compare_reports(a, b)
+
+
+ROWS = [("case_a", "SUPPORTED", "SUPPORTED"), ("case_b", "SUPPORTED", "SUPPORTED")]
+
+
+def test_two_models_on_one_prompt_are_comparable(tmp_path):
+    """Comparing models was refused outright; now it is the second valid mode.
+
+    The arms must still agree on prompt version, index signature and suite
+    version — only the model and its provider arm may move.
+    """
+    a = _write_report(tmp_path, "a", 1, ROWS, model="claude-sonnet-5",
+                      prompt_version="synthesis-v7", provider_prefix="AGENT")
+    b = _write_report(tmp_path, "b", 1, ROWS, model="glm-5.2",
+                      prompt_version="synthesis-v7", provider_prefix="OPEN_WEIGHT")
+    report = MODULE.compare_reports([a], [b])
+    prov = report["provenance"]
+    assert prov["comparison_variable"] == "model"
+    assert prov["arm_a_model"] == "claude-sonnet-5"
+    assert prov["arm_b_model"] == "glm-5.2"
+    assert prov["arm_a_provider_prefix"] == "AGENT"
+    assert prov["arm_b_provider_prefix"] == "OPEN_WEIGHT"
+
+
+def test_the_same_model_on_two_prompts_still_reports_a_prompt_comparison(tmp_path):
+    a = _write_report(tmp_path, "a", 1, ROWS, prompt_version="synthesis-v5")
+    b = _write_report(tmp_path, "b", 1, ROWS, prompt_version="synthesis-v6")
+    assert MODULE.compare_reports([a], [b])["provenance"]["comparison_variable"] == "prompt_version"
+
+
+def test_arms_that_differ_in_both_model_and_prompt_are_refused(tmp_path):
+    """Two variables moving at once is the defect Rule 30 exists to prevent."""
+    a = _write_report(tmp_path, "a", 1, ROWS, model="claude-sonnet-5",
+                      prompt_version="synthesis-v5")
+    b = _write_report(tmp_path, "b", 1, ROWS, model="glm-5.2",
+                      prompt_version="synthesis-v6")
+    with pytest.raises(ValueError, match="both model and prompt"):
+        MODULE.compare_reports([a], [b])
+
+
+def test_identical_arms_are_refused_because_nothing_varies(tmp_path):
+    a = _write_report(tmp_path, "a", 1, ROWS, prompt_version="synthesis-v7")
+    b = _write_report(tmp_path, "b", 1, ROWS, prompt_version="synthesis-v7")
+    with pytest.raises(ValueError, match="no variable to compare"):
+        MODULE.compare_reports([a], [b])
+
+
+def test_one_arm_mixing_provider_prefixes_is_refused(tmp_path):
+    """A single arm served by two environments is not one arm."""
+    a1 = _write_report(tmp_path, "a1", 1, ROWS, prompt_version="p", provider_prefix="AGENT")
+    a2 = _write_report(tmp_path, "a2", 1, ROWS, prompt_version="p", provider_prefix="OPEN_WEIGHT")
+    with pytest.raises(ValueError, match="different provider arms"):
+        MODULE._load_arm([a1, a2], "arm_a")
+
+
+def test_an_incomplete_arm_is_refused(tmp_path):
+    """A truncated run compared against a complete one reports a difference
+    that is an artifact of stopping, not of the variable under test."""
+    a = _write_report(tmp_path, "a", 1, ROWS, prompt_version="p1",
+                      stop_reason="SUITE_COST_BUDGET_EXHAUSTED")
+    b = _write_report(tmp_path, "b", 1, ROWS, prompt_version="p2")
+    with pytest.raises(ValueError, match="did not complete"):
+        MODULE.compare_reports([a], [b])
+
+
+def test_a_report_missing_results_is_refused(tmp_path):
+    a = _write_report(tmp_path, "a", 1, ROWS, prompt_version="p1", total=5)
+    b = _write_report(tmp_path, "b", 1, ROWS, prompt_version="p2")
+    with pytest.raises(ValueError, match="incomplete"):
+        MODULE.compare_reports([a], [b])
+
+
+def test_multiple_repetitions_inside_one_report_are_refused(tmp_path):
+    """The trial denominator is cases x reports, so 3 reps in one report would
+    be counted once. Refusing is better than reporting a wrong denominator."""
+    a = _write_report(tmp_path, "a", 1, ROWS, prompt_version="p1", repetitions=3)
+    b = _write_report(tmp_path, "b", 1, ROWS, prompt_version="p2")
+    with pytest.raises(ValueError, match="one repetition per report"):
+        MODULE.compare_reports([a], [b])
+
+
+def test_unequal_report_counts_are_refused(tmp_path):
+    a1 = _write_report(tmp_path, "a1", 1, ROWS, prompt_version="p1")
+    a2 = _write_report(tmp_path, "a2", 1, ROWS, prompt_version="p1")
+    b = _write_report(tmp_path, "b", 1, ROWS, prompt_version="p2")
+    with pytest.raises(ValueError, match="different report counts"):
+        MODULE.compare_reports([a1, a2], [b])
+
+
+def test_a_model_comparison_requires_the_same_effective_prompt(tmp_path):
+    """The header naming a prompt is not evidence the model received it.
+
+    A header once named one version while every attempt rendered another, which
+    is what invalidated this repository's only prompt comparison.
+    """
+    a = _write_report(tmp_path, "a", 1, ROWS, model="m1", prompt_version="p",
+                      provider_prefix="AGENT", effective_prompt="synthesis-v7")
+    b = _write_report(tmp_path, "b", 1, ROWS, model="m2", prompt_version="p",
+                      provider_prefix="OPEN_WEIGHT", effective_prompt="synthesis-v6")
+    with pytest.raises(ValueError, match="same effective prompt"):
+        MODULE.compare_reports([a], [b])
+
+
+def test_one_arm_rendering_two_prompts_is_refused(tmp_path):
+    a1 = _write_report(tmp_path, "a1", 1, ROWS, prompt_version="p1",
+                       effective_prompt="synthesis-v6")
+    a2 = _write_report(tmp_path, "a2", 1, ROWS, prompt_version="p1",
+                       effective_prompt="synthesis-v7")
+    with pytest.raises(ValueError, match="more than one prompt version"):
+        MODULE._load_arm([a1, a2], "arm_a")
+
+
+def test_the_effective_prompt_is_reported_even_when_it_matches(tmp_path):
+    a = _write_report(tmp_path, "a", 1, ROWS, prompt_version="p1", effective_prompt="v6")
+    b = _write_report(tmp_path, "b", 1, ROWS, prompt_version="p2", effective_prompt="v6")
+    prov = MODULE.compare_reports([a], [b])["provenance"]
+    # Headers say p1/p2; both actually rendered v6. Surfacing that is the point.
+    assert prov["arm_a_effective_prompt"] == ["v6"]
+    assert prov["arm_b_effective_prompt"] == ["v6"]

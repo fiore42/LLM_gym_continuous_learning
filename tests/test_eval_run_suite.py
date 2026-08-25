@@ -106,3 +106,96 @@ class SuiteArtifactPathTests(unittest.TestCase):
         self.assertNotIn("/", prefix[len("data/eval-suite/"):])
         self.assertNotIn(":", prefix)
         self.assertTrue(prefix.startswith("data/eval-suite/"))
+
+
+class ProviderArmTests(unittest.TestCase):
+    """A report must record which environment arm answered, not just the model.
+
+    Without this the CLI could only reach the AGENT_* arm, and the report named
+    the model requested rather than the provider that served it — so two arms
+    could not be compared without trusting the filename.
+    """
+
+    def _suite(self, path: Path):
+        path.write_text(json.dumps({
+            "suite_version": "test-suite-v1",
+            "answer_cases": [
+                {"case_id": "case-a", "question": "Question A",
+                 "expected_outcome": "SUPPORTED",
+                 "evidence": [{"evidence_id": "a", "snippet": "Evidence A"}]},
+            ],
+        }), encoding="utf-8")
+
+    def test_the_report_records_the_provider_arm(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._suite(root / "suite.json")
+            report = run_suite(suite_path=root / "suite.json",
+                               output_path=root / "r.json", state_path=root / "s.json",
+                               cache_dir=root / "c", model="glm-5.2",
+                               client=SuiteClient(), provider_prefix="OPEN_WEIGHT")
+            self.assertEqual(report["provider_prefix"], "OPEN_WEIGHT")
+
+    def test_the_default_arm_is_agent(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._suite(root / "suite.json")
+            report = run_suite(suite_path=root / "suite.json",
+                               output_path=root / "r.json", state_path=root / "s.json",
+                               cache_dir=root / "c", model="m", client=SuiteClient())
+            self.assertEqual(report["provider_prefix"], "AGENT")
+
+    def test_switching_arm_restarts_rather_than_resuming(self):
+        """The same model name served by another arm is a different run."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._suite(root / "suite.json")
+            client = SuiteClient()
+            common = dict(suite_path=root / "suite.json", output_path=root / "r.json",
+                          state_path=root / "s.json", cache_dir=root / "c",
+                          model="same-name", client=client)
+            run_suite(**common, provider_prefix="AGENT")
+            self.assertEqual(client.calls, 1)
+            run_suite(**common, provider_prefix="OPEN_WEIGHT")
+            self.assertEqual(client.calls, 2)   # not resumed from the other arm
+
+    def test_the_default_artifact_path_separates_arms(self):
+        agent = suite_artifact_prefix("m", "synthesis-v7", "AGENT")
+        other = suite_artifact_prefix("m", "synthesis-v7", "OPEN_WEIGHT")
+        self.assertNotEqual(agent, other)
+        self.assertIn("agent", agent)
+        self.assertIn("open-weight", other)
+
+
+class ProviderArmWiringTests(unittest.TestCase):
+    """The prefix must reach the client factory, not just the report.
+
+    Every other test in this file injects a client, so the `client is None`
+    branch — the one the CLI actually takes — was never exercised. Removing the
+    prefix from the factory call survived all of them.
+    """
+
+    def test_the_prefix_reaches_the_client_factory(self):
+        from unittest import mock
+        import scripts.eval_run_suite as runner
+        seen = {}
+
+        def fake_factory(*, prefix="AGENT", **kwargs):
+            seen["prefix"] = prefix
+            return SuiteClient()
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "suite.json").write_text(json.dumps({
+                "suite_version": "test-suite-v1",
+                "answer_cases": [
+                    {"case_id": "case-a", "question": "Q", "expected_outcome": "SUPPORTED",
+                     "evidence": [{"evidence_id": "a", "snippet": "E"}]},
+                ],
+            }), encoding="utf-8")
+            with mock.patch.object(runner, "model_client_from_environment", fake_factory):
+                runner.run_suite(suite_path=root / "suite.json",
+                                 output_path=root / "r.json", state_path=root / "s.json",
+                                 cache_dir=root / "c", model="glm-5.2",
+                                 provider_prefix="OPEN_WEIGHT")
+        self.assertEqual(seen["prefix"], "OPEN_WEIGHT")

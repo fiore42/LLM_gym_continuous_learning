@@ -693,6 +693,125 @@ version 4, so any fresh prompt comparison needs a re-run; the `suite_version`
 guard will refuse to mix them. Still do not start an LLM judge as authoritative,
 semantic retrieval, or full-document summarization.
 
+## Open items from the README-rewrite session
+
+Recorded so they are not rediscovered. Each was found by verifying a claim
+against the code while rewriting the project overview; none is speculative.
+
+### Fixed in that session, listed so the history is not lost
+
+- `run_agent_task` resolved `prompt_version` for the cache key, revision
+  templates and report header, then never passed it into `SynthesisRequest`.
+  Every arm rendered the module default. The cache key gained a
+  `prompt_binding` marker so entries written before the fix are not replayed.
+- `agent_run_digest.py` had no way to select a prompt version, so two versions
+  could never be compared on one window. `--prompt-version` added.
+- `eval_run_suite.py` could only reach the `AGENT_*` arm and did not record
+  which arm served a run. `--provider-prefix` added, and folded into state
+  identity and default artifact paths.
+- `eval_compare_prompt_arms.py` refused model comparison outright. It now
+  derives the variable under test, refuses arms differing in both or neither,
+  and reads the **effective** prompt version out of each stored attempt rather
+  than trusting the report header.
+- `show_digest.py` hid 222 of 321 assessments behind a default filter without
+  saying so, and printed a traceback when a reader quit the pager.
+- `show_recent_run_log.py` mixed a human summary into the JSON on stdout, so
+  the log could not be piped to any reader.
+
+### Open — evaluation suite
+
+1. **The `insufficient_exact_latency` forbidden-citation rule is wrong.** The
+   model cites those passages to explain that they contain no latency figure,
+   which is correct behaviour. The field can only express "never cite these"
+   when the case means "never cite these as establishing a figure". Review or
+   remove the rule before any citation scoring is trusted.
+2. **Citation criteria are declared and unscored.** 12 cases define
+   `required_citation_ids` and one defines `forbidden_citation_ids`; nothing
+   reads them. Applied retrospectively to the 78 stored task results they
+   produce two genuine completeness misses in `memory_context_retrieval`. Wire
+   them in as **post-hoc diagnostics**, not into the live retry gate: adding a
+   retry trigger would change model behaviour and confound any comparison.
+3. **`required_claims` and `forbidden_overclaims` remain unscoreable
+   mechanically** — 13 and 9 cases respectively. This is the human-review layer
+   by design; do not automate it with phrase matching.
+4. **The suite cannot yet measure model quality differences.** Zero
+   discriminating cases were observed, on a comparison that was itself invalid.
+   Roughly **170 independent cases** are needed for ~80% power to detect a
+   15-point accuracy difference near a 50% baseline at a two-sided 5% level.
+   Repetitions measure run-to-run variance and do not add breadth.
+5. **`benchmark_status` is still `PENDING_HUMAN_REVIEW`**, and the holdout split
+   is 3 of 13 — symbolic at that size.
+6. **The historical prompt comparison is still accepted by the comparator.**
+   Both arms rendered `synthesis-v6`; the provenance now shows it, but the
+   comparison runs. Decide whether a prompt comparison should also refuse arms
+   whose *effective* prompts are identical. Doing so would reject the committed
+   reports that the project overview cites.
+7. **`eval_compare_model_providers.py` and `model_evaluation.py` are
+   unguarded.** No index signature, suite version or prompt version is
+   recorded, and the default benchmark is three synthetic cases whose evidence
+   IDs are absent from the corpus. Either bring the path up to Rule 30 or
+   retire it in favour of `eval_run_suite.py` + `eval_compare_prompt_arms.py`.
+8. **`--repetitions 3` is refused rather than supported.** The trial
+   denominator is cases × reports, so more than one repetition per report would
+   be undercounted. Refusing is honest; supporting it properly is open.
+
+### Open — observability
+
+9. **The answer path writes no run-log events**, contrary to Rule 12.
+   `run_agent_task` and `run_retrieval_retry` never construct a `RunLogger`;
+   ingestion and the digest do. `run_agent_task` already builds a loop context
+   with a `run_id`, so it has everything an event needs except the write.
+10. **Retrieval-retry and trigger-measurement traces omit prompt provenance
+    entirely** — no version, hash, or rendered prompt, because
+    `agent_run_retrieval_retry.py` strips the prompt record when serialising
+    rounds. The project's most-shown trace therefore cannot say which prompt
+    produced it. Older manual answer traces record the version but not the hash
+    or rendering.
+
+### Open — digest quality
+
+11. **The digest filters but does not prioritise.** 30% of a 30-day window is
+    labelled `SIGNIFICANT` (99 of 321), ranked by label then publication date
+    ascending, so the top of a "what changed" report is the oldest item in the
+    window. Rejecting 42% as promotional or unsupported works; ordering the
+    remainder does not. Fixing it needs M6.3 duplicate grouping, M6.5
+    supersession, and a ranking key finer than a four-value label — not a
+    better model.
+12. **`significance-v2` appears to have widened the top label rather than
+    narrowing it.** `SIGNIFICANT` rose from 30% to 47% and `UNSUPPORTED`
+    collapsed from 12% to 2% between the two runs. **Provisional**: different
+    windows, different prompt, one arm each. Now testable on one window,
+    because `--prompt-version` exists.
+
+### Open — the citation contract rejects a valid refusal
+
+14. **`citations_present` is a critical gate, so a model that answers "the
+    supplied evidence does not establish this" with no citations fails
+    outright.** Surfaced by the first valid prompt comparison: under GLM-5.2 and
+    `synthesis-v7`, `insufficient_exact_latency` failed all three rounds —
+    twice for missing `citation_ids` — and escalated with
+    `QUALITY_GATE_NOT_REACHED`. Claude resolves the tension by citing the
+    passages *to explain* their insufficiency, which is also what trips that
+    case's forbidden-citation rule (item 1). The two are the same defect seen
+    from opposite sides: the contract has no way to say "cite this only to
+    explain why it does not establish the claim". Decide whether
+    `citations_present` should be waived for `INSUFFICIENT_EVIDENCE`, or whether
+    citing-to-explain is the intended behaviour and the forbidden rule is what
+    must go.
+
+### Open — not yet exercised
+
+13. **The two-model comparison has never been run.** The capability exists and
+    is tested offline; six paid reports at roughly $0.10–0.20 each would
+    exercise it. Until then, no claim about relative model quality on this
+    suite is available. The **prompt** comparison *has* now run —
+    `synthesis-v6` vs `synthesis-v7` on GLM-5.2, 78 tasks, $0.1985, in
+    `data/prompt-comparison/run-20260825T034820Z/` — and returned **zero
+    discriminating cases** with two cases unstable within their own arm. That
+    is the first comparison in this repository whose provenance shows the two
+    arms actually rendering different prompts, and it is direct evidence for
+    item 4: the suite cannot separate these prompts.
+
 ## Session handoff
 
 At the end of each session, update this file and the status sections of

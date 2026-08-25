@@ -91,7 +91,10 @@ class OpenAICompatibleClient:
                  timeout_seconds: int | None = None, cost_prefix: str = "AGENT",
                  response_format: str | None = None, thinking: str | None = None):
         if not api_key.strip():
-            raise ValueError("AGENT_API_KEY is required")
+            # Name the arm that is actually missing. These were hardcoded to
+            # AGENT/ANTHROPIC, which sent anyone configuring a second arm to the
+            # wrong variable — reachable from the CLI since --provider-prefix exists.
+            raise ValueError(f"{cost_prefix}_API_KEY is required")
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")
         self.opener = opener
@@ -178,7 +181,11 @@ class AnthropicClient:
                  opener: Callable = urlopen, timeout_seconds: int | None = None,
                  cost_prefix: str = "AGENT", thinking: str | None = None):
         if not api_key.strip():
-            raise ValueError("ANTHROPIC_API_KEY is required")
+            # Name the arm that is actually missing. These were hardcoded to
+            # AGENT/ANTHROPIC, which sent anyone configuring a second arm to the
+            # wrong variable — reachable from the CLI since --provider-prefix exists.
+            raise ValueError(
+                f"{cost_prefix}_API_KEY or ANTHROPIC_API_KEY is required")
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")
         self.opener = opener

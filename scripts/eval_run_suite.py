@@ -50,12 +50,13 @@ def _task_key(case_id: str, repetition: int) -> str:
 
 
 def _new_state(suite: dict[str, Any], model: str, repetitions: int,
-               prompt_version: str) -> dict[str, Any]:
+               prompt_version: str, provider_prefix: str) -> dict[str, Any]:
     return {
         "suite_version": suite.get("suite_version"),
         "model": model,
         "repetitions": repetitions,
         "prompt_version": prompt_version,
+        "provider_prefix": provider_prefix,
         "loop": new_loop_context(LoopType.MODEL_EVALUATION),
         "started_at": datetime.now(timezone.utc).isoformat(),
         "entries": {},
@@ -63,11 +64,16 @@ def _new_state(suite: dict[str, Any], model: str, repetitions: int,
 
 
 def _state_matches(state: dict[str, Any], suite: dict[str, Any], model: str,
-                   repetitions: int, prompt_version: str) -> bool:
+                   repetitions: int, prompt_version: str,
+                   provider_prefix: str) -> bool:
+    # provider_prefix is part of the identity: the same model name served by a
+    # different environment arm is a different run, and resuming across arms
+    # would silently blend them into one report.
     return (state.get("suite_version") == suite.get("suite_version")
             and state.get("model") == model
             and state.get("repetitions") == repetitions
             and state.get("prompt_version") == prompt_version
+            and state.get("provider_prefix") == provider_prefix
             and isinstance(state.get("entries"), dict))
 
 
@@ -91,6 +97,7 @@ def run_suite(*, suite_path: str | Path, output_path: str | Path,
               state_path: str | Path, cache_dir: str | Path, model: str,
               repetitions: int = 1, max_cost_usd: float = 1.0,
               prompt_version: str | None = None, client=None,
+              provider_prefix: str = "AGENT",
               index_path: str | Path = "data/evidence.sqlite3",
               progress=print) -> dict[str, Any]:
     """Run or resume a sequential suite and return its compact report."""
@@ -113,12 +120,14 @@ def run_suite(*, suite_path: str | Path, output_path: str | Path,
         state = _read_json(state_file) if state_file.is_file() else {}
     except (OSError, json.JSONDecodeError, ValueError):
         state = {}
-    if not _state_matches(state, suite, model, repetitions, selected_prompt_version):
-        state = _new_state(suite, model, repetitions, selected_prompt_version)
+    if not _state_matches(state, suite, model, repetitions, selected_prompt_version,
+                          provider_prefix):
+        state = _new_state(suite, model, repetitions, selected_prompt_version,
+                           provider_prefix)
     entries: dict[str, Any] = state["entries"]
     cache_root.mkdir(parents=True, exist_ok=True)
     if client is None:
-        client = model_client_from_environment()
+        client = model_client_from_environment(prefix=provider_prefix)
 
     summaries = [entry for entry in entries.values()
                  if isinstance(entry, dict) and entry.get("outcome") in TERMINAL_OUTCOMES]
@@ -185,6 +194,10 @@ def run_suite(*, suite_path: str | Path, output_path: str | Path,
         "run_id": state["loop"]["run_id"],
         "suite_version": suite.get("suite_version"),
         "model": model,
+        # Which environment arm served this run. Without it a report records
+        # what was asked for but not what answered, so two arms cannot be
+        # compared without trusting the filename.
+        "provider_prefix": provider_prefix,
         "prompt_version": selected_prompt_version,
         "index_signature": current_index_signature,
         "repetitions": repetitions,
@@ -207,14 +220,18 @@ def run_suite(*, suite_path: str | Path, output_path: str | Path,
     return report
 
 
-def suite_artifact_prefix(model: str, prompt_version: str) -> str:
+def suite_artifact_prefix(model: str, prompt_version: str,
+                          provider_prefix: str = "AGENT") -> str:
     """Per-arm artifact prefix, so one arm cannot overwrite another.
 
     The report, resume state, and cache all belong to a single combination of
-    model and prompt version. Sharing a default path across arms is how a
-    stale artifact gets read as the current one.
+    provider arm, model and prompt version. Sharing a default path across arms
+    is how a stale artifact gets read as the current one. The provider arm is
+    part of the identity because the same model name can be served by two
+    environments — Rule 31.
     """
-    slug = re.sub(r"[^a-z0-9.]+", "-", f"{model}-{prompt_version}".lower()).strip("-")
+    slug = re.sub(r"[^a-z0-9.]+", "-",
+                  f"{provider_prefix}-{model}-{prompt_version}".lower()).strip("-")
     return f"data/eval-suite/{slug}"
 
 
@@ -229,6 +246,10 @@ def main() -> int:
     parser.add_argument("--index", default="data/evidence.sqlite3",
                         help="Evidence index used for corpus provenance stamping")
     parser.add_argument("--model", default=os.environ.get("AGENT_MODEL", ""))
+    parser.add_argument("--provider-prefix", default="AGENT",
+                        help=("Environment prefix selecting the provider arm "
+                              "(AGENT, OPEN_WEIGHT). Recorded in the report so "
+                              "two arms can be compared."))
     parser.add_argument("--prompt-version", default=None,
                         help="Immutable prompt version; defaults to the latest registered prompt")
     parser.add_argument("--repetitions", type=int, default=1)
@@ -236,7 +257,8 @@ def main() -> int:
     args = parser.parse_args()
     if not args.model:
         parser.error("--model or AGENT_MODEL is required")
-    prefix = suite_artifact_prefix(args.model, args.prompt_version or PROMPT_VERSION)
+    prefix = suite_artifact_prefix(args.model, args.prompt_version or PROMPT_VERSION,
+                                   args.provider_prefix)
     output_path = args.output or f"{prefix}-report.json"
     state_path = args.state or f"{prefix}-state.json"
     cache_dir = args.cache_dir or f"{prefix}-cache"
@@ -246,6 +268,7 @@ def main() -> int:
                            model=args.model, repetitions=args.repetitions,
                            max_cost_usd=args.max_cost_usd,
                            prompt_version=args.prompt_version,
+                           provider_prefix=args.provider_prefix,
                            index_path=args.index)
     except KeyboardInterrupt:
         print("Interrupted; per-task checkpoints remain resumable.", file=sys.stderr)

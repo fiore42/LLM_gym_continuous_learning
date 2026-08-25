@@ -33,7 +33,14 @@ def _expand_paths(values: Iterable[str]) -> list[Path]:
     return unique
 
 
-def _classification(result_path: str | Path) -> str:
+def _effective(result_path: str | Path) -> dict[str, str]:
+    """Classification plus what actually served the call.
+
+    The prompt version is read from the attempt, not the report header, because
+    a header once named one version while every attempt rendered another — the
+    defect that invalidated this repository's only prompt comparison. Reading
+    both is nearly free here: the file is already open.
+    """
     result = _read_json(result_path)
     attempts = result.get("attempts")
     if not isinstance(attempts, list) or not attempts:
@@ -41,8 +48,29 @@ def _classification(result_path: str | Path) -> str:
     for attempt in reversed(attempts):
         synthesis = attempt.get("synthesis") if isinstance(attempt, dict) else None
         if isinstance(synthesis, dict) and synthesis.get("classification"):
-            return str(synthesis["classification"])
-    raise ValueError(f"result has no classification: {result_path}")
+            return {
+                "classification": str(synthesis["classification"]),
+                "model": str(synthesis.get("model") or ""),
+                "prompt_version": str(synthesis.get("prompt_version") or ""),
+            }
+    # A task that exhausted its rounds without a valid response has no
+    # classification, and that is a result rather than a broken file: the model
+    # failed to answer. Recording the terminal outcome keeps it visible and
+    # counts it as a non-match, instead of refusing to compare five other
+    # complete reports because one case escalated.
+    outcome = str(result.get("outcome") or "NO_CLASSIFICATION")
+    prompts = {str((a.get("synthesis") or {}).get("prompt_version") or "")
+               for a in attempts if isinstance(a, dict)}
+    prompts.discard("")
+    return {
+        "classification": outcome,
+        "model": "",
+        "prompt_version": next(iter(prompts)) if len(prompts) == 1 else "",
+    }
+
+
+def _classification(result_path: str | Path) -> str:
+    return _effective(result_path)["classification"]
 
 
 def _load_arm(paths: list[Path], name: str) -> dict[str, Any]:
@@ -53,6 +81,28 @@ def _load_arm(paths: list[Path], name: str) -> dict[str, Any]:
     signatures = {str(report.get("index_signature")) for report in reports}
     prompt_versions = {str(report.get("prompt_version")) for report in reports}
     suite_versions = {str(report.get("suite_version")) for report in reports}
+    prefixes = {str(report.get("provider_prefix") or "UNRECORDED") for report in reports}
+    # A truncated arm compared against a complete one reports a difference that
+    # is an artifact of stopping, not of the variable under test.
+    for path, report in zip(paths, reports):
+        if report.get("suite_stop_reason") != "SUITE_COMPLETE":
+            raise ValueError(
+                f"{name}: {path} did not complete "
+                f"({report.get('suite_stop_reason')}); rerun before comparing")
+        completed, total = report.get("completed_tasks"), report.get("total_tasks")
+        rows = len(report.get("results") or [])
+        if completed != total or rows != total:
+            raise ValueError(
+                f"{name}: {path} is incomplete: completed={completed} "
+                f"total={total} results={rows}")
+        # The trial denominator is cases x reports, so more than one repetition
+        # inside a report would be counted once. Refuse rather than miscount.
+        if report.get("repetitions") not in (1, None):
+            raise ValueError(
+                f"{name}: {path} has repetitions={report.get('repetitions')}; "
+                "use one repetition per report so the trial count is correct")
+    if len(prefixes) != 1:
+        raise ValueError(f"{name} reports use different provider arms: {sorted(prefixes)}")
     if len(models) != 1:
         raise ValueError(f"{name} reports use different models: {sorted(models)}")
     if len(signatures) != 1:
@@ -63,6 +113,7 @@ def _load_arm(paths: list[Path], name: str) -> dict[str, Any]:
         raise ValueError(f"{name} reports use different suite versions: {sorted(suite_versions)}")
 
     cases: dict[str, list[dict[str, Any]]] = {}
+    effective_prompt_versions: set[str] = set()
     for report_path, report in zip(paths, reports):
         for row in report.get("results") or []:
             if not isinstance(row, dict) or not row.get("case_id"):
@@ -71,7 +122,12 @@ def _load_arm(paths: list[Path], name: str) -> dict[str, Any]:
             output_path = row.get("output_path")
             if not output_path:
                 raise ValueError(f"missing output_path for {case_id} in {report_path}")
-            classification = _classification(output_path)
+            effective = _effective(output_path)
+            classification = effective["classification"]
+            # An escalated task may not name a version; an empty string would
+            # otherwise look like a second prompt in the arm.
+            if effective["prompt_version"]:
+                effective_prompt_versions.add(effective["prompt_version"])
             expected = row.get("expected_outcome")
             cases.setdefault(case_id, []).append({
                 "classification": classification,
@@ -80,10 +136,18 @@ def _load_arm(paths: list[Path], name: str) -> dict[str, Any]:
                 "report_path": str(report_path),
                 "output_path": str(output_path),
             })
+    # One arm is one configuration: attempts that rendered two different
+    # prompts are two arms wearing one name.
+    if len(effective_prompt_versions) != 1:
+        raise ValueError(
+            f"{name}: attempts rendered more than one prompt version: "
+            f"{sorted(effective_prompt_versions)}")
     return {
         "name": name,
         "prompt_version": next(iter(prompt_versions)),
         "model": next(iter(models)),
+        "prefix": next(iter(prefixes)),
+        "effective_prompt_versions": effective_prompt_versions,
         "index_signature": next(iter(signatures)),
         "suite_version": next(iter(suite_versions)),
         "report_count": len(paths),
@@ -106,8 +170,21 @@ def _role(a: list[dict[str, Any]], b: list[dict[str, Any]]) -> str:
 def compare_reports(arm_a_paths: list[Path], arm_b_paths: list[Path]) -> dict[str, Any]:
     arm_a = _load_arm(arm_a_paths, "arm_a")
     arm_b = _load_arm(arm_b_paths, "arm_b")
-    if arm_a["model"] != arm_b["model"]:
-        raise ValueError(f"cannot compare different models: {arm_a['model']} vs {arm_b['model']}")
+    # Exactly one variable may differ. Deriving it, rather than taking it as a
+    # flag, is what makes that an invariant: a flag lets a caller declare "this
+    # is a model comparison" while the prompt moves underneath it too.
+    model_differs = arm_a["model"] != arm_b["model"] or arm_a["prefix"] != arm_b["prefix"]
+    prompt_differs = arm_a["prompt_version"] != arm_b["prompt_version"]
+    if model_differs and prompt_differs:
+        raise ValueError(
+            "cannot compare arms that differ in both model and prompt: "
+            f"{arm_a['prefix']}/{arm_a['model']}/{arm_a['prompt_version']} vs "
+            f"{arm_b['prefix']}/{arm_b['model']}/{arm_b['prompt_version']}")
+    if not model_differs and not prompt_differs:
+        raise ValueError(
+            "arms are identical in model, provider arm and prompt version; "
+            "there is no variable to compare")
+    comparison_variable = "model" if model_differs else "prompt_version"
     if arm_a["index_signature"] != arm_b["index_signature"]:
         raise ValueError(
             "cannot compare different index_signatures: "
@@ -122,6 +199,16 @@ def compare_reports(arm_a_paths: list[Path], arm_b_paths: list[Path]) -> dict[st
             "cannot compare different suite versions: "
             f"{arm_a['suite_version']} vs {arm_b['suite_version']}"
         )
+    if len(arm_a_paths) != len(arm_b_paths):
+        raise ValueError(
+            f"arms have different report counts: {len(arm_a_paths)} vs {len(arm_b_paths)}; "
+            "the trial denominators would not be comparable")
+    if comparison_variable == "model" and (
+            arm_a["effective_prompt_versions"] != arm_b["effective_prompt_versions"]):
+        raise ValueError(
+            "a model comparison requires the same effective prompt in both arms: "
+            f"{sorted(arm_a['effective_prompt_versions'])} vs "
+            f"{sorted(arm_b['effective_prompt_versions'])}")
     if set(arm_a["cases"]) != set(arm_b["cases"]):
         raise ValueError("arms contain different case sets")
 
@@ -176,11 +263,17 @@ def compare_reports(arm_a_paths: list[Path], arm_b_paths: list[Path]) -> dict[st
     report = {
         "analysis_version": 1,
         "provenance": {
-            "model": arm_a["model"],
+            "comparison_variable": comparison_variable,
             "index_signature": arm_a["index_signature"],
             "suite_version": arm_a["suite_version"],
+            "arm_a_model": arm_a["model"],
+            "arm_b_model": arm_b["model"],
+            "arm_a_provider_prefix": arm_a["prefix"],
+            "arm_b_provider_prefix": arm_b["prefix"],
             "arm_a_prompt_version": arm_a["prompt_version"],
             "arm_b_prompt_version": arm_b["prompt_version"],
+            "arm_a_effective_prompt": sorted(arm_a["effective_prompt_versions"]),
+            "arm_b_effective_prompt": sorted(arm_b["effective_prompt_versions"]),
             "arm_a_report_count": len(arm_a_paths),
             "arm_b_report_count": len(arm_b_paths),
         },

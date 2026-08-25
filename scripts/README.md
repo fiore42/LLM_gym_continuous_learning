@@ -27,10 +27,10 @@ but 128 exact character-substring matches.
 
 ## Evaluation
 
-- `eval_run_suite.py` — Run the frozen answer cases through one bounded model provider.
+- `eval_run_suite.py` — Run the frozen answer cases through one bounded model provider. `--provider-prefix` selects the environment arm (default `AGENT`) and is recorded in the report and in the default artifact paths, so two arms cannot be confused or overwrite each other.
 - `eval_validate_suite.py` — Validate the reviewable agent evaluation suite without calling a model. Use `--case <id>` for one answer case, or `--case` with no value to list them.
 - `eval_review_trajectory_case.py` — Show one trajectory case beside the test that proves it, and run that test. Use `--case <id>`, or `--case` with no value to list them.
-- `eval_compare_prompt_arms.py` — Compare repeated evaluation-suite report groups by case and provenance.
+- `eval_compare_prompt_arms.py` — Compare repeated evaluation-suite report groups by case and provenance. It derives the variable under test: exactly one of model/provider arm or prompt version may differ between arms, and it refuses arms that differ in both or in neither. Index signature, suite version and case set must always match.
 - `eval_draft_claim_verification_sheet.py` — Draft claim-to-evidence verification sheets for human confirmation.
 - `eval_audit_digest_claims.py` — Build and label a blind digest claim/evidence
   audit, then reveal model reasons and labels. The reveal phase prints exact

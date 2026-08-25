@@ -332,3 +332,25 @@ class LatencyMeasurementTests(unittest.TestCase):
             client.complete(system="s", user="u", model="m", max_output_tokens=10)
         self.assertEqual(client.last_usage["latency_seconds"], 0.0)
         self.assertIsNone(client.last_usage["output_tokens_per_second"])
+
+
+class MissingKeyMessageTests(unittest.TestCase):
+    """The error must name the arm that is missing, not a hardcoded default.
+
+    Both messages were pinned to AGENT/ANTHROPIC, so anyone configuring a second
+    provider arm was sent to the wrong environment variable. `--provider-prefix`
+    made that path reachable from the CLI.
+    """
+
+    def test_openai_compatible_names_the_configured_arm(self):
+        with self.assertRaises(ValueError) as raised:
+            OpenAICompatibleClient(api_key="", base_url="http://x",
+                                   cost_prefix="OPEN_WEIGHT")
+        self.assertIn("OPEN_WEIGHT_API_KEY", str(raised.exception))
+        self.assertNotIn("AGENT_API_KEY", str(raised.exception))
+
+    def test_anthropic_names_the_configured_arm_and_the_fallback(self):
+        with self.assertRaises(ValueError) as raised:
+            AnthropicClient(api_key="", base_url="http://x", cost_prefix="FRONTIER")
+        self.assertIn("FRONTIER_API_KEY", str(raised.exception))
+        self.assertIn("ANTHROPIC_API_KEY", str(raised.exception))

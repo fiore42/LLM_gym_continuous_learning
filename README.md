@@ -25,14 +25,72 @@ seconds without scrolling.
 
 **Contents**
 
-- [Part 0 — The 90-second answer](#part-0)
+- [Part 0 — What actually happens](#part-0)
+  - [The run, step by step](#run-step-by-step)
+  - [Who does what?](#who-does-what)
+  - [Why did the label change?](#why-did-the-label-change)
+  - [What does it show?](#what-does-it-show)
+  - [Key concepts](#key-concepts)
+  - [Key numbers](#key-numbers)
 - [Part I — What this is, and what it isn't](#part-i)
+  - [I.1 The brief, as stated](#i-1)
+  - [I.2 What I built](#i-2)
+  - [I.3 What this demonstrates, and what it does not](#i-3)
 - [Part II — Guided demonstrations](#part-ii)
+  - [II.0 Preparing a live demonstration](#ii-0)
+  - [II.1 The loop that changes its mind](#ii-1) *(2 min)*
+  - [II.2 Long-running: 328 items, killed, resumed, escalated](#ii-2) *(3 min)*
+  - [II.3 Consistency across repeated runs](#ii-3) *(2 min)*
+  - [II.4 GLM-5.2 against Claude Sonnet 5](#ii-4) *(3 min)*
+  - [II.5 How accuracy is established](#ii-5) *(3 min)*
+  - [II.6 Observability, traceability, auditability](#ii-6) *(2 min)*
+  - [II.7 Where the human belongs](#ii-7) *(1 min)*
 - [Part III — How every piece fits together](#part-iii)
+  - [III.1 The pipeline, stage by stage](#iii-1)
+  - [III.2 The three-way split — who owns what](#iii-2)
+  - [III.3 The seven loops](#iii-3)
+  - [III.4 The three prompt families](#iii-4)
+  - [III.5 The two evaluation gates — and the one that is only declared](#iii-5)
+  - [III.6 Why the query layer has no model in it](#iii-6)
+  - [III.7 Budgets, and why the runs are short](#iii-7)
+  - [III.8 What is committed, and why](#iii-8)
 - [Part IV — Turning points: what broke, and what it produced](#part-iv)
+  - [TP-1 — 126 green tests, zero successful live calls](#tp-1)
+  - [TP-2 — The snippet that deleted the word "no"](#tp-2)
+  - [TP-3 — The model was right and my benchmark was wrong](#tp-3)
+  - [TP-4 — The comparison that compared two different benchmarks](#tp-4)
+  - [TP-5 — A tie, correctly read — and then a second look that voided it](#tp-5)
+  - [TP-6 — Seven specifications nobody executed](#tp-6)
+  - [TP-7 — Green tests do not detect drift](#tp-7)
+  - [TP-8 — Two counters disagreed, and one of them was lying](#tp-8)
+  - [TP-9 — I generalised from one arm. Twice.](#tp-9)
+  - [TP-10 — 107,682 characters, four fifths of it duplication](#tp-10)
+  - [TP-11 — 328 items exposed four defects that 49 could not](#tp-11)
+  - [TP-12 — The annotation unit was wrong, so the score would have been meaningless](#tp-12)
+  - [The pattern across all twelve](#the-pattern)
+  - [What I actually learned](#learnings)
 - [Part V — The map to the company's problem](#part-v)
+  - [V.1 The target pipeline, and where this project sits on it](#v-1)
+  - [V.2 The consistency problem, answered with data](#v-2)
+  - [V.3 Why "look at GLM 5.2" was the assignment](#v-3)
+  - [V.4 The compounding-error math, with numbers](#v-4)
+  - [V.5 Where the human belongs — and where they don't](#v-5)
+  - [V.6 Where I add value](#v-6)
+  - [V.7 Anticipated questions](#v-7)
 - [Part VI — What comes next](#part-vi)
-- [Part VII — Reference: setup, commands, docs](#part-vii)
+  - [VI.1 From an ML point of view](#vi-1)
+  - [VI.2 From a human-in-the-loop point of view](#vi-2)
+  - [VI.3 The one thing that would actually close the brief](#vi-3)
+- [Part VII — Reference](#part-vii)
+  - [VII.1 Setup from an empty checkout](#vii-1)
+  - [VII.2 Building a corpus](#vii-2)
+  - [VII.3 Running the agent](#vii-3)
+  - [VII.4 Evaluation and review](#vii-4)
+  - [VII.5 Repository map](#vii-5)
+  - [VII.6 Document map](#vii-6)
+  - [VII.7 Verification record](#vii-7)
+  - [VII.8 Deterministic stages: run it, and inspect it](#vii-8)
+  - [VII.9 Command index](#vii-9)
 
 ---
 
@@ -45,6 +103,7 @@ material **with citations — or refuses when the evidence is thin**. Ordinary
 code owns every step except two: **reading evidence and judging it**, and
 **writing search queries**. Those two are the model's entire job.
 
+<a id="run-step-by-step"></a>
 ### The run, step by step
 
 The question was: *"What does the corpus describe as the purpose of evals for
@@ -144,6 +203,19 @@ back and made the model try again.
 
 **Then open the trace.** [▸ the adaptive trace](#cmd-trace-adaptive)
 
+**And the three things this project taught me that a test suite could not.**
+[▸ what I actually learned](#learnings)
+
+**To run the same 13 frozen cases through a second model and compare the two
+arms.** [▸ compare models](#cmd-model-comparison)
+
+**Or through two prompt versions on one model.**
+[▸ compare prompts](#cmd-prompt-comparison)
+
+**Today the digest labels 30% (too much?) of a month `SIGNIFICANT` and ranks oldest-first, 
+so it filters without prioritising.** [▸ what the distribution says](#label-calibration)
+
+<a id="who-does-what"></a>
 ### Who does what?
 
 The model does two things: it reads and judges evidence, and it writes search
@@ -180,6 +252,7 @@ six new sources came from one of those rewrites.
 **The first search looked for the words in the question. The model rewrote the
 query to look for the words in the answer.** [▸ replay all four queries](#cmd-replay-queries)
 
+<a id="what-does-it-show"></a>
 ### What does it show?
 
 The system noticed its own information wasn't good enough and changed what it
@@ -188,6 +261,7 @@ did next. That is the difference between an agent and a script.
 It does not show long-horizon reasoning. **This loop is two rounds deep and stops
 there by design.**
 
+<a id="key-concepts"></a>
 ### Key concepts
 
 | # | Claim | Prompt in that flow | Receipt |
@@ -211,6 +285,7 @@ the same day. `significance-v2` was written 2026-08-18 16:00 UTC, and the v2 run
 started an hour later. A digest launched today would use v2.
 [▸ verify that each report names the prompt it really used](#cmd-prompt-provenance-check)
 
+<a id="key-numbers"></a>
 ### Key numbers
 
 | | |
@@ -229,6 +304,7 @@ started an hour later. A digest launched today would use v2.
 <a id="part-i"></a>
 ## Part I — What this is, and what it isn't
 
+<a id="i-1"></a>
 ### I.1 The brief, as stated
 
 From the last conversation, the assignment was explicit:
@@ -250,6 +326,7 @@ This project is the answer built against that brief, using public AI/agent
 content as the evidence domain instead of compliance artifacts — because the
 task *shape* transfers and the data was obtainable.
 
+<a id="i-2"></a>
 ### I.2 What I built
 
 ```mermaid
@@ -289,6 +366,7 @@ files are not: `data/research-answer.json`, `data/agent-task-cache.json` and
 `data/eval-suite/**` are gitignored, because they duplicate the committed
 reports.
 
+<a id="i-3"></a>
 ### I.3 What this demonstrates, and what it does not
 
 | Claim I will make | Claim I will not make |
@@ -486,32 +564,39 @@ If someone wants the claim proved rather than inferred, the answer is to run it
 in front of them.
 
 <a id="cmd-resume-live"></a>
-**Repeat the experiment live** — **paid**, about $0.03 total
+**Repeat the experiment live** — **paid**, a few cents on a 5-item window
 
 ```bash
 # 1. freeze the smallest real window: 5 items
 .venv/bin/python scripts/corpus_freeze_digest_window.py \
   --since 2026-08-06 --until 2026-08-07 --platform youtube | jq .
 W=data/digest-windows/2026-08-06-to-2026-08-07-youtube.json
-C=data/digests/2026-08-06-to-2026-08-07-youtube-glm-5.2-open-weight-checkpoint.json
 
-# 2. clear any previous run so the demo starts cold
-rm -f "$C" data/digests/2026-08-06-*-report.json
+# Name the prompt version and both artifacts explicitly. Artifact paths carry
+# the version, so the v1-era filenames are not the ones a run produces today.
+P=significance-v2
+C=data/digests/2026-08-06-to-2026-08-07-youtube-glm-5.2-open-weight-$P-checkpoint.json
+R=data/digests/2026-08-06-to-2026-08-07-youtube-glm-5.2-open-weight-$P-report.json
+
+# 2. clear only this run's own artifacts, so the demo starts cold.
+#    Never glob here: the committed v1 report shares this window's prefix.
+rm -f "$C" "$R"
 
 # 3. start it — press Ctrl-C after the second or third item scrolls past
 .venv/bin/python scripts/agent_run_digest.py \
-  --snapshot "$W" --model glm-5.2 --provider-prefix OPEN_WEIGHT
+  --snapshot "$W" --model glm-5.2 --provider-prefix OPEN_WEIGHT \
+  --prompt-version "$P" --checkpoint "$C" --output "$R"
 
 # 4. THIS is the proof: what was banked before the interrupt
 jq '{run_id: .loop.run_id, outcome, items_assessed, cost_usd, current_item}' "$C"
 
-# 5. rerun the identical command, no flags
+# 5. rerun the identical command, no flags changed
 .venv/bin/python scripts/agent_run_digest.py \
-  --snapshot "$W" --model glm-5.2 --provider-prefix OPEN_WEIGHT
+  --snapshot "$W" --model glm-5.2 --provider-prefix OPEN_WEIGHT \
+  --prompt-version "$P" --checkpoint "$C" --output "$R"
 
 # 6. compare against step 4
-jq '{run_id: .loop.run_id, outcome, items_total, items_assessed, cost_usd}' \
-  data/digests/2026-08-06-to-2026-08-07-youtube-glm-5.2-open-weight-report.json
+jq '{run_id: .loop.run_id, outcome, items_total, items_assessed, cost_usd}' "$R"
 ```
 
 Three things to point at when step 6 prints:
@@ -522,9 +607,12 @@ Three things to point at when step 6 prints:
 | `items_assessed` | 5 of 5, but the items banked at step 4 were never re-sent |
 | `cost_usd` | Final total ≈ step-4 cost **plus the remainder only**. A restart would cost the full $0.028 again on top |
 
-The committed 1-day run finished at **$0.027794 for 5 items** — about $0.0056
-each. If the interrupt lands after 2 items, expect the checkpoint at step 4 to
-read roughly $0.011 and the final report roughly $0.028, not $0.039.
+For scale only: the committed 1-day run finished at **$0.027794 for 5 items**,
+about $0.0056 each — but that was **`significance-v1`**, which emits one quote
+rather than one to three mapped passages, so it is a historical reference and
+not a predicted v2 cost. What to watch is the *shape*: the step-6 total should
+be roughly the step-4 checkpoint total plus the remaining items, not the two
+added on top of a full restart.
 
 <a id="cmd-show-checkpoint"></a>
 **What the checkpoint actually holds** — free, local only
@@ -646,6 +734,145 @@ self-reported signals are not stable — *which* signal is stable varies by mode
 and by case. So the loop keys expansion on the **union** of two signals rather
 than either alone. [▸ show the instability](#cmd-trigger-stability)
 
+<a id="cmd-model-comparison"></a>
+**Compare two model/provider arms on the same 13 cases** — **paid**, roughly
+$0.10–0.20 per report
+
+Each arm names the environment that served it, and the comparator derives which
+variable moved rather than being told. Three **one-repetition** reports per arm:
+the trial denominator is cases × reports, so the comparator refuses a report
+containing more than one repetition rather than miscounting it.
+
+**The timestamped run directory is not tidiness.** The suite runner resumes from
+its state file, so rehearsing into the same paths makes the live run skip every
+case, issue **zero model calls**, and still print `SUITE_COMPLETE` with 13
+results and no cache hits — a report indistinguishable from a fresh one. A fresh
+directory is the only thing that prevents demonstrating a replay.
+
+```bash
+set -e
+RUN_DIR="data/model-comparison/run-$(date -u +%Y%m%dT%H%M%SZ)"
+mkdir -p "$RUN_DIR"
+
+for rep in 1 2 3; do
+  .venv/bin/python scripts/eval_run_suite.py --suite config/agent_eval_suite.json \
+    --provider-prefix AGENT --model claude-sonnet-5 --prompt-version synthesis-v7 \
+    --repetitions 1 --max-cost-usd 1.0 \
+    --output "$RUN_DIR/sonnet-rep-$rep-report.json" \
+    --state  "$RUN_DIR/sonnet-rep-$rep-state.json" \
+    --cache-dir "$RUN_DIR/sonnet-rep-$rep-cache"
+
+  .venv/bin/python scripts/eval_run_suite.py --suite config/agent_eval_suite.json \
+    --provider-prefix OPEN_WEIGHT --model glm-5.2 --prompt-version synthesis-v7 \
+    --repetitions 1 --max-cost-usd 1.0 \
+    --output "$RUN_DIR/glm-rep-$rep-report.json" \
+    --state  "$RUN_DIR/glm-rep-$rep-state.json" \
+    --cache-dir "$RUN_DIR/glm-rep-$rep-cache"
+done
+
+.venv/bin/python scripts/eval_compare_prompt_arms.py \
+  --arm-a "$RUN_DIR"/sonnet-rep-*-report.json \
+  --arm-b "$RUN_DIR"/glm-rep-*-report.json \
+  --output "$RUN_DIR/sonnet-vs-glm-synthesis-v7.json"
+```
+
+The comparator now refuses the ways this can go quietly wrong: a report that did
+not reach `SUITE_COMPLETE`, one whose `completed_tasks` and `total_tasks`
+disagree, more than one repetition per report, unequal report counts between
+arms, an arm whose attempts rendered two different prompts, and a model
+comparison whose arms did not actually render the same prompt. It reads the
+**effective** prompt version out of each stored attempt rather than trusting the
+report header — that header once named one version while every attempt rendered
+another, which is what invalidated this repository's only prompt comparison.
+[TP-5 →](#tp-5)
+
+Then check the artifact reports **39 trials per arm**, and that
+`arm_a_effective_prompt` and `arm_b_effective_prompt` are the same single
+version.
+
+It is a **model/provider-arm** comparison, not a model comparison: switching
+from Claude to GLM changes both the model and the service serving it, and
+nothing here separates those two variables.
+
+**What an identical score would license you to say**, and nothing more:
+
+> *On these 13 frozen answer cases, across three uncached repetitions per model
+> — 39 outputs per arm — the two models had the same observed
+> expected-classification score. No difference was detected on this sample.*
+
+You may also compare per-case stability, retries, cost, calls and throughput.
+You may **not** say the models are equivalent, that their answer quality is
+equal, that the suite cannot distinguish them, or that 39 repetitions are 39
+independent cases. **The unit of generalisation is the case, so the breadth is
+13, not 39.** The seven trajectory cases are not exercised by this run, and
+semantic claim support is not compared by anything here.
+
+**And the honest size caveat**, which belongs in the same breath:
+
+> Treat this 13-case run as a proof of execution only; before interpreting
+> model-quality differences, expand to at least **170 independent cases**, which
+> gives roughly 80% power at a two-sided 5% significance level to detect a
+> 15-percentage-point accuracy difference near a 50% baseline. Repeating the
+> same cases measures run-to-run variance but does not increase the number of
+> independent cases.
+
+<a id="cmd-prompt-comparison"></a>
+**Compare two prompt versions on one model** — **paid**, measured at **$0.198**
+
+Same 13 cases, same model and arm, three one-repetition reports per prompt. The
+script derives the arm names from a single array, so the run loop and the
+comparison cannot drift apart, and it writes to a fresh timestamped directory
+for the reason given above.
+
+```bash
+./run_prompt_comparison.sh          # defaults: glm-5.2 via OPEN_WEIGHT, v6 vs v7
+# override with: MODEL=... PROVIDER_PREFIX=... ARM_A=... ARM_B=... ./run_prompt_comparison.sh
+```
+
+**This has been run.** `synthesis-v6` against `synthesis-v7`, GLM-5.2, six
+reports, 78 tasks, **$0.1985**:
+
+```
+Consistency: arm_a 12/13; arm_b 11/13
+Unstable/noise cases: insufficient_exact_latency, unsupported_causal_claim
+All cases: arm_a 37/39 vs arm_b 36/39
+Discriminating cases: 0 — arm_a 0/0 vs arm_b 0/0
+```
+
+Three things to say about that, in order.
+
+**1. The provenance proves the arms were actually different**, which no previous
+comparison in this project could:
+
+```
+arm_a_prompt_version: synthesis-v6   arm_a_effective_prompt: ["synthesis-v6"]
+arm_b_prompt_version: synthesis-v7   arm_b_effective_prompt: ["synthesis-v7"]
+```
+
+The header and the rendered prompt agree. Before the binding fix they did not —
+both arms of the committed v5/v6 reports rendered `synthesis-v6`, and the
+comparator now surfaces that. [TP-5 →](#tp-5)
+
+**2. Zero discriminating cases, again — and this time the number means
+something.** Eleven of 13 cases pass under both prompts; two are unstable
+*within* an arm, so they measure sampling noise rather than the prompt. The
+effective comparison instrument is **zero cases of 13**. 37/39 versus 36/39 is
+one flip on a noisy case, not a result. **The honest reading is that the suite
+cannot distinguish these two prompts** — which is a fact about the suite, since
+v6 and v7 differ by one clause about when to suggest queries.
+
+**3. One case escalated legitimately, and it is the interesting one.** Under
+`synthesis-v7`, `insufficient_exact_latency` failed all three rounds —
+*"model response requires citation_ids"*, then an evidence-assessment coverage
+failure, then citations again — and the runtime escalated with
+`QUALITY_GATE_NOT_REACHED` rather than inventing an answer. That case expects
+`INSUFFICIENT_EVIDENCE`, and the output contract makes `citation_ids` a critical
+gate. **A model answering "the supplied evidence does not establish this" may
+reasonably return no citations, and the contract rejects it.** Claude resolves
+the tension by citing the passages *to explain* their insufficiency; GLM returns
+none and fails. That is a real contract defect surfaced by changing the model —
+tracked in [ROADMAP.md](ROADMAP.md), not patched here.
+
 <a id="cmd-consistency-run"></a>
 **Run a fresh measurement live** — **paid**, capped at $1
 
@@ -684,7 +911,7 @@ jq -C . data/runs/trigger-measurement/agent/summary.json | less -R
 jq -C . data/runs/trigger-measurement/open_weight/summary.json | less -R
 ```
 
-Same 2 cases, 3 repetitions each, identical evidence, identical prompt
+Same 2 cases, 3 repetitions each, identical **round-one** evidence, identical prompt
 (`synthesis-v7`), separate output directories, no shared configuration:
 
 | | Claude Sonnet 5 | GLM-5.2 |
@@ -1348,6 +1575,7 @@ and does not yet prioritise what remains.** [Next steps →](#part-vi)
 <a id="part-iii"></a>
 ## Part III — How every piece fits together
 
+<a id="iii-1"></a>
 ### III.1 The pipeline, stage by stage
 
 | # | Stage | What happens | Owned by | Code | Run it |
@@ -1364,6 +1592,7 @@ and does not yet prioritise what remains.** [Next steps →](#part-vi)
 | 9 | **Evaluate** | Frozen fixtures, trajectory contracts, repeated runs, provider comparison. | code | [model_evaluation.py](llm_gym/agent/model_evaluation.py), `scripts/eval_*` | [▸](#cmd-offline-suite) |
 | 10 | **Review** | Blind human audit of selected decisions; advisory claim-verification sheets. | **human** | [eval_audit_digest_claims.py](scripts/eval_audit_digest_claims.py) | [▸](#cmd-audit-run) |
 
+<a id="iii-2"></a>
 ### III.2 The three-way split — who owns what
 
 The rule, in one line: **the model proposes, ordinary code disposes, and a human
@@ -1388,6 +1617,7 @@ Two consequences worth naming:
 - **Ranking is code.** The model never sees the ranking, so identical
   assessments always produce an identical report.
 
+<a id="iii-3"></a>
 ### III.3 The seven loops
 
 `stochastic: True` in the code means *may call a model* — not *owns a prompt*,
@@ -1419,6 +1649,7 @@ and uses that observation to change its next action. Only `AGENT_TASK` does
 that — twice over: a failed validation produces *targeted* repair instructions,
 and thin evidence produces model-proposed queries that change the next prompt.
 
+<a id="iii-4"></a>
 ### III.4 The three prompt families
 
 Three model-facing tasks, and **exactly one of them is allowed to change what
@@ -1527,6 +1758,7 @@ were produced under the defect and both arms rendered `synthesis-v6`. They stay
 in the repository as history and as six uncached repetitions of one prompt,
 which is a legitimate consistency measurement and nothing more.
 
+<a id="iii-5"></a>
 ### III.5 The two evaluation gates — and the one that is only declared
 
 This distinction was corrected in [EVALS.md](EVALS.md) during this pass, because
@@ -1547,6 +1779,7 @@ That gap is not a bug; it is the honest shape of the problem. *No mechanical
 check establishes that a cited passage supports a claim* — which is precisely
 what [the human audit](#ii-5) measured and why it exists.
 
+<a id="iii-6"></a>
 ### III.6 Why the query layer has no model in it
 
 Retrieval is SQLite FTS5 with BM25 — decades-old technology, deliberately.
@@ -1631,6 +1864,7 @@ newly cited sources came from Q1 alone; Q3's results never entered, because the
 live trace shows a *vocabulary* failure stemming cannot reach. Recorded in
 [ROADMAP.md](ROADMAP.md) so the decision is falsifiable rather than a taste.
 
+<a id="iii-7"></a>
 ### III.7 Budgets, and why the runs are short
 
 <a id="cmd-show-budgets"></a>
@@ -1681,6 +1915,7 @@ than `max_minutes` permanently unfinishable, stranding hundreds of paid
 assessments. Both reasons are commented at both sites, as
 [Rule 32](PROJECT_RULES.md) requires.
 
+<a id="iii-8"></a>
 ### III.8 What is committed, and why
 
 One distinction governs the whole repository: **model output is committed**
@@ -2062,6 +2297,7 @@ diff <(.venv/bin/python -c "import json;print(json.load(open('prompts/digest/sig
 The `user_template` is byte-identical between versions — the entire change is in
 the system instructions.
 
+<a id="the-pattern"></a>
 ### The pattern across all twelve
 
 Ten of the twelve were found by **running**, not by reading or by adding tests.
@@ -2070,11 +2306,65 @@ that came out of it — guard every field a comparison depends on, and make ever
 measured claim carry its sample and cite its artifact — are the two I would
 bring to any team on day one.
 
+<a id="learnings"></a>
+### What I actually learned
+
+Those twelve are things that broke in the code. These three are different: each
+one is a moment where **my own judgement was the thing that turned out to be
+unreliable**, and none of them would have shown up in a test suite.
+
+#### 1. I sat down to review the model's judgements and found I couldn't, because the evidence it gave me was not enough to decide
+
+The first review packet showed me a summary the model had written and one short
+quote it had highlighted. My job was to say whether the summary was grounded. I
+couldn't — not because the judgement was hard, but because **one quote cannot
+establish a claim with three parts in it.** I tried adding the surrounding
+context, which made the cards longer and no more decidable.
+
+The instinct was to work harder at reviewing. The actual problem was upstream:
+the model was being asked for a broad summary and a single supporting quote, and
+no reviewer could check that pairing. So I changed the **model's output
+contract** instead — `significance-v2` requires one concise claim plus one to
+three passages, each mapped to a specific part of the claim, with the summary
+limited to what their union supports. Then the review became answerable.
+
+What stuck with me is that **I nearly scored the first packet anyway.** If I
+had, I would have produced a number from a question that could not be answered,
+and it would have looked exactly like a real result.
+[▸ diff the two output contracts](#cmd-prompt-diff) · [the audit protocol](#ii-5)
+
+#### 2. The labels turned out to be subjective, including my own
+
+I wrote the four significance labels and thought they were reasonably crisp.
+When I audited 20 decisions blind, **my label matched the model's in only 8 of
+18 cases — but after the reveal I judged all 18 of the model's labels to be
+reasonable.** So I could not reproduce my own boundary, and I could not say the
+model was wrong either.
+
+Separately, the answer classification flipped between `SUPPORTED` and
+`INSUFFICIENT_EVIDENCE` on **byte-identical input** across repeated runs. I had
+assumed the disagreement I would find was model-versus-truth. Most of it was
+ambiguity in the category itself.
+[▸ the audit](#cmd-audit-report) · [▸ the same input, different labels](#cmd-trigger-stability)
+
+#### 3. The digest does not yet do the job I built it for, and I only found that by counting
+
+It labels **30% of a month's videos `SIGNIFICANT`** and sorts them oldest-first,
+so a reader opening the report sees July 8th and about 99 items. It rejects 42%
+as promotional or unsupported, which is genuinely useful. But it filters; **it
+does not prioritise.**
+
+I had read the output many times and it looked fine. The problem only appeared
+when I ran a count. Reading a sample tells you whether individual judgements are
+sane. It does not tell you whether the distribution is useful.
+[▸ measure the selectivity](#cmd-digest-selectivity) · [what the distribution says](#label-calibration)
+
 ---
 
 <a id="part-v"></a>
 ## Part V — The map to the company's problem
 
+<a id="v-1"></a>
 ### V.1 The target pipeline, and where this project sits on it
 
 The brief named the shape precisely: **Discovery → mapping → reconciliation →
@@ -2096,6 +2386,7 @@ deliberately did not fake, and it's also the piece that would make the run a
 genuine dependent chain rather than a parallel map. Those turn out to be the
 same build."*
 
+<a id="v-2"></a>
 ### V.2 The consistency problem, answered with data
 
 > *"The first time it says compliant, the second non-compliant, the third
@@ -2129,6 +2420,7 @@ That maps directly onto the gap assessment: `PARTIAL` versus `GAP` on identical
 evidence is a defect; `PARTIAL` versus *escalate-for-review* on genuinely
 ambiguous evidence may be the system working.
 
+<a id="v-3"></a>
 ### V.3 Why "look at GLM 5.2" was the assignment
 
 Not because it is cheap. **Open weights under MIT means on-premise deployment**,
@@ -2142,6 +2434,7 @@ argument for the mixture-of-experts position, with a sharper selection
 criterion: **choose the model by how it fails, not only by what it costs.**
 [▸ the data](#cmd-trigger-stability)
 
+<a id="v-4"></a>
 ### V.4 The compounding-error math, with numbers
 
 You raised subtask decomposition yourself: three subtasks at 90% gives ~73%
@@ -2168,6 +2461,7 @@ wrong early judgement biases everything after it. That is precisely when
 per-item checkpoints you can inspect and replay from stop being operational
 hygiene and become the thing that makes the design tractable.
 
+<a id="v-5"></a>
 ### V.5 Where the human belongs — and where they don't
 
 The brief was explicit: *"Nobody wants to let the agent fix anything in their
@@ -2193,6 +2487,7 @@ must be paid for with an equal increase in how cheaply a human can check the
 result.** Otherwise review becomes the thing that doesn't scale, and the system
 quietly stops being audited.
 
+<a id="v-6"></a>
 ### V.6 Where I add value
 
 Sixty seconds, then stop talking:
@@ -2219,6 +2514,7 @@ that turns the workload from a parallel map into a dependent chain, which is the
 property a long-horizon agent is actually judged on — and it's the exact shape of
 'is this evidence new, or does it replace what we filed last quarter?'"*
 
+<a id="v-7"></a>
 ### V.7 Anticipated questions
 
 | Question | The honest answer |
@@ -2236,6 +2532,7 @@ property a long-horizon agent is actually judged on — and it's the exact shape
 <a id="part-vi"></a>
 ## Part VI — What comes next
 
+<a id="vi-1"></a>
 ### VI.1 From an ML point of view
 
 **Immediate — close the measured failure, properly.** The audit produced one
@@ -2273,6 +2570,7 @@ Sequence: write `prompts/digest/significance-v3.json` (never edit v2) →
 6. **Escalation rate in every provider table** — cost and latency alone measure
    the wrong thing.
 
+<a id="vi-2"></a>
 ### VI.2 From a human-in-the-loop point of view
 
 The honest summary: **the machine is ahead of the ruler.** Most of what would
@@ -2297,6 +2595,7 @@ now most improve the system is human judgement work.
    rather than reviewing model output — the only design that can support
    precision *and* recall, and the thing every ranking claim currently lacks.
 
+<a id="vi-3"></a>
 ### VI.3 The one thing that would actually close the brief
 
 **A supersession-based digest.** It is simultaneously:
@@ -2318,6 +2617,7 @@ missing is the dependency itself.
 <a id="part-vii"></a>
 ## Part VII — Reference
 
+<a id="vii-1"></a>
 ### VII.1 Setup from an empty checkout
 
 <a id="cmd-setup"></a>
@@ -2385,6 +2685,7 @@ succeeded on attempt one. **An OpenAI-compatible URL does not imply an
 OpenAI-compatible body**, and a bad value is rejected at client construction
 rather than returned as an opaque 400.
 
+<a id="vii-2"></a>
 ### VII.2 Building a corpus
 
 <a id="cmd-ingest-one-day"></a>
@@ -2451,6 +2752,7 @@ week as an artifact of the API ingestion window rather than real activity. Both
 report `excluded_non_substantive: 2`, the `[MUSIC PLAYING]` transcripts removed
 before any paid call. **Scoping produced the long run; nothing was built for it.**
 
+<a id="vii-3"></a>
 ### VII.3 Running the agent
 
 <a id="cmd-retrieve"></a>
@@ -2498,6 +2800,7 @@ snippets. If the evidence set is wrong, no model fixes it. `--force` builds a fr
   --snapshot data/digest-windows/<window>.json --estimate | jq .
 ```
 
+<a id="vii-4"></a>
 ### VII.4 Evaluation and review
 
 <a id="cmd-offline-suite"></a>
@@ -2565,6 +2868,7 @@ the sheet reaches the reviewer; a fabricated passage is downgraded and flagged.
 grep -n -E "deterministic|stochastic|human|escalat" CONTRACTS.md
 ```
 
+<a id="vii-5"></a>
 ### VII.5 Repository map
 
 ```text
@@ -2589,6 +2893,7 @@ Script names follow `<group>_<verb>_<object>`, so `ls scripts/` reads as an
 explanation of the project surface. Full index:
 [scripts/README.md](scripts/README.md).
 
+<a id="vii-6"></a>
 ### VII.6 Document map
 
 | Document | Purpose |
@@ -2604,6 +2909,7 @@ explanation of the project surface. Full index:
 | [data/README.md](data/README.md) | Committed vs regenerable, with regeneration commands |
 | [data/human-labels/README.md](data/human-labels/README.md) | The audit protocol and its exact denominators |
 
+<a id="vii-7"></a>
 ### VII.7 Verification record
 
 Every Markdown file was checked against the prompts and scripts, and every
@@ -2641,7 +2947,8 @@ cases, 18 unique evidence references and 8/8 retrieval expectations.
 **Corpus figures re-counted from the index**, not carried forward: 1,645
 evidence records (472 YouTube transcripts, 1,173 X posts), 193,802 chunks.
 
-### VII.9 Deterministic stages: run it, and inspect it
+<a id="vii-8"></a>
+### VII.8 Deterministic stages: run it, and inspect it
 
 Every **code** link in [the run, step by step](#part-0) points here. Each stage
 lists how to run it and how to see what it did. Where one of those is missing,
@@ -2693,7 +3000,8 @@ answer that; the answer task cannot. Closing it is a small change:
 `run_agent_task` already builds a loop context with a `run_id`, so it has
 everything an event needs except the call to write one.
 
-### VII.8 Command index
+<a id="vii-9"></a>
+### VII.9 Command index
 
 Every command in this document, once. Free unless marked.
 
@@ -2707,7 +3015,7 @@ Every command in this document, once. Free unless marked.
 | 2b | [resume evidence](#cmd-resume-evidence) · [repeat it live **paid**](#cmd-resume-live) | What the record proves, and what only a live run can |
 | 7 | [rejected items](#cmd-show-digest-rejected) · [label distribution](#cmd-label-distribution) · [what it says](#label-calibration) · [escalation fixtures](#cmd-inspect-fixture) · [ranked report](#cmd-show-digest-quotes) | Where the human belongs, and why ranking isn't prioritisation |
 | 7b | [digest selectivity](#cmd-digest-selectivity) · [label arms compared](#cmd-label-arms) | 3.2× reduction, 3.3 items/day, and the v1→v2 label shift |
-| 3 | [prompt-arm comparison](#cmd-compare-prompt-arms) · [fresh run **paid**](#cmd-consistency-run) | Consistency, measured uncached |
+| 3 | [prompt-arm comparison](#cmd-compare-prompt-arms) · [fresh run **paid**](#cmd-consistency-run) · [compare two models **paid**](#cmd-model-comparison) · [compare two prompts **paid**](#cmd-prompt-comparison) | Consistency uncached; the same machinery across two model arms; and a run prompt comparison (v6 vs v7, GLM-5.2, $0.198, zero discriminating cases) |
 | 4 | [provider summaries](#cmd-provider-summaries) · [trigger stability](#cmd-trigger-stability) · [reproduce **paid**](#cmd-measure-trigger) | GLM-5.2 economics, and the behavioural difference |
 | 5 | [why items failed](#cmd-why-rejected) · [count overlap](#cmd-count-overlap) · [human audit](#cmd-audit-report) · [the two checks](#cmd-provenance-vs-support) · [protocol](#cmd-audit-run) | 1.8% caught mechanically; 7 of 18 incomplete mappings caught only by a human |
 | 6 | [prompt hash](#cmd-prompt-hash) · [index signature](#cmd-show-pinned) · [run log](#cmd-run-log) · [exit code](#cmd-show-failure) · [counters](#cmd-accounting-counters) | Observability, traceability, auditability |
